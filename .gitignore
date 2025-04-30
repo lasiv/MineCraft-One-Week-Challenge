@@ -1,6 +1,15 @@
 # Linux
 build/
 
+#latex
+latex/*.aux
+latex/*.fdb_latexmk
+latex/*.fls
+latex/*.log
+latex/*.gz
+latex/*.pdf
+
+
 # Windows
 *.dll
 *.exe
