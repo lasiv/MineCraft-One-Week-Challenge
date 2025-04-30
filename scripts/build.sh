@@ -27,6 +27,14 @@ then
     mkdir -p mc-one-week-challenge
 fi
 
+# handle config
+if [ ! -f config.txt ]; then
+    cp config.default.txt config.txt
+    echo "Created config.txt from default."
+else
+    echo "User config already exists: config.txt"
+fi
+
 # Creates the folder for the buildaries
 mkdir -p mc-one-week-challenge 
 mkdir -p mc-one-week-challenge/assets
@@ -34,6 +42,8 @@ mkdir -p build
 mkdir -p build/release
 mkdir -p build/debug
 cd build
+
+
 
 # Builds target
 if [ "$1" = "release" ]

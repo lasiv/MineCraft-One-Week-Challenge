@@ -22,3 +22,6 @@ Release/
 vcpkg_installed/
 
 mc-one-week-challenge/
+
+# personilized files
+config.txt
