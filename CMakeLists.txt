@@ -85,6 +85,8 @@ endif()
 
 find_package(glm CONFIG REQUIRED)
 find_package(SFML COMPONENTS system audio network window graphics CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(ImGui-SFML CONFIG REQUIRED)
 
 add_subdirectory(deps)
 target_include_directories(
@@ -96,5 +98,7 @@ target_include_directories(
 target_link_libraries(${PROJECT_NAME} PRIVATE
     sfml-system sfml-audio sfml-network sfml-graphics sfml-window
     glm::glm
-    glad 
+    glad
+    imgui::imgui
+    ImGui-SFML::ImGui-SFML
 )
