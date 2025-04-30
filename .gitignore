@@ -9,6 +9,8 @@ latex/*.log
 latex/*.gz
 latex/*.pdf
 
+#doxygen
+doxygen/
 
 # Windows
 *.dll
