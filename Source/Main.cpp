@@ -14,10 +14,44 @@ __declspec(dllexport) bool AmdPowerXpressRequestHighPerformance = true;
 #endif // __WIN32
 
 namespace {
-void loadConfig(Config &config);
-void displayInfo();
+    /**
+     * @brief Loads configuration settings from a file into a Config object.
+     *
+     * @param config Reference to the Config object to populate.
+     *
+     * @details
+     * Tries to open an existing configuration file (e.g., "config.ini").
+     * - If the file exists: parses and loads settings such as resolution, fullscreen, and vsync.
+     * - If the file does not exist: creates a new config file using default values from the Config class.
+     * After parsing or creating the file, values are written into the provided Config object.
+     * 
+     * This ensures that the program always starts with valid configuration data,
+     * even on the first launch or after deletion of the config file.
+     */
+    void loadConfig(Config &config);
+
+    /**
+     * @brief Displays startup information from a text file.
+     *
+     * @details
+     * Reads and prints the contents of a text file (e.g., "Res/info.txt") to the console.
+     * This can include version information, controls, or other relevant details.
+     */
+    void displayInfo();
 } // namespace
 
+
+/**
+ * @brief Entry point of the program.
+ * 
+ * @details
+ * - Loads configuration settings from a config file into a Config object.
+ * - Displays startup information by reading a text file (e.g., version, controls).
+ * - Instantiates the Application class, passing the loaded config.
+ * - Starts the main game loop via Application::run(), which handles input, updates, and rendering.
+ * 
+ * @return int Exit code (0 on successful execution).
+ */
 int main()
 {
     Config config;
@@ -32,8 +66,6 @@ int main()
 }
 
 namespace {
-/// @brief Self declared function that loads in configuration files as needed.
-/// @param config 
 void loadConfig(Config &config)
 {
     std::ifstream configFile("config.txt");
