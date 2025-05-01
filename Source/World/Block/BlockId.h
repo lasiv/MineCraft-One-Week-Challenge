@@ -5,7 +5,15 @@
 
 using Block_t = uint8_t;
 
-/// @brief Known block ID types used in game.
+/**
+ * @enum BlockId
+ * @brief Enumeration of block IDs used in the game.
+ *
+ * @details
+ * This enumeration defines the unique IDs for different block types in the game world.
+ * Each block type is represented by a specific ID, which is used for rendering and
+ * interaction within the game.
+ */
 enum class BlockId : Block_t {
     Air = 0,
     Grass = 1,

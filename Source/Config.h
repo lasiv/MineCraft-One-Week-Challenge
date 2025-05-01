@@ -1,7 +1,21 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
 
-/// @brief Default configuration for program.
+/**
+ * @struct Config
+ * @brief Configuration structure for application settings.
+ * 
+ * @details
+ * This structure holds various settings for the application, including:
+ * - Window dimensions (width and height)
+ * - Fullscreen mode (true/false)
+ * - Render distance (how far the game world is rendered)
+ * - Field of view (FOV) for the camera
+ * 
+ * @note
+ * The default values are set to reasonable defaults for a typical gaming experience.
+ * These can be modified by the user through a configuration file.
+ */
 struct Config {
     int windowX = 1280;
     int windowY = 720;

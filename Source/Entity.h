@@ -4,6 +4,14 @@
 #include "Maths/Matrix.h"
 #include "Physics/AABB.h"
 
+/**
+ * @struct Entity
+ * @brief Represents a 3D entity in the game world.
+ * 
+ * @details
+ * The Entity struct encapsulates the position, rotation, velocity, and bounding box
+ * of an entity. It is used as a base class for player and other game objects.
+ */
 struct Entity {
     Entity()
         : box({0.f, 0.f, 0.f})
