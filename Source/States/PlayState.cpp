@@ -37,7 +37,8 @@ void StatePlay::handleInput()
 
         auto block = m_world.getBlock(x, y, z);
         auto id = (BlockId)block.id;
-
+        
+        /// @todo add the keyboard handling to Player object
         if (id != BlockId::Air && id != BlockId::Water) {
             if (timer.getElapsedTime().asSeconds() > 0.2) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {

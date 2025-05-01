@@ -181,7 +181,7 @@ void Player::collide(World &world, const glm::vec3 &vel, float dt)
             }
 }
 
-///@TODO Move this
+/// @todo Move this (comment by hopson)
 float speed = 0.2f;
 
 /// @todo add movement keys to config
