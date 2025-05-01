@@ -184,6 +184,7 @@ void Player::collide(World &world, const glm::vec3 &vel, float dt)
 ///@TODO Move this
 float speed = 0.2f;
 
+/// @todo add movement keys to config
 void Player::keyboardInput(Keyboard &keyboard)
 {
     if (keyboard.isKeyDown(sf::Keyboard::W)) {
@@ -217,6 +218,7 @@ void Player::keyboardInput(Keyboard &keyboard)
     }
 }
 
+/// @todo add sensitivity and mouselock key to config
 void Player::mouseInput(const sf::Window &window)
 {
     static bool useMouse = true;
@@ -233,7 +235,7 @@ void Player::mouseInput(const sf::Window &window)
     static float const BOUND = 89.f;
     static auto lastMousePosition = sf::Mouse::getPosition(window);
     auto change = sf::Mouse::getPosition() - lastMousePosition;
-
+    
     rotation.y += change.x * 0.05f;
     rotation.x += change.y * 0.05f;
 

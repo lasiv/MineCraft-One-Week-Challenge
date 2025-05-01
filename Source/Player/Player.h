@@ -103,9 +103,37 @@ class Player : public Entity {
     ItemStack &getHeldItems();
 
   private:
+
+    /**
+     * @brief Handles player jumping.
+     * 
+     * @details
+     * Initiates a jump action for the player.
+     * This method is called when the jump key is pressed.
+     */
     void jump();
 
+    /**
+     * @brief Handles keyboard input for player movement and actions.
+     * 
+     * @param keyboard The Keyboard object to manage key states.
+     * 
+     * @details
+     * Processes input from the keyboard to control player movement.
+     * This includes walking, flying, and sneaking.
+     */
     void keyboardInput(Keyboard &keyboard);
+
+    /**
+     * @brief Handles mouse input for the player.
+     * 
+     * @param window The SFML window to capture input from.
+     * 
+     * @details
+     * Processes mouse movement to control player view direction.
+     * The mouse position is reset to the center of the window after processing.
+     * The mouse input is only processed if the useMouse flag is set to true.
+     */
     void mouseInput(const sf::Window &window);
     bool m_isOnGround = false;
     bool m_isFlying = false;

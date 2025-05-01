@@ -51,6 +51,17 @@ struct Material : public NonCopyable {
      */
     BlockId toBlockID() const;
 
+    /**
+     * @brief Converts a BlockId to a Material.
+     * 
+     * @param id The BlockId to convert.
+     * @return const Material& The Material corresponding to the BlockId.
+     * 
+     * @details
+     * This method converts a BlockId to its corresponding Material. It allows the game
+     * to retrieve the material properties based on the block ID. This is useful for
+     * determining the properties of a block in the game world.
+     */
     static const Material &toMaterial(BlockId id);
 
     const Material::ID id;

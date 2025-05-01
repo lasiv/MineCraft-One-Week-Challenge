@@ -38,6 +38,8 @@ void Application::runLoop()
     //}
 
     m_context.window.setPosition(win_center);
+    
+    /// @todo Make vsync a config option
     m_context.window.setVerticalSyncEnabled(true);
 
     while (m_context.window.isOpen() && !m_states.empty())
