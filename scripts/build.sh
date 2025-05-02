@@ -46,4 +46,4 @@ else
     target_debug
 fi
 
-cp -R assets mc-one-week-challenge/
+: cp -R assets mc-one-week-challenge/
