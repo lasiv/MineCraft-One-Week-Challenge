@@ -2,19 +2,9 @@
 build/
 
 #latex
-latex/*.aux
-latex/*.fdb_latexmk
-latex/*.fls
-latex/*.log
-latex/*.pdf
-latex/*.synctex.gz
-latex/*.toc
-latex/*.out
-latex/*.loc
-latex/*.lof
-latex/*.lot
-latex/*.thm
-latex/_minted-*
+latex/*
+!latex/*.tex
+!latex/*.png
 
 #doxygen
 doxygen/
