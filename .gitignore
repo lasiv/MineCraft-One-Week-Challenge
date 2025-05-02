@@ -6,8 +6,15 @@ latex/*.aux
 latex/*.fdb_latexmk
 latex/*.fls
 latex/*.log
-latex/*.gz
 latex/*.pdf
+latex/*.synctex.gz
+latex/*.toc
+latex/*.out
+latex/*.loc
+latex/*.lof
+latex/*.lot
+latex/*.thm
+latex/_minted-*
 
 #doxygen
 doxygen/

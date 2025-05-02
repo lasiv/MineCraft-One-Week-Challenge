@@ -1,30 +1,289 @@
 \documentclass{article}
+
+%%% Defines %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{shapes.misc}
+\usepackage[european,straightvoltages]{circuitikz}
+\usepackage[ngerman]{babel} 
+\usepackage[colorlinks]{hyperref}
+\usepackage{caption, float, subcaption}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{mathtools, amssymb, ntheorem, amsmath, siunitx}
+\sisetup{per-mode=fraction, separate-uncertainty=true,exponent-base=10,output-decimal-marker={,}}
+\DeclareSIUnit\liter{l}
+\usepackage{enumitem}
+\usepackage{minted}
+
+% maths
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\br}[1]{\left( #1 \right)}
+\newcommand{\ubar}[1]{\mkern 1.5mu\underline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+% image
+\newcommand{\img}[5]{
+    \begin{figure} [#5]
+    \centering
+    \includegraphics[width=#2\linewidth]{#1}
+    \caption{#3}
+    \label{pic:#4}
+    \end{figure}
+}
+
+% tikz
+\newenvironment{gfx}[3]
+{
+    \newcommand{\gfxname}{#2}
+    \newcommand{\gfxcaption}{#1}
+    \begin{figure} [#3]
+    \centering
+    \begin{tikzpicture}
+}
+{
+    \end{tikzpicture}
+    \caption{\gfxcaption}
+    \label{gfx:\gfxname}
+    \end{figure}
+}
+
+
+% cicuitikz
+\newenvironment{ckt}[3]
+{
+    \newcommand{\cktname}{#2}
+    \newcommand{\cktcaption}{#1}
+    \begin{figure} [#3]
+    \centering
+    \begin{circuitikz}
+	\draw
+}
+{
+	;
+    \end{circuitikz}
+    \caption{\cktcaption}
+    \label{ckt:\cktname}
+    \end{figure}
+}
+
+% Code
+\newfloat{Code}{htbp}{loc}
+\floatname{Code}{Quelltext}
+\definecolor{LightGray}{gray}{0.9}
+\newenvironment{code}[4]
+{%
+  \VerbatimEnvironment
+  \begin{Code} [#4]
+  \caption{#2}%
+  \label{cod:#3}%
+  \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,bgcolor=LightGray,fontsize=\footnotesize,style=emacs]{#1}%
+}
+{%
+  \end{minted}%
+  \vspace{-20pt}%
+  \end{Code}%
+}
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+\newcommand{\listofcode}{
+  \doublespacing
+  \listof{Code}{Quelltextverzeichnis}
+}
+
+%%% Head %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Title}
+\author{Benjamin Brohs}
+\date{Date}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
 
 \begin{document}
 
-\section*{Programmfluss -- Übersicht}
+%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[
-  node distance=1.5cm and 2.5cm,
-  every node/.style={draw, rounded corners, align=center, minimum width=4cm, minimum height=1cm},
-  arrow/.style={-{Latex}, thick},
-]
+\begin{titlepage}
+  \centering
+	\begin{tabular}{lcr}
+		\includegraphics[width=0.35\textwidth]{fachbereich.png} & \hspace{0.195\textwidth} & \includegraphics[width=0.35\textwidth]{Q04_HTW_Berlin_Logo_quer_pos_FARBIG_RGB.jpg}\\
+	\end{tabular}	
+	\\[3cm]
+	\Large
+	Versuchsprotokoll\\
+	\vspace{2cm}
+	\textbf{Experiment Dichte}\\
+	\vspace{2cm}
+	\begin{tabular}{ll} 
+		Im Studiengang: & CE \\		
+	\end{tabular}	
+	\\[3cm]
+	\normalsize
+	\begin{tabular}{ll}
+	\textbf{Versuchsdatum:} & Montag, den 13.05.2024 \\
+        \textbf{Erstellt von:} & Benjamin Brohs \\
+        \textbf{Matrikel-Nr.:} & s0591345 \\
+        \textbf{Gruppe:} & 7 \\
+	\textbf{Dozent:} & Lars Bergenholtz
+	\end{tabular}	
+\end{titlepage}
 
-% Nodes
-\node (start)        {Programmstart (main)};
-\node (display)      [below=of start] {displayInfo()\\-- Zeigt Willkommensnachricht aus Datei};
-\node (config)       [below=of display] {loadConfig(config)\\-- L\"adt Einstellungen aus Konfig-Datei};
-\node (appCreate)    [below=of config] {Application-Objekt wird erstellt};
-\node (appRun)       [below=of appCreate] {Application.run(config)\\-- Startet Game Loop};
+\tableofcontents
+\newpage
 
-% Arrows
-\draw [arrow] (start)     -- (display);
-\draw [arrow] (display)   -- (config);
-\draw [arrow] (config)    -- (appCreate);
-\draw [arrow] (appCreate) -- (appRun);
+%%% Inhalt %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\end{tikzpicture}
+\section{Text} \label{sec:Text}
+Text
+
+%%% Verzeichnisse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Anhang}
+In diesem Abschnitt finden sich verschiedene Verzeichnisse der genutzten 
+Ressourcen, sowie zusätzliche Anhänge von Ressourcen, die nicht direkt im 
+Hauptteil des Dokuments enthalten sind.
+
+\listoffigures
+\listoftables
+\listofcode
+
+\iffalse
+\section*{Arbeitsverteilung}
+
+\subsection*{Benjamin Brohs}
+\begin{mylist}
+  \mylistentry{sec:intro}
+\end{mylist}
+\fi
+
+%%% Anhänge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|}
+	\hline
+	$U_{AB}$ & I \\
+	\hline
+	0   & 0 \\
+	0,1 & ~ \\
+	\hline
+	\end{tabular}
+	\caption{Messwerte nach 3.3.1}
+	\label{tab:rx}
+\end{table}
+\fi
+
+\iffalse
+\begin{gfx}{Bodediagramm Phasengang Bandpass}{bodeband2}{}
+    \begin{axis}
+        [
+        xlabel={$f$ [Hz] },
+        ylabel={Phasenunterschied $\Delta \varphi_{12}$ [°] },
+        grid=both,
+        grid style={line width=.1pt, draw=gray!10},
+        major grid style={line width=.2pt,draw=gray!50},
+        xmin=20, xmax=100000,
+        ymin=-90, ymax=90,
+        width=11.89cm, height=6cm,
+        every axis plot/.append style={very thick, mark=*},
+        legend style={at={(0.5,-0.1)}, anchor=north, legend columns=-1},
+        xtick={10, 100, 1000, 10000, 100000},
+        ytick={-90,-75,-60,-45,-30,-15,0,15,30,45,60,75,90},
+        xmode=log
+        ]
+
+        \addplot[
+        scatter,
+        only marks,
+        point meta=explicit symbolic
+        ] table[meta=label] {
+            x y label
+            100 74 1
+            200 59 2
+            341.49 44 10
+            500 32 3
+            1000 14 4
+            2000 -1 5
+            5000 -20 6
+            10000 -39 7
+            12847.92 -46 11
+            20000 -59 8
+            50000 -76 9
+        };
+
+        \addplot[
+        no marks,
+        thin,
+        ] coordinates{
+            (20, 86.51900995)
+            (23.79683391, 85.86013154)
+            (28.3144652, 85.07750427)
+            (33.68973128, 84.1485388)
+            (40.08544699, 83.04696273)
+            (47.6953362, 81.74251804)
+            (56.74989969, 80.20084926)
+            (67.52339687, 78.38375782)
+            (80.34215301, 76.25009007)
+            (95.59444355, 73.7576336)
+            (113.7422548, 70.86648447)
+            (135.3352773, 67.54432971)
+            (161.0275558, 63.7738094)
+            (191.5972999, 59.56138864)
+            (227.9704562, 54.94591252)
+            (271.2487541, 50.00361115)
+            (322.7430775, 44.84581114)
+            (384.0131705, 39.60725845)
+            (456.9148818, 34.42684488)
+            (543.6563777, 29.42650423)
+            (646.8650261, 24.69507184)
+            (769.6669794, 20.2811201)
+            (915.7818637, 16.1944633)
+            (1089.635445, 12.41311546)
+            (1296.493686, 8.892029277)
+            (1542.622245, 5.571078989)
+            (1835.476267, 2.381199607)
+            (2183.926194, -0.751349392)
+            (2598.526445, -3.902071813)
+            (3091.835111, -7.145930748)
+            (3678.794331, -10.554851)
+            (4377.182883, -14.19424224)
+            (5208.154703, -18.11787564)
+            (6196.879622, -22.3608024)
+            (7373.305756, -26.93078726)
+            (8773.066621, -31.80001815)
+            (10438.56046, -36.90028499)
+            (12420.23448, -42.12536058)
+            (14778.11285, -47.34270134)
+            (17583.61485, -52.41271888)
+            (20921.7181, -57.2098854)
+            (24893.53254, -61.63886918)
+            (29619.36296, -65.64164712)
+            (35242.35304, -69.19586452)
+            (41932.82109, -72.30765117)
+            (49893.41894, -75.00259162)
+            (59365.27018, -77.317439)
+            (70635.27373, -79.29373889)
+            (84044.79385, -80.97351325)
+            (100000, -82.3966604)
+        };
+
+        \addplot [densely dotted, thin, no marks] coordinates {(341.485847695166,-90) (341.485847695166,90)};
+        \node [below left] at (axis cs:341.485847695166,43.14655286) {$f_h$};
+        
+        \addplot [densely dotted, thin, no marks] coordinates {(2094.60836705993,-90) (2094.60836705993,90)};
+        \node [below left] at (axis cs:2094.60836705993,0) {$f_0$};
+        
+        \addplot [densely dotted, thin, no marks] coordinates {(12847.9239797778,-90) (12847.9239797778,90)};
+        \node [above right] at (axis cs:12847.9239797778,-43.14655286) {$f_t$};
+    \end{axis}
+\end{gfx}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
