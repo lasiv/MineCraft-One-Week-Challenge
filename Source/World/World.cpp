@@ -31,7 +31,6 @@ World::~World()
     }
 }
 
-// world coords into chunk column coords
 ChunkBlock World::getBlock(int x, int y, int z)
 {
     auto bp = getBlockXZ(x, z);
@@ -41,6 +40,20 @@ ChunkBlock World::getBlock(int x, int y, int z)
         .getBlock(bp.x, y, bp.z);
 }
 
+/**
+ * @brief Sets a block at the specified coordinates in the world.
+ * 
+ * @param x The x-coordinate of the block.
+ * @param y The y-coordinate of the block.
+ * @param z The z-coordinate of the block.
+ * @param block The ChunkBlock to set at the specified coordinates.
+ * 
+ * @details
+ * This function sets a block at the specified world coordinates. It calculates the chunk
+ * position and block position within the chunk, and sets the corresponding ChunkBlock.
+ * The coordinates are expected to be in world space. If the y-coordinate is less than or
+ * equal to 0, the function does nothing.
+ */
 void World::setBlock(int x, int y, int z, ChunkBlock block)
 {
     if (y <= 0)
@@ -53,8 +66,8 @@ void World::setBlock(int x, int y, int z, ChunkBlock block)
         .setBlock(bp.x, y, bp.z, block);
 }
 
-// loads chunks
-// make chunk meshes
+
+/// @todo add keyboard to config file
 void World::update(const Camera &camera)
 {
     static ToggleKey key(sf::Keyboard::C);
@@ -73,8 +86,7 @@ void World::update(const Camera &camera)
     updateChunks();
 }
 
-///@TODO
-/// Optimize for chunkPositionU usage :thinking:
+/// @todo Optimize for chunkPositionU usage :thinking: (comment by hopson)
 void World::loadChunks(const Camera &camera)
 {
     while (m_isRunning) {

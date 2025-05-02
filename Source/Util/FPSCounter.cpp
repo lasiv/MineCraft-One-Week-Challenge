@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+/// @todo add fps counter to the config file and render it to the screen
 FPSCounter::FPSCounter()
 {
     enabled = true;
