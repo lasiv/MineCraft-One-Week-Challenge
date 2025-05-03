@@ -111,9 +111,22 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 }
 
+/**
+ * @todo fix accelleration feeling floaty
+ *       multiply damping and m_acceleration by accelleration constant to keep max speed
+ *       check accelleration based on different cases like falling and on ground etc
+ */
+
 void Player::update(float dt, World &world)
 {
     velocity += m_acceleration;
+    // debug print accelleration and velocity
+    std::cout << "\033[2K\r" // Clear current line and return cursor to start
+    << std::fixed << std::setprecision(3)
+    << "acc: (" << m_acceleration.x << ", " << m_acceleration.y << ", " << m_acceleration.z << ")  "
+    << "vel: (" << velocity.x << ", " << velocity.y << ", " << velocity.z << ")"
+    << std::flush;
+
     m_acceleration = {0, 0, 0};
 
     if (!m_isFlying) {
@@ -183,6 +196,7 @@ void Player::collide(World &world, const glm::vec3 &vel, float dt)
 
 /// @todo Move this (comment by hopson)
 float speed = 0.2f;
+float accelleration = 1.f;
 
 /// @todo add movement keys to config
 void Player::keyboardInput(Keyboard &keyboard)
@@ -194,20 +208,20 @@ void Player::keyboardInput(Keyboard &keyboard)
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
             s *= 0.35;
-        m_acceleration.x += -glm::cos(glm::radians(rotation.y + 90)) * s;
-        m_acceleration.z += -glm::sin(glm::radians(rotation.y + 90)) * s;
+        m_acceleration.x += -glm::cos(glm::radians(rotation.y + 90)) * s * accelleration;
+        m_acceleration.z += -glm::sin(glm::radians(rotation.y + 90)) * s * accelleration;
     }
     if (keyboard.isKeyDown(sf::Keyboard::S)) {
-        m_acceleration.x += glm::cos(glm::radians(rotation.y + 90)) * speed;
-        m_acceleration.z += glm::sin(glm::radians(rotation.y + 90)) * speed;
+        m_acceleration.x += glm::cos(glm::radians(rotation.y + 90)) * speed * accelleration;
+        m_acceleration.z += glm::sin(glm::radians(rotation.y + 90)) * speed * accelleration;
     }
     if (keyboard.isKeyDown(sf::Keyboard::A)) {
-        m_acceleration.x += -glm::cos(glm::radians(rotation.y)) * speed;
-        m_acceleration.z += -glm::sin(glm::radians(rotation.y)) * speed;
+        m_acceleration.x += -glm::cos(glm::radians(rotation.y)) * speed * accelleration;
+        m_acceleration.z += -glm::sin(glm::radians(rotation.y)) * speed * accelleration;
     }
     if (keyboard.isKeyDown(sf::Keyboard::D)) {
-        m_acceleration.x += glm::cos(glm::radians(rotation.y)) * speed;
-        m_acceleration.z += glm::sin(glm::radians(rotation.y)) * speed;
+        m_acceleration.x += glm::cos(glm::radians(rotation.y)) * speed * accelleration;
+        m_acceleration.z += glm::sin(glm::radians(rotation.y)) * speed * accelleration;
     }
 
     if (keyboard.isKeyDown(sf::Keyboard::Space)) {
