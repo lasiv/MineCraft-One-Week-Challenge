@@ -19,9 +19,6 @@ void NoiseGenerator::setParameters(const NoiseParameters &params) noexcept
     m_noiseParameters = params;
 }
 
-/// @brief Gets Noise through n which acts as a seed number.
-/// @param n 
-/// @return 
 double NoiseGenerator::getNoise(int n) const noexcept
 {
     n += m_seed;
@@ -31,10 +28,6 @@ double NoiseGenerator::getNoise(int n) const noexcept
     return 1.0 - ((double)newN / 1073741824.0);
 }
 
-/// @brief Overload of getNoise that takes doubles instead of int n.
-/// @param x 
-/// @param z 
-/// @return 
 double NoiseGenerator::getNoise(double x, double z) const noexcept
 {
     return getNoise(x + z * 57.0);
@@ -48,8 +41,7 @@ double NoiseGenerator::lerp(double a, double b, double z) const noexcept
 
 double NoiseGenerator::noise(double x, double z) const noexcept
 {
-    auto floorX = (double)((
-        int)x); // This is kinda a cheap way to floor a double integer.
+    auto floorX = (double)((int)x); // This is kinda a cheap way to floor a double integer.
     auto floorZ = (double)((int)z);
 
     auto s = 0.0, t = 0.0, u = 0.0,
@@ -73,12 +65,6 @@ double NoiseGenerator::noise(double x, double z) const noexcept
     return rec3;
 }
 
-/// @brief Gets the height of the chunk for the sake of Noise Generation.
-/// @param x 
-/// @param z 
-/// @param chunkX 
-/// @param chunkZ 
-/// @return val
 double NoiseGenerator::getHeight(int x, int z, int chunkX, int chunkZ) const
     noexcept
 {

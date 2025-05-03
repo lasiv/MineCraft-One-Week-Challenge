@@ -16,8 +16,6 @@ float Plane::distanceToPoint(const glm::vec3 &point) const
     return glm::dot(point, normal) + distanceToOrigin;
 }
 
-/// @brief Updates the Frustrum relative between player and observed surface.
-/// @param mat 
 void ViewFrustum::update(const glm::mat4 &mat) noexcept
 {
     // left
@@ -63,9 +61,6 @@ void ViewFrustum::update(const glm::mat4 &mat) noexcept
     }
 }
 
-/// @brief Determines if a collision box is present in the Frustrum.
-/// @param box 
-/// @return result
 bool ViewFrustum::isBoxInFrustum(const AABB &box) const noexcept
 {
     bool result = true;
