@@ -44,12 +44,10 @@ GLuint loadShaders(const std::string &vertexShader,
                    const std::string &fragmentShader)
 {
     auto vertexSource = getFileContents("Shaders/" + vertexShader + ".vert");
-    auto fragmentSource =
-        getFileContents("Shaders/" + fragmentShader + ".frag");
+    auto fragmentSource = getFileContents("Shaders/" + fragmentShader + ".frag");
 
     auto vertexShaderID = compileShader(vertexSource.c_str(), GL_VERTEX_SHADER);
-    auto fragmentShaderID =
-        compileShader(fragmentSource.c_str(), GL_FRAGMENT_SHADER);
+    auto fragmentShaderID = compileShader(fragmentSource.c_str(), GL_FRAGMENT_SHADER);
 
     auto shaderID = linkProgram(vertexShaderID, fragmentShaderID);
 

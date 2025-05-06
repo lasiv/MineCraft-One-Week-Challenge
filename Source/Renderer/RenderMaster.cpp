@@ -8,6 +8,19 @@
 #include "../World/Chunk/ChunkMesh.h"
 #include "../World/Chunk/ChunkSection.h"
 
+/**
+ * @brief Renders the world using OpenGL.
+ */
+
+/**
+ * @brief Draws a chunk section.
+ * 
+ * @param chunk The chunk section to draw.
+ * 
+ * @details
+ * This method adds the chunk's solid, water, and flora meshes to their respective
+ * renderers. It checks if each mesh has faces before adding it to the renderer.
+ */
 void RenderMaster::drawChunk(const ChunkSection &chunk)
 {
     const auto &solidMesh = chunk.getMeshes().solidMesh;
@@ -24,11 +37,28 @@ void RenderMaster::drawChunk(const ChunkSection &chunk)
         m_floraRenderer.add(floraMesh);
 }
 
+/**
+ * @brief Draws the skybox.
+ * 
+ * @details
+ * This method sets a flag to indicate that the skybox should be drawn.
+ * The actual rendering of the skybox is handled in the finishRender method.
+ */
 void RenderMaster::drawSky()
 {
     m_drawBox = true;
 }
 
+/**
+ * @brief Finishes the rendering process.
+ * 
+ * @param window The SFML window to display the rendered content.
+ * @param camera The camera used for rendering.
+ * 
+ * @details
+ * This method clears the screen, enables depth testing and face culling,
+ * and renders the chunk, water, flora, and skybox (if applicable).
+ */
 void RenderMaster::finishRender(sf::Window &window, const Camera &camera)
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);

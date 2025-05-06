@@ -87,15 +87,68 @@ class World : public NonCopyable {
     void update(const Camera &camera);
 
     /**
+     * @brief Updates the chunk at the specified coordinates.
      * 
+     * @param blockX The x-coordinate of the block.
+     * @param blockY The y-coordinate of the block.
+     * @param blockZ The z-coordinate of the block.
+     * 
+     * @details
+     * This function updates the chunk at the specified world coordinates. It calculates
+     * the chunk position and block position within the chunk, and updates the corresponding
+     * chunk section. The coordinates are expected to be in world space.
      */
     void updateChunk(int blockX, int blockY, int blockZ);
 
+    /**
+     * @brief Renders the world using the specified RenderMaster and camera.
+     * 
+     * @param master The RenderMaster object used for rendering.
+     * @param camera The camera object used for rendering the world.
+     * 
+     * @details
+     * This function renders the world using the specified RenderMaster and camera. It
+     * handles the rendering of chunks, sky, and other world elements. The camera is used
+     * to determine the view frustum and culling of chunks.
+     */
     void renderWorld(RenderMaster &master, const Camera &camera);
 
+    /**
+     * @brief Gets the chunk manager for the world.
+     * 
+     * @return A reference to the ChunkManager object.
+     * 
+     * @details
+     * This function returns a reference to the ChunkManager object, which is responsible
+     * for managing the chunks in the world. The ChunkManager handles loading, unloading,
+     * and generating chunks, as well as managing the terrain generator.
+     */
     ChunkManager &getChunkManager();
 
+    /**
+     * @brief Gets the player spawn point.
+     * 
+     * @return The player spawn point as a glm::vec3.
+     * 
+     * @details
+     * This function returns the player spawn point as a glm::vec3. The spawn point is
+     * randomly generated within the world bounds and is used to spawn the player when
+     * entering the world.
+     */
     static VectorXZ getBlockXZ(int x, int z);
+    /**
+     * @brief Gets the chunk coordinates for the specified world coordinates.
+     * 
+     * @param x The x-coordinate of the block.
+     * @param z The z-coordinate of the block.
+     * 
+     * @return The chunk coordinates as a VectorXZ object.
+     * 
+     * @details
+     * This function calculates the chunk coordinates for the specified world coordinates.
+     * It returns a VectorXZ object containing the chunk coordinates based on the world
+     * coordinates provided.
+     */
     static VectorXZ getChunkXZ(int x, int z);
 
     // void collisionTest(Entity &entity);
@@ -106,8 +159,39 @@ class World : public NonCopyable {
     }
 
   private:
+    /**
+     * @brief Loads chunks around the player based on the camera position.
+     * 
+     * @param camera The camera object used to determine the current view.
+     * 
+     * @details
+     * This function loads chunks around the player based on the camera position. It
+     * calculates the chunk coordinates based on the camera position and loads the
+     * corresponding chunks. The load distance determines how many chunks are loaded
+     * around the player.
+     */
     void loadChunks(const Camera &camera);
+
+    /**
+     * @brief Updates the chunks based on the current state of the world.
+     * 
+     * @details
+     * This function updates the chunks based on the current state of the world. It
+     * processes any pending chunk updates and applies them to the corresponding chunks.
+     * It also handles the generation of new chunks if necessary.
+     */
     void updateChunks();
+
+    /**
+     * @brief Sets the spawn point for the player in the world.
+     * 
+     * @details
+     * This function sets the spawn point for the player in the world. It generates a
+     * random spawn point within the world bounds and sets it as the player's spawn
+     * point. The spawn point is used to spawn the player when entering the world.
+     * It ensures that the spawn point is valid and does not collide with any existing
+     * blocks or terrain features.
+     */
     void setSpawnPoint();
 
     ChunkManager m_chunkManager;

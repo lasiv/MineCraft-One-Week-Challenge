@@ -9,6 +9,17 @@ using Rand = Random<std::minstd_rand>;
 
 class Chunk;
 
+/**
+ * @class Biome
+ * @brief Base class for different biomes in the game world.
+ * 
+ * @details
+ * The Biome class serves as a base class for different biomes in the game world.
+ * It provides methods to generate terrain features such as plants, trees,
+ * top blocks, and underwater blocks. The class uses noise generation to
+ * determine the height of the terrain and the characteristics of the biome.
+ * It also provides methods to set the frequency of trees and plants in the biome.
+ */
 struct Biome {
   public:
     Biome(const NoiseParameters &parameters, int treeFreq, int plantFreq,
