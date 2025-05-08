@@ -19,6 +19,8 @@
 \usepackage{enumitem}
 \usepackage{minted}
 
+\usepackage{tikz-uml}
+
 % maths
 \newcommand{\abs}[1]{\left| #1 \right|}
 \newcommand{\br}[1]{\left( #1 \right)}
@@ -147,6 +149,31 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 Grundlegend basiert diese Softftware auf der Idee des Spiels \href{https://www.minecraft.net}{Minecraft}. Bei der vorgestellen Software jedoch, handelt es sich um eine wesentlich ausgedünnte Version dessen. Der Sinn soll sein, dass ein Spieler sich in einer Welt, generiert aus Blöcken verschiedener Texturen. Dem Spieler ist es möglich, diese Welt zu manipulieren. In erster Linie handelt es sich dabei um das Löschen von Blöcken. Die generierte Welt ist groß genug, sodass sich der Spieler in ihr frei bewegen kann. Der Spieler hat dabei die möglichkeit zu Springen, zu Sprinten und sich verlangsamt zu bewegen. Dabei stößt der Spieler auf verschiedenste generierte Strukturen. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
+
+\begin{tikzpicture}
+  % Systemgrenze
+  \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
+    \umlusecase[x=0, y=0]{Laufen}
+    \umlusecase[x=0, y=-1.5]{Springen}
+    \umlusecase[x=0, y=-3]{Schleichen}
+    \umlusecase[x=0, y=-4.5]{Fliegen}
+    \umlusecase[x=0, y=-6]{Block abbauen}
+    \umlusecase[x=0, y=-7.5]{Block platzieren}
+    \umlusecase[x=0, y=-9]{Maussteuerung umschalten}
+  \end{umlsystem}
+
+  % Akteur
+  \umlactor[x=-2, y=-4]{Spieler}
+
+  % Assoziationen
+  \umlassoc{Spieler}{usecase-1}
+  \umlassoc{Spieler}{usecase-2}
+  \umlassoc{Spieler}{usecase-3}
+  \umlassoc{Spieler}{usecase-4}
+  \umlassoc{Spieler}{usecase-5}
+  \umlassoc{Spieler}{usecase-6}
+  \umlassoc{Spieler}{usecase-7}
+\end{tikzpicture}
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
