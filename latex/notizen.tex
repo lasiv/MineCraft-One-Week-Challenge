@@ -52,6 +52,7 @@
     \end{figure}
 }
 
+\newcommand{\opt}{\ensuremath{\parallel}}
 
 % cicuitikz
 \newenvironment{ckt}[3]
@@ -146,10 +147,11 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 \subsection{Informelle Beschreibung} \label{subsec:inf}
 
-Grundlegend basiert diese Softftware auf der Idee des Spiels \href{https://www.minecraft.net}{Minecraft}. Bei der vorgestellen Software jedoch, handelt es sich um eine wesentlich ausgedünnte Version dessen. Der Sinn soll sein, dass ein Spieler sich in einer Welt, generiert aus Blöcken verschiedener Texturen. Dem Spieler ist es möglich, diese Welt zu manipulieren. In erster Linie handelt es sich dabei um das Löschen von Blöcken. Die generierte Welt ist groß genug, sodass sich der Spieler in ihr frei bewegen kann. Der Spieler hat dabei die möglichkeit zu Springen, zu Sprinten und sich verlangsamt zu bewegen. Dabei stößt der Spieler auf verschiedenste generierte Strukturen. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
+Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.net}{Minecraft}. Bei der vorgestellen Software handelt es sich um eine wesentlich ausgedünnte Version dessen. Der Sinn des Spiels ist, dass ein Spieler sich in einer Welt, generiert aus Blöcken verschiedener Texturen, überleben soll und kreativ ausleben kann. Der Spieler hat dabei die Möglichkeit zu Springen, zu Sprinten und zu Schleichen um diese Welt zu erkunden. Außerdem kann der Spiler diese Welt manipulieren, indem er Blöcke abbaut und sie woanders wieder platzieren kann. Die generierte Welt ist groß genug, sodass sich der Spieler in ihr frei bewegen kann. Dabei stößt der Spieler auf verschiedenste generierte Strukturen und Biome. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
+\begin{center}
 \begin{tikzpicture}
   % Systemgrenze
   \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
@@ -163,7 +165,7 @@ Grundlegend basiert diese Softftware auf der Idee des Spiels \href{https://www.m
   \end{umlsystem}
 
   % Akteur
-  \umlactor[x=-2, y=-4]{Spieler}
+  \umlactor[x=-2, y=-4.5]{Spieler}
 
   % Assoziationen
   \umlassoc{Spieler}{usecase-1}
@@ -174,6 +176,142 @@ Grundlegend basiert diese Softftware auf der Idee des Spiels \href{https://www.m
   \umlassoc{Spieler}{usecase-6}
   \umlassoc{Spieler}{usecase-7}
 \end{tikzpicture}
+\end{center}
+
+\section*{Use Case UC01: Laufen}
+
+\textbf{Name:} Laufen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Bewegung in eine Richtung innerhalb der Spielwelt \\
+\textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv \\
+\textbf{Nachbedingungen:} Position der Spielfigur ist aktualisiert \\
+\textbf{Beschreibung:} Der Spieler bewegt sich in eine gewünschte Richtung mithilfe der Bewegungstasten.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler drückt Bewegungstaste (W/A/S/D)
+  \item[2.] System berechnet neue Position
+  \item[3.] Spielfigur wird an neue Position gesetzt
+\end{description}
+
+
+\section*{Use Case UC02: Springen}
+
+\textbf{Name:} Springen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Hindernisse überwinden oder Höhe gewinnen \\
+\textbf{Vorbedingungen:} Spieler befindet sich auf festem Boden \\
+\textbf{Nachbedingungen:} Spielfigur verlässt kurzzeitig den Boden \\
+\textbf{Beschreibung:} Der Spieler kann durch eine Taste springen, wenn die Bedingungen erfüllt sind.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler drückt Springtaste (Leertaste)
+  \item[2.] System prüft, ob Spieler sich auf dem Boden befindet
+  \item[2a.] Falls nicht: Sprung wird ignoriert
+  \item[3.] Sprungbewegung wird ausgelöst
+  \item[3.1.] Spieler verlässt den Boden
+  \item[3.2.] Gravitation wirkt auf Spieler
+\end{description}
+
+
+\section*{Use Case UC03: Schleichen}
+
+\textbf{Name:} Schleichen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Langsam und kontrolliert bewegen, z.B. an Kanten \\
+\textbf{Vorbedingungen:} Spielfigur befindet sich auf Boden \\
+\textbf{Nachbedingungen:} Spielfigur bewegt sich langsamer \\
+\textbf{Beschreibung:} Durch Halten einer Taste wird die Bewegung verlangsamt und Abstürze verhindert.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler hält Schleichen-Taste gedrückt
+  \item[2.] Bewegungsgeschwindigkeit wird reduziert
+  \item[2\opt a.] Optional: Spieler kann nicht von Kanten fallen
+  \item[3.] Animation ändert sich zu Schleichbewegung
+\end{description}
+
+
+\section*{Use Case UC04: Fliegen}
+
+\textbf{Name:} Fliegen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Freies Bewegen im dreidimensionalen Raum \\
+\textbf{Vorbedingungen:} Flugmodus wurde aktiviert \\
+\textbf{Nachbedingungen:} Spieler kann sich vertikal und horizontal bewegen \\
+\textbf{Beschreibung:} Der Flugmodus hebt die Gravitation auf und erlaubt freies Navigieren.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler aktiviert Flugmodus (z.B. durch Doppelsprung)
+  \item[2.] Gravitation wird deaktiviert
+  \item[3.] Bewegung erfolgt in 3D-Richtung per WASD und Maus
+  \item[4.] Flugmodus kann durch erneuten Tastendruck beendet werden
+  \item[4a.] Spieler fällt zurück zu Boden, Gravitation wird aktiviert
+\end{description}
+
+
+\section*{Use Case UC05: Block abbauen}
+
+\textbf{Name:} Block abbauen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Entfernen eines Blocks aus der Spielwelt \\
+\textbf{Vorbedingungen:} Spieler sieht einen erreichbaren Block \\
+\textbf{Nachbedingungen:} Block ist nicht mehr in der Welt vorhanden \\
+\textbf{Beschreibung:} Durch Mausklick kann ein Block entfernt und ggf. aufgenommen werden.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler klickt mit der linken Maustaste auf einen Block
+  \item[2.] System prüft, ob Block erreichbar ist
+  \item[2a.] Falls nicht erreichbar: Aktion abbrechen
+  \item[3.] Block wird aus der Welt entfernt
+  \item[3\opt a.] Optional: Partikeleffekt beim Abbauen anzeigen
+  \item[4.] Block wird dem Inventar hinzugefügt (sofern implementiert)
+\end{description}
+
+
+\section*{Use Case UC06: Block platzieren}
+
+\textbf{Name:} Block platzieren \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Platzieren eines Blocks an einer bestimmten Stelle \\
+\textbf{Vorbedingungen:} Ein Block ist ausgewählt \\
+\textbf{Nachbedingungen:} Der Block ist in der Spielwelt sichtbar \\
+\textbf{Beschreibung:} Spieler kann Blöcke frei setzen, um die Spielwelt zu gestalten.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler klickt mit rechter Maustaste auf Fläche
+  \item[1a.] Falls kein Block ausgewählt ist: Hinweis anzeigen
+  \item[1a.1.] Spieler wählt Blocktyp
+  \item[1\opt b.] Optional: Vorschau anzeigen
+  \item[1\opt b.1.] Vorschau folgt Cursor
+  \item[2.] Block wird an der Stelle platziert
+\end{description}
+
+
+\section*{Use Case UC07: Maussteuerung umschalten}
+
+\textbf{Name:} Maussteuerung umschalten \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) \\
+\textbf{Vorbedingungen:} Spielsteuerung ist aktiv \\
+\textbf{Nachbedingungen:} Mauszeiger ist sichtbar, Steuerung pausiert \\
+\textbf{Beschreibung:} Mit einer Taste kann der Spieler zwischen Maussteuerung und normaler Cursorbewegung wechseln.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler drückt Mausfreigabetaste (z.B. Escape)
+  \item[2.] System schaltet Mauszeiger sichtbar
+  \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
+  \item[3\opt a.] Optional: Spieler kann Fenster verlassen oder Einstellungen ändern
+  \item[4.] Durch erneuten Tastendruck wird Spielsteuerung wieder aktiviert
+\end{description}
+
+
+
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
