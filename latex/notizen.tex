@@ -155,13 +155,12 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
 \begin{tikzpicture}
   % Systemgrenze
   \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
-    \umlusecase[x=0, y=0]{Laufen}
+    \umlusecase[x=0, y=0]{Bewegen}
     \umlusecase[x=0, y=-1.5]{Springen}
-    \umlusecase[x=0, y=-3]{Schleichen}
-    \umlusecase[x=0, y=-4.5]{Fliegen}
+    \umlusecase[x=0, y=-3]{Flugmodus umschalten}
+    \umlusecase[x=0, y=-4.5]{Maussteuerung umschalten}
     \umlusecase[x=0, y=-6]{Block abbauen}
     \umlusecase[x=0, y=-7.5]{Block platzieren}
-    \umlusecase[x=0, y=-9]{Maussteuerung umschalten}
   \end{umlsystem}
 
   % Akteur
@@ -174,125 +173,103 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \umlassoc{Spieler}{usecase-4}
   \umlassoc{Spieler}{usecase-5}
   \umlassoc{Spieler}{usecase-6}
-  \umlassoc{Spieler}{usecase-7}
 \end{tikzpicture}
 \end{center}
 
-\section*{Use Case UC01: Laufen}
+\subsubsection*{Physikalische Rahmenbedingungen der Spielfigur}
 
-\textbf{Name:} Laufen \\
+Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das zwischen horizontaler und vertikaler Bewegung sowie zwischen Flug- und Bodenmodus unterscheidet. Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf Basis folgender Prinzipien berechnet:
+
+\begin{itemize}
+  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewendet, die die Geschwindigkeit exponentiell reduziert.
+
+  \item \textbf{Vertikale Bewegung:}  Die vertikale Bewegung unterscheidet sich je nach Modus, im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine konstante Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
+
+  \item \textbf{Zusammenfassung der Logik:}
+  \begin{itemize}
+    \item Dämpfung wirkt \textbf{immer} in allen Richtungen außer vertikal im Bodenmodus.
+    \item Gravitation ersetzt im Bodenmodus die vertikale Dämpfung.
+    \item Sprung ist eine \textit{diskrete Initialisierung der vertikalen Geschwindigkeit}, kein kontinuierlicher Prozess.
+    \item Die Dämpfung erfolgt exponentiell, die Gravitation linear.
+  \end{itemize}
+\end{itemize}
+
+\textit{Hinweis:} Diese Mechaniken gelten systemweit und werden innerhalb der Use Cases nicht vollständig modelliert, sondern vorausgesetzt. Ihre konkrete Auswirkung auf das Spielerlebnis ergibt sich aus dem Zusammenspiel dieser physikalischen Regeln mit den Eingaben des Spielers.
+
+
+
+\subsubsection*{UC01 – Bewegen}
+
+\textbf{Name:} Bewegen \\
 \textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Bewegung in eine Richtung innerhalb der Spielwelt \\
+\textbf{Ziel:} Fortbewegung der Spielfigur in der Spielwelt entsprechend der Eingaben \\
 \textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv \\
-\textbf{Nachbedingungen:} Position der Spielfigur ist aktualisiert \\
-\textbf{Beschreibung:} Der Spieler bewegt sich in eine gewünschte Richtung mithilfe der Bewegungstasten.
+\textbf{Nachbedingungen:} Position der Spielfigur wurde ggf. angepasst \\
+\textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Bewegungstasten. Die Bewegungsrichtung wird durch die aktuelle Blickrichtung bestimmt. Der Use Case bleibt aktiv, solange Eingaben erfolgen. Sprinten, Schleichen sowie vertikale Flugbewegung (Flugmodus aktiv) beeinflussen die Fortbewegung.
 
 \textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler drückt Bewegungstaste (W/A/S/D)
-  \item[2.] System berechnet neue Position
-  \item[3.] Spielfigur wird an neue Position gesetzt
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[1a.] Spieler behält Blickrichtung bei
+  \item[2.] Spieler drückt Bewegungstaste (W/A/S/D)
+  \item[2a.] Speiler tätigt keine Eingabe - Use Case bleibt aktiv
+  \item[2a.1.] Wiederhole Schritt 1
+  \item[2\opt b.] Spieler drückt Sprinttaste (Shift)
+  \item[2\opt c.] Spieler drückt Schleichtaste (Strg)
+  \item[3.] System berechnet neue Position der Spielfigur
+  \item[3\opt a.] Spieler ist am Sprinten
+  \item[3\opt a.1.] Geschwindigkeit der Spielfigur wird erhöht
+  \item[3\opt b.] Spieler ist am Schleichen
+  \item[3\opt b.1.] Geschwindigkeit der Spielfigur wird verringert
+  \item[3\opt b.1a.] Spieler ist am fliegen.
+  \item[3\opt b.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
+  \item[4.] Spiel aktualisiert Position der Spielfigur
+  \item[5.] Wiederhole Schritt 1
 \end{description}
 
-
-\section*{Use Case UC02: Springen}
+\subsubsection*{UC02 – Springen}
 
 \textbf{Name:} Springen \\
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Hindernisse überwinden oder Höhe gewinnen \\
-\textbf{Vorbedingungen:} Spieler befindet sich auf festem Boden \\
-\textbf{Nachbedingungen:} Spielfigur verlässt kurzzeitig den Boden \\
-\textbf{Beschreibung:} Der Spieler kann durch eine Taste springen, wenn die Bedingungen erfüllt sind.
+\textbf{Vorbedingungen:} Spielfigur befindet sich in der Spielwelt \\
+\textbf{Nachbedingungen:} Spielfigur bewegt sich vertikal nach oben oder bleibt unverändert \\
+\textbf{Beschreibung:} Durch Drücken der Springtaste kann die Spielfigur entweder einen einmaligen Sprung ausführen (bei Bodenkontakt) oder im Flugmodus kontinuierlich aufsteigen. Das Verhalten hängt vom Zustand der Spielfigur (am Boden oder im Flug) ab.
+
+\textit{Hinweis: Im Flugmodus verhält sich der Use Case wie eine kontinuierliche Bewegungseingabe. Außerhalb des Flugmodus handelt es sich um eine einmalige Aktion.}
 
 \textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spieler drückt Springtaste (Leertaste)
-  \item[2.] System prüft, ob Spieler sich auf dem Boden befindet
-  \item[2a.] Falls nicht: Sprung wird ignoriert
+  \item[2.] System validiert, dass Spieler springen kann
+  \item[2a.] Spielfigur hat keinen Bodenkontakt
+  \item[2a.1.] UseCase endet erfolglos
+  \item[2b.] Spielfigur ist im Flugmodus
+  \item[2b.1.] Solange Springtaste gedrückt ist, erhält die Spielfigur Bewegung nach oben
+  \item[2b.2.] Der Use Case endet erfolgreich, sobald die Taste losgelassen wird
   \item[3.] Sprungbewegung wird ausgelöst
-  \item[3.1.] Spieler verlässt den Boden
-  \item[3.2.] Gravitation wirkt auf Spieler
+  \item[4.] UseCase endet erfolgreich
 \end{description}
 
+\subsubsection*{UC03 – Flugmodus umschalten}
 
-\section*{Use Case UC03: Schleichen}
-
-\textbf{Name:} Schleichen \\
+\textbf{Name:} Flugmodus umschalten \\
 \textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Langsam und kontrolliert bewegen, z.B. an Kanten \\
-\textbf{Vorbedingungen:} Spielfigur befindet sich auf Boden \\
-\textbf{Nachbedingungen:} Spielfigur bewegt sich langsamer \\
-\textbf{Beschreibung:} Durch Halten einer Taste wird die Bewegung verlangsamt und Abstürze verhindert.
+\textbf{Ziel:} Zustand der Spielfigur zwischen Boden- und Flugmodus wechseln \\
+\textbf{Vorbedingungen:} Spielfigur befindet sich in der Spielwelt \\
+\textbf{Nachbedingungen:} Gravitation ist deaktiviert oder wiederhergestellt; Flugverhalten wird angepasst \\
+\textbf{Beschreibung:} Durch Drücken der Flugmodus-Taste kann der Spieler zwischen normalem Bewegungsmodus und Flugmodus wechseln. Der Flugmodus deaktiviert die Gravitation und ermöglicht kontrollierte Bewegung in alle Richtungen. Beim erneuten Drücken wird der Zustand wieder zurückgesetzt.
 
 \textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler hält Schleichen-Taste gedrückt
-  \item[2.] Bewegungsgeschwindigkeit wird reduziert
-  \item[2\opt a.] Optional: Spieler kann nicht von Kanten fallen
-  \item[3.] Animation ändert sich zu Schleichbewegung
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler drückt die Fliegentaste (F)
+  \item[2.] Flugmodus wird aktiviert
+  \item[2a.] Flugmodus ist bereits aktiv
+  \item[2a.1.] Flugmodus wird deaktiviert
+  \item[3.] UseCase endet erfolgreich
 \end{description}
 
-
-\section*{Use Case UC04: Fliegen}
-
-\textbf{Name:} Fliegen \\
-\textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Freies Bewegen im dreidimensionalen Raum \\
-\textbf{Vorbedingungen:} Flugmodus wurde aktiviert \\
-\textbf{Nachbedingungen:} Spieler kann sich vertikal und horizontal bewegen \\
-\textbf{Beschreibung:} Der Flugmodus hebt die Gravitation auf und erlaubt freies Navigieren.
-
-\textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler aktiviert Flugmodus (z.B. durch Doppelsprung)
-  \item[2.] Gravitation wird deaktiviert
-  \item[3.] Bewegung erfolgt in 3D-Richtung per WASD und Maus
-  \item[4.] Flugmodus kann durch erneuten Tastendruck beendet werden
-  \item[4a.] Spieler fällt zurück zu Boden, Gravitation wird aktiviert
-\end{description}
-
-
-\section*{Use Case UC05: Block abbauen}
-
-\textbf{Name:} Block abbauen \\
-\textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Entfernen eines Blocks aus der Spielwelt \\
-\textbf{Vorbedingungen:} Spieler sieht einen erreichbaren Block \\
-\textbf{Nachbedingungen:} Block ist nicht mehr in der Welt vorhanden \\
-\textbf{Beschreibung:} Durch Mausklick kann ein Block entfernt und ggf. aufgenommen werden.
-
-\textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler klickt mit der linken Maustaste auf einen Block
-  \item[2.] System prüft, ob Block erreichbar ist
-  \item[2a.] Falls nicht erreichbar: Aktion abbrechen
-  \item[3.] Block wird aus der Welt entfernt
-  \item[3\opt a.] Optional: Partikeleffekt beim Abbauen anzeigen
-  \item[4.] Block wird dem Inventar hinzugefügt (sofern implementiert)
-\end{description}
-
-
-\section*{Use Case UC06: Block platzieren}
-
-\textbf{Name:} Block platzieren \\
-\textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Platzieren eines Blocks an einer bestimmten Stelle \\
-\textbf{Vorbedingungen:} Ein Block ist ausgewählt \\
-\textbf{Nachbedingungen:} Der Block ist in der Spielwelt sichtbar \\
-\textbf{Beschreibung:} Spieler kann Blöcke frei setzen, um die Spielwelt zu gestalten.
-
-\textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler klickt mit rechter Maustaste auf Fläche
-  \item[1a.] Falls kein Block ausgewählt ist: Hinweis anzeigen
-  \item[1a.1.] Spieler wählt Blocktyp
-  \item[1\opt b.] Optional: Vorschau anzeigen
-  \item[1\opt b.1.] Vorschau folgt Cursor
-  \item[2.] Block wird an der Stelle platziert
-\end{description}
-
-
-\section*{Use Case UC07: Maussteuerung umschalten}
+\subsubsection*{UC04 – Maussteuerung umschalten}
 
 \textbf{Name:} Maussteuerung umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -302,13 +279,67 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
 \textbf{Beschreibung:} Mit einer Taste kann der Spieler zwischen Maussteuerung und normaler Cursorbewegung wechseln.
 
 \textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler drückt Mausfreigabetaste (z.B. Escape)
-  \item[2.] System schaltet Mauszeiger sichtbar
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler drückt Mausfreigabetaste (L)
+  \item[2.] System schaltet Mauszeiger frei
+  \item[2a.] Spieler kann Mauszeiger bewegen
+  \item[2a.1.] Mauszeiger wird eingefangen
+  \item[2a.2.] Kamera- und Bewegungssteuerung werden aktiviert
+  \item[2a.3.] UseCase endet erfolglos
   \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
-  \item[3\opt a.] Optional: Spieler kann Fenster verlassen oder Einstellungen ändern
-  \item[4.] Durch erneuten Tastendruck wird Spielsteuerung wieder aktiviert
+  \item[3\opt a.] Spieler kann Fenster verlassen
+  \item[4.] UseCase endet erfolgreich
 \end{description}
+
+\subsubsection*{UC05 – Block abbauen}
+
+\textbf{Name:} Block abbauen \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Entfernen eines Blocks aus der Spielwelt \\
+\textbf{Vorbedingungen:} Spieler sieht einen erreichbaren Block \\
+\textbf{Nachbedingungen:} Block ist nicht mehr in der Welt vorhanden \\
+\textbf{Beschreibung:} Durch Mausklick kann ein Block entfernt und ggf. aufgenommen werden.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[2.] Spieler klickt die linken Maustaste
+  \item[3.] System validiert, dass der Block abgebaut werden kann
+  \item[3a.] Es ist kein entfernbarer Block im Sichtfeld
+  \item[3a.1.] UseCase endet erfolglos
+  \item[4.] Block wird aus der Welt entfernt
+  \item[3\opt a.] Partikeleffekt beim Abbauen anzeigen
+  \item[5.] Block wird dem Inventar hinzugefügt
+  \item[5a.] Inventar ist voll
+  \item[5a.1.] UseCase endet erfolglos 
+  \item[6.] UseCase endet erfolgreich
+\end{description}
+
+\subsubsection*{UC06 – Block platzieren}
+
+\textbf{Name:} Block platzieren \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Platzieren eines Blocks an einer bestimmten Stelle \\
+\textbf{Vorbedingungen:} Ein Block ist ausgewählt \\
+\textbf{Nachbedingungen:} Der Block ist in der Spielwelt sichtbar \\
+\textbf{Beschreibung:} Spieler kann Blöcke frei setzen, um die Spielwelt zu gestalten.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[2.] Spieler klickt die linken Maustaste
+  \item[3.] System validiert, dass der Block platziert werden kann
+  \item[3a.] Es ist keine valide Oberfläche im Sichtfeld
+  \item[3a.1.] UseCase endet erfolglos
+  \item[4.] Block wird an der Stelle platziert
+  \item[4a.] Spieler hat keinen Block im Inventar
+  \item[4a.1.] UseCase endet erfolglos
+  \item[5.] Block wird aus dem Inventar entfernt
+  \item[6.] UseCase endet erfolgreich
+\end{description}
+
+
+
 
 
 
