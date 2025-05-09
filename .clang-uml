@@ -1,0 +1,14 @@
+compilation_database_dir: build
+output_directory: class_diagram
+diagrams:
+  config_class:
+    type: class
+    include_relations_also_as_members: false
+    glob: 
+      - ./Source/**/*.cpp
+    exclude:
+      namespaces:
+        - std
+        - glm
+      relationships:
+        - instantiation
