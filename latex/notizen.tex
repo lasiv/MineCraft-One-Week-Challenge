@@ -285,7 +285,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[2a.] Spieler kann Mauszeiger bewegen
   \item[2a.1.] Mauszeiger wird eingefangen
   \item[2a.2.] Kamera- und Bewegungssteuerung werden aktiviert
-  \item[2a.3.] UseCase endet erfolgreich
+  \item[2a.3.] UseCase endet erfolglos
   \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
   \item[3\opt a.] Spieler kann Fenster verlassen
   \item[4.] UseCase endet erfolgreich
@@ -302,12 +302,17 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler klickt mit der linken Maustaste auf einen Block
-  \item[2.] System prüft, ob Block erreichbar ist
-  \item[2a.] Falls nicht erreichbar: Aktion abbrechen
-  \item[3.] Block wird aus der Welt entfernt
-  \item[3\opt a.] Optional: Partikeleffekt beim Abbauen anzeigen
-  \item[4.] Block wird dem Inventar hinzugefügt (sofern implementiert)
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[2.] Spieler klickt die linken Maustaste
+  \item[3.] System validiert, dass der Block abgebaut werden kann
+  \item[3a.] Es ist kein entfernbarer Block im Sichtfeld
+  \item[3a.1.] UseCase endet erfolglos
+  \item[4.] Block wird aus der Welt entfernt
+  \item[3\opt a.] Partikeleffekt beim Abbauen anzeigen
+  \item[5.] Block wird dem Inventar hinzugefügt
+  \item[5a.] Inventar ist voll
+  \item[5a.1.] UseCase endet erfolglos 
+  \item[6.] UseCase endet erfolgreich
 \end{description}
 
 \subsubsection*{UC06 – Block platzieren}
@@ -321,12 +326,16 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler klickt mit rechter Maustaste auf Fläche
-  \item[1a.] Falls kein Block ausgewählt ist: Hinweis anzeigen
-  \item[1a.1.] Spieler wählt Blocktyp
-  \item[1\opt b.] Optional: Vorschau anzeigen
-  \item[1\opt b.1.] Vorschau folgt Cursor
-  \item[2.] Block wird an der Stelle platziert
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[2.] Spieler klickt die linken Maustaste
+  \item[3.] System validiert, dass der Block platziert werden kann
+  \item[3a.] Es ist keine valide Oberfläche im Sichtfeld
+  \item[3a.1.] UseCase endet erfolglos
+  \item[4.] Block wird an der Stelle platziert
+  \item[4a.] Spieler hat keinen Block im Inventar
+  \item[4a.1.] UseCase endet erfolglos
+  \item[5.] Block wird aus dem Inventar entfernt
+  \item[6.] UseCase endet erfolgreich
 \end{description}
 
 
