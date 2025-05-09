@@ -157,11 +157,10 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
     \umlusecase[x=0, y=0]{Laufen}
     \umlusecase[x=0, y=-1.5]{Springen}
-    \umlusecase[x=0, y=-3]{Schleichen}
-    \umlusecase[x=0, y=-4.5]{Fliegen}
+    \umlusecase[x=0, y=-3]{Fliegen}
     \umlusecase[x=0, y=-6]{Block abbauen}
     \umlusecase[x=0, y=-7.5]{Block platzieren}
-    \umlusecase[x=0, y=-9]{Maussteuerung umschalten}
+    \umlusecase[x=0, y=-4.5]{Maussteuerung umschalten}
   \end{umlsystem}
 
   % Akteur
@@ -174,28 +173,36 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \umlassoc{Spieler}{usecase-4}
   \umlassoc{Spieler}{usecase-5}
   \umlassoc{Spieler}{usecase-6}
-  \umlassoc{Spieler}{usecase-7}
 \end{tikzpicture}
 \end{center}
 
-\section*{Use Case UC01: Laufen}
+\subsubsection*{UC01 – Laufen}
 
 \textbf{Name:} Laufen \\
 \textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Bewegung in eine Richtung innerhalb der Spielwelt \\
+\textbf{Ziel:} Bewegung der Spielfigur innerhalb der Spielwelt \\
 \textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv \\
 \textbf{Nachbedingungen:} Position der Spielfigur ist aktualisiert \\
 \textbf{Beschreibung:} Der Spieler bewegt sich in eine gewünschte Richtung mithilfe der Bewegungstasten.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler drückt Bewegungstaste (W/A/S/D)
-  \item[2.] System berechnet neue Position
-  \item[3.] Spielfigur wird an neue Position gesetzt
+  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
+  \item[2.] Spieler drückt Bewegungstaste (W/A/S/D)
+  \item[2\opt a.] Spieler drückt Sprinttaste (Shift)
+  \item[2\opt b.] Spieler drückt Schleichtaste (Strg)
+  \item[3.] System berechnet neue Position der Spielfigfur
+  \item[3\opt a.] Spieler ist am Sprinten
+  \item[3\opt a.1.] Geschwindigkeit der Spielfigur wird erhöht
+  \item[3\opt b.] Spieler ist am Schleichen
+  \item[3\opt b.1.] Geschwindigkeit der Spielfigur wird verringert
+  \item[3\opt b.1a.] Spieler ist am fliegen.
+  \item[3\opt b.1a.1.] Spielfigur bekommt zusätzlich Geschwindigkeit nach unten
+  \item[4.] Spiel aktualisiert Position der Spielfigur
+  \item[5.] Wiederhole Schritt 2
 \end{description}
 
-
-\section*{Use Case UC02: Springen}
+\subsubsection*{UC02 – Springen}
 
 \textbf{Name:} Springen \\
 \textbf{Akteur:} Spieler \\
@@ -214,26 +221,7 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \item[3.2.] Gravitation wirkt auf Spieler
 \end{description}
 
-
-\section*{Use Case UC03: Schleichen}
-
-\textbf{Name:} Schleichen \\
-\textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Langsam und kontrolliert bewegen, z.B. an Kanten \\
-\textbf{Vorbedingungen:} Spielfigur befindet sich auf Boden \\
-\textbf{Nachbedingungen:} Spielfigur bewegt sich langsamer \\
-\textbf{Beschreibung:} Durch Halten einer Taste wird die Bewegung verlangsamt und Abstürze verhindert.
-
-\textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler hält Schleichen-Taste gedrückt
-  \item[2.] Bewegungsgeschwindigkeit wird reduziert
-  \item[2\opt a.] Optional: Spieler kann nicht von Kanten fallen
-  \item[3.] Animation ändert sich zu Schleichbewegung
-\end{description}
-
-
-\section*{Use Case UC04: Fliegen}
+\subsubsection*{UC03 – Fliegen}
 
 \textbf{Name:} Fliegen \\
 \textbf{Akteur:} Spieler \\
@@ -251,8 +239,25 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \item[4a.] Spieler fällt zurück zu Boden, Gravitation wird aktiviert
 \end{description}
 
+\subsubsection*{UC04 – Maussteuerung umschalten}
 
-\section*{Use Case UC05: Block abbauen}
+\textbf{Name:} Maussteuerung umschalten \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) \\
+\textbf{Vorbedingungen:} Spielsteuerung ist aktiv \\
+\textbf{Nachbedingungen:} Mauszeiger ist sichtbar, Steuerung pausiert \\
+\textbf{Beschreibung:} Mit einer Taste kann der Spieler zwischen Maussteuerung und normaler Cursorbewegung wechseln.
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
+  \item[1.] Spieler drückt Mausfreigabetaste (z.B. Escape)
+  \item[2.] System schaltet Mauszeiger sichtbar
+  \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
+  \item[3\opt a.] Optional: Spieler kann Fenster verlassen oder Einstellungen ändern
+  \item[4.] Durch erneuten Tastendruck wird Spielsteuerung wieder aktiviert
+\end{description}
+
+\subsubsection*{UC05 – Block abbauen}
 
 \textbf{Name:} Block abbauen \\
 \textbf{Akteur:} Spieler \\
@@ -271,8 +276,7 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
   \item[4.] Block wird dem Inventar hinzugefügt (sofern implementiert)
 \end{description}
 
-
-\section*{Use Case UC06: Block platzieren}
+\subsubsection*{UC06 – Block platzieren}
 
 \textbf{Name:} Block platzieren \\
 \textbf{Akteur:} Spieler \\
@@ -292,23 +296,7 @@ Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.n
 \end{description}
 
 
-\section*{Use Case UC07: Maussteuerung umschalten}
 
-\textbf{Name:} Maussteuerung umschalten \\
-\textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) \\
-\textbf{Vorbedingungen:} Spielsteuerung ist aktiv \\
-\textbf{Nachbedingungen:} Mauszeiger ist sichtbar, Steuerung pausiert \\
-\textbf{Beschreibung:} Mit einer Taste kann der Spieler zwischen Maussteuerung und normaler Cursorbewegung wechseln.
-
-\textbf{Ablaufspezifikation:}
-\begin{description}[style=nextline,leftmargin=1.5cm,labelwidth=1.2cm]
-  \item[1.] Spieler drückt Mausfreigabetaste (z.B. Escape)
-  \item[2.] System schaltet Mauszeiger sichtbar
-  \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
-  \item[3\opt a.] Optional: Spieler kann Fenster verlassen oder Einstellungen ändern
-  \item[4.] Durch erneuten Tastendruck wird Spielsteuerung wieder aktiviert
-\end{description}
 
 
 
