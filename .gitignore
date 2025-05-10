@@ -35,5 +35,6 @@ mc-one-week-challenge/
 config.txt
 
 # clang-uml
-class_diagram/
+class_diagram/*
+!class_diagram/scripts/
 !class_diagram/scripts/puml2tikz.py
