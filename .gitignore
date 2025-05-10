@@ -36,3 +36,4 @@ config.txt
 
 # clang-uml
 class_diagram/
+!class_diagram/scripts/
