@@ -1,4 +1,4 @@
-compilation_database_dir: build
+compilation_database_dir: build/debug
 output_directory: class_diagram
 diagrams:
   config_class:
