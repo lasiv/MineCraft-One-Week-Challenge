@@ -1,0 +1,1223 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+class Application {
+	+Application(const Config& config)
+	-m_camera : Camera
+	+getCamera() : Camera&
+	-m_context : Context
+	-m_masterRenderer : RenderMaster
+	-m_isPopState : bool
+	-m_config : const Config&
+	+getWindow() : sf::Window& {query}
+	-m_states : std::vector<std::unique_ptr<StateBase>>
+	-handleEvents() : void
+	+popState() : void
+	+pushState(Args&& ... args) : void
+	+runLoop() : void
+	+turnOffMouse() : void
+	+turnOnMouse() : void
+}
+
+
+class Array2D <template<typename T, int WIDTH>> {
+	+get(int x, int z) : T&
+	+get(int x, int z) : T& {query}
+	+getMaxValue() : T&
+	-m_array : array<T, WIDTH* WIDTH>
+	+setAll(T val) : void
+}
+
+
+class BasicShader {
+	+BasicShader(const std::string& vertexFile, const std::string& fragmentFile)
+	-m_locationModelMatrix : GLuint
+	-m_locationProjectionViewMatrix : GLuint
+	#getUniforms() : void
+	+loadModelMatrix(const glm::mat4& matrix) : void
+	+loadProjectionViewMatrix(const glm::mat4& pvMatrix) : void
+}
+
+
+class BasicTexture {
+	+BasicTexture()
+	+BasicTexture(const std::string& file)
+	+~BasicTexture()
+	-m_id : GLuint
+	+bindTexture() : void {query}
+	+loadFromFile(const std::string& file) : void
+	+loadFromImage(const sf::Image& image) : void
+}
+
+
+class BlockData {
+	+BlockData(const std::string& fileName)
+	-m_data : BlockDataHolder
+	+getBlockData() : BlockDataHolder& {query}
+}
+
+
+class BlockDatabase {
+	-BlockDatabase()
+	+getData(BlockId id) : BlockData& {query}
+	+{static} get() : BlockDatabase&
+	+getBlock(BlockId id) : BlockType& {query}
+	+textureAtlas : TextureAtlas
+	-,(unsigned) : std::array<std::unique_ptr<BlockType>
+}
+
+
+class BlockType {
+	+BlockType(const std::string& fileName)
+	+~BlockType()
+	-m_data : BlockData
+	+getData() : BlockData& {query}
+}
+
+
+class Camera {
+	+Camera(const Config& config)
+	-m_config : Config
+	-m_frustum : ViewFrustum
+	+getFrustum() : ViewFrustum& {query}
+	-m_pEntity : const Entity*
+	-m_projViewMatrx : glm::mat4
+	-m_projectionMatrix : glm::mat4
+	-m_viewMatrix : glm::mat4
+	+getProjMatrix() : glm::mat4& {query}
+	+getProjectionViewMatrix() : glm::mat4& {query}
+	+getViewMatrix() : glm::mat4& {query}
+	+hookEntity(const Entity& entity) : void
+	+update() : void
+}
+
+
+class Chunk {
+	+Chunk()
+	+Chunk(World& world, const sf::Vector2i& location)
+	-m_highestBlocks : Array2D<int, CHUNK_SIZE>
+	+getBlock(int x, int y, int z) : ChunkBlock {query}
+	+getSection(int index) : ChunkSection&
+	-m_pWorld : World*
+	+hasLoaded() : bool {query}
+	-m_isLoaded : bool
+	+makeMesh(const Camera& camera) : bool
+	-outOfBound(int x, int y, int z) : bool {query}
+	+getHeightAt(int x, int z) : int
+	-m_location : sf::Vector2i
+	+getLocation() : sf::Vector2i& {query}
+	-m_chunks : std::vector<ChunkSection>
+	-addSection() : void
+	-addSectionsBlockTarget(int blockY) : void
+	-addSectionsIndexTarget(int index) : void
+	+deleteMeshes() : void
+	+drawChunks(RenderMaster& renderer, const Camera& camera) : void
+	+load(TerrainGenerator& generator) : void
+	+setBlock(int x, int y, int z, ChunkBlock block) : void
+}
+
+
+class ChunkManager {
+	+ChunkManager(World& world)
+	+getChunk(int x, int z) : Chunk&
+	+getChunks() : ChunkMap&
+	+getTerrainGenerator() : TerrainGenerator& {query}
+	-m_world : World*
+	+chunkExistsAt(int x, int z) : bool {query}
+	+chunkLoadedAt(int x, int z) : bool {query}
+	+makeMesh(int x, int z, const Camera& camera) : bool
+	-m_terrainGenerator : std::unique_ptr<TerrainGenerator>
+	-m_chunks : unordered_map<VectorXZ, Chunk>
+	+deleteMeshes() : void
+	+loadChunk(int x, int z) : void
+	+unloadChunk(int x, int z) : void
+}
+
+
+class ChunkMesh {
+	+ChunkMesh()
+	-m_indexIndex : GLuint
+	-m_mesh : Mesh
+	-m_model : Model
+	+getModel() : Model& {query}
+	+faces : int
+	-m_light : std::vector<GLfloat>
+	+addFace(const std::array<GLfloat, 12>& blockFace, const std::array<GLfloat, 8>& textureCoords, const sf::Vector3i& chunkPosition, const sf::Vector3i& blockPosition, GLfloat cardinalLight) : void
+	+bufferMesh() : void
+	+deleteData() : void
+}
+
+
+class ChunkMeshBuilder {
+	+ChunkMeshBuilder(ChunkSection& chunk, ChunkMeshCollection& meshes)
+	-m_pActiveMesh : ChunkMesh*
+	-m_pMeshes : ChunkMeshCollection*
+	-m_pChunk : ChunkSection*
+	-shouldMakeFace(const sf::Vector3i& blockPosition, const BlockDataHolder& blockData) : bool
+	-shouldMakeLayer(int y) : bool
+	-m_pBlockData : const BlockDataHolder*
+	-m_pBlockPtr : const ChunkBlock*
+	-addXBlockToMesh(const sf::Vector2i& textureCoords, const sf::Vector3i& blockPosition) : void
+	+buildMesh() : void
+	-setActiveMesh(ChunkBlock block) : void
+	-tryAddFaceToMesh(const std::array<GLfloat, 12>& blockFace, const sf::Vector2i& textureCoords, const sf::Vector3i& blockPosition, const sf::Vector3i& blockFacing, GLfloat cardinalLight) : void
+}
+
+
+class ChunkRenderer {
+	-m_shader : ChunkShader
+	-m_chunks : std::vector<const RenderInfo*>
+	+add(const ChunkMesh& mesh) : void
+	+render(const Camera& camera) : void
+}
+
+
+class ChunkSection {
+	+ChunkSection(const sf::Vector3i& position, World& world)
+	-m_aabb : AABB
+	+getBlock(int x, int y, int z) : ChunkBlock {query}
+	+begin() : ChunkBlock*
+	-m_meshes : ChunkMeshCollection
+	+getMeshes() : ChunkMeshCollection& {query}
+	+getAdjacent(int dx, int dz) : ChunkSection&
+	+getLayer(int y) : Layer& {query}
+	-m_pWorld : World*
+	+hasBuffered() : bool {query}
+	+hasMesh() : bool {query}
+	-m_hasBufferedMesh : bool
+	-m_hasMesh : bool
+	-{static} outOfBounds(int value) : bool
+	-{static} getIndex(int x, int y, int z) : int
+	+getLocation() : sf::Vector3i {query}
+	-m_location : sf::Vector3i
+	-toWorldPosition(int x, int y, int z) : sf::Vector3i {query}
+	-m_blocks : std::array<ChunkBlock, CHUNK_VOLUME>
+	-m_layers : std::array<Layer, CHUNK_SIZE>
+	+bufferMesh() : void
+	+deleteMeshes() : void
+	+makeMesh() : void
+	+setBlock(int x, int y, int z, ChunkBlock block) : void
+}
+
+
+class ChunkSection::Layer {
+	+isAllSolid() : bool {query}
+	-m_solidBlockCount : int
+	+update(ChunkBlock c) : void
+}
+
+
+class ChunkShader {
+	+ChunkShader()
+	-getUniforms() : void
+}
+
+
+class ClassicOverWorldGenerator {
+	+ClassicOverWorldGenerator()
+	-m_biomeMap : Array2D<int, CHUNK_SIZE + 1>
+	-m_heightMap : Array2D<int, CHUNK_SIZE>
+	-getBiome(int x, int z) : Biome& {query}
+	-m_pChunk : Chunk*
+	-m_desertBiome : DesertBiome
+	-m_grassBiome : GrasslandBiome
+	-m_lightForest : LightForest
+	-m_oceanBiome : OceanBiome
+	-m_random : Random<std::minstd_rand>
+	-m_temperateForest : TemperateForestBiome
+	+getMinimumSpawnHeight() : int {query}
+	-{static} m_biomeNoiseGen : static NoiseGenerator
+	+generateTerrainFor(Chunk& chunk) : void
+	-getBiomeMap() : void
+	-getHeightIn(int xMin, int zMin, int xMax, int zMax) : void
+	-getHeightMap() : void
+	-setBlocks(int maxHeight) : void
+	-{static} setUpNoise() : void
+}
+
+
+class Controller {
+	-translateInput() : glm::vec3
+	-mouseInput() : sf::Vector2i
+}
+
+
+class CubeTexture {
+	+CubeTexture()
+	+CubeTexture(const std::array<std::string, 6>& files)
+	+~CubeTexture()
+	-m_texId : GLuint
+	+bindTexture() : void {query}
+	+loadFromFiles(const std::array<std::string, 6>& files) : void
+}
+
+
+class DefaultBlock {
+	+DefaultBlock(const std::string& fileName)
+}
+
+
+class DesertBiome {
+	+DesertBiome(int seed)
+	+getPlant(Rand& rand) : ChunkBlock {query}
+	+getTopBlock(Rand& rand) : ChunkBlock {query}
+	+getUnderWaterBlock(Rand& rand) : ChunkBlock {query}
+	-getNoiseParameters() : NoiseParameters
+	+makeTree(Rand& rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+class FPSCounter {
+	+FPSCounter()
+	-debugging : bool
+	-enabled : bool
+	-m_fps : float
+	-m_frameCount : int
+	-m_delayTimer : sf::Clock
+	-m_fpsTimer : sf::Clock
+	-m_font : sf::Font
+	-m_text : sf::Text
+	+draw(RenderMaster& renderer) : void
+	+update() : void
+}
+
+
+class FloraRenderer {
+	-m_shader : FloraShader
+	-m_chunks : std::vector<const RenderInfo*>
+	+add(const ChunkMesh& mesh) : void
+	+render(const Camera& camera) : void
+}
+
+
+class FloraShader {
+	+FloraShader()
+	-m_time : GLuint
+	-getUniforms() : void
+	+loadTime(const float& time) : void
+}
+
+
+class GrasslandBiome {
+	+GrasslandBiome(int seed)
+	+getBeachBlock(Rand& rand) : ChunkBlock {query}
+	+getPlant(Rand& rand) : ChunkBlock {query}
+	+getTopBlock(Rand& rand) : ChunkBlock {query}
+	+getUnderWaterBlock(Rand& rand) : ChunkBlock {query}
+	-getNoiseParameters() : NoiseParameters
+	+makeTree(Rand& rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+class ItemStack {
+	+ItemStack(const Material& material, int amount)
+	+getMaterial() : Material& {query}
+	-m_pMaterial : const Material*
+	+add(int amount) : int
+	+getNumInStack() : int {query}
+	-m_numInStack : int
+	+remove() : void
+}
+
+
+class Keyboard {
+	+Keyboard()
+	+isKeyDown(sf::Keyboard::Key key) : bool {query}
+	+keyReleased(sf::Keyboard::Key key) : bool {query}
+	-m_recentlyReleased : sf::Keyboard::Key
+	-m_keys : std::array<bool, sf::Keyboard::KeyCount>
+	+update(sf::Event e) : void
+}
+
+
+class LightForest {
+	+LightForest(int seed)
+	+getPlant(Rand& rand) : ChunkBlock {query}
+	+getTopBlock(Rand& rand) : ChunkBlock {query}
+	+getUnderWaterBlock(Rand& rand) : ChunkBlock {query}
+	-getNoiseParameters() : NoiseParameters
+	+makeTree(Rand& rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+class Model {
+	+Model()
+	+Model(const Mesh& mesh)
+	+Model(Model&& other)
+	+~Model()
+	+operator=(Model&& other) : Model&
+	-m_renderInfo : RenderInfo
+	+getRenderInfo() : RenderInfo& {query}
+	+getIndicesCount() : int {query}
+	-m_vboCount : int
+	-m_buffers : std::vector<GLuint>
+	+addData(const Mesh& mesh) : void
+	+addEBO(const std::vector<GLuint>& indices) : void
+	+addVBO(int dimensions, const std::vector<GLfloat>& data) : void
+	+bindVAO() : void {query}
+	+deleteData() : void
+	+genVAO() : void
+}
+
+
+class NoiseGenerator {
+	+NoiseGenerator(int seed)
+	-m_noiseParameters : NoiseParameters
+	+getHeight(int x, int z, int chunkX, int chunkZ) : double {query}
+	-getNoise(int n) : double {query}
+	-getNoise(double x, double z) : double {query}
+	-lerp(double a, double b, double z) : double {query}
+	-noise(double x, double z) : double {query}
+	-m_seed : int
+	+setParameters(const NoiseParameters& params) : void
+}
+
+
+class NonMovable {
+	#NonMovable()
+}
+
+
+class OceanBiome {
+	+OceanBiome(int seed)
+	+getPlant(Rand& rand) : ChunkBlock {query}
+	+getTopBlock(Rand& rand) : ChunkBlock {query}
+	+getUnderWaterBlock(Rand& rand) : ChunkBlock {query}
+	-getNoiseParameters() : NoiseParameters
+	+makeTree(Rand& rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+class Player {
+	+Player()
+	+getHeldItems() : ItemStack&
+	-m_flyKey : ToggleKey
+	-m_itemDown : ToggleKey
+	-m_itemUp : ToggleKey
+	-m_num1 : ToggleKey
+	-m_num2 : ToggleKey
+	-m_num3 : ToggleKey
+	-m_num4 : ToggleKey
+	-m_num5 : ToggleKey
+	-m_slow : ToggleKey
+	-m_isFlying : bool
+	-m_isOnGround : bool
+	-m_isSneak : bool
+	-m_acceleration : glm::vec3
+	-m_heldItem : int
+	-m_posPrint : sf::Text
+	-m_items : std::vector<ItemStack>
+	-m_itemText : std::vector<sf::Text>
+	+addItem(const Material& material) : void
+	+collide(World& world, const glm::vec3& vel, float dt) : void
+	+draw(RenderMaster& master) : void
+	+handleInput(const sf::Window& window, Keyboard& keyboard) : void
+	-jump() : void
+	-keyboardInput(Keyboard& keyboard) : void
+	-mouseInput(const sf::Window& window) : void
+	+update(float dt, World& wolrd) : void
+}
+
+
+class PlayerDigEvent {
+	+PlayerDigEvent(sf::Mouse::Button button, const glm::vec3& location, Player& player)
+	-m_pPlayer : Player*
+	-m_digSpot : glm::vec3
+	-m_buttonPress : sf::Mouse::Button
+	-dig(World& world) : void
+	+handle(World& world) : void
+}
+
+
+class Random <template<typename REngine=std::mt19937>> {
+	+Random(int n)
+	-m_randomEngine : REngine
+	+intInRange(T low, T high) : T
+	+setSeed(int seed) : void
+}
+
+
+class RandomSingleton {
+	-RandomSingleton()
+	+{static} get() : RandomSingleton&
+	+intInRange(T low, T high) : T
+	-m_randomEngine : std::mt19937
+}
+
+
+class Ray {
+	+Ray(const glm::vec3& position, const glm::vec3& direction)
+	+getLength() : float {query}
+	-m_direction : glm::vec3
+	-m_rayEnd : glm::vec3
+	-m_rayStart : glm::vec3
+	+getEnd() : glm::vec3& {query}
+	+step(float scale) : void
+}
+
+
+class RenderMaster {
+	-m_chunkRenderer : ChunkRenderer
+	-m_floraRenderer : FloraRenderer
+	-m_skyboxRenderer : SkyboxRenderer
+	-m_waterRenderer : WaterRenderer
+	-m_drawBox : bool
+	+drawChunk(const ChunkSection& chunk) : void
+	+drawSky() : void
+	+finishRender(sf::Window& window, const Camera& camera) : void
+}
+
+
+abstract class Shader {
+	+Shader(const std::string& vertexFile, const std::string& fragmentFile)
+	+~Shader()
+	#m_id : GLuint
+	#{abstract} getUniforms() : void
+	+loadFloat(GLuint location, float value) : void
+	+loadInt(GLuint location, int value) : void
+	+loadMatrix4(GLuint location, const glm::mat4& matrix) : void
+	+loadVector2(GLuint location, const glm::vec2& vect) : void
+	+loadVector3(GLuint location, const glm::vec3& vect) : void
+	+loadVector4(GLuint location, const glm::vec4& vect) : void
+	+useProgram() : void {query}
+}
+
+
+class Singleton {
+}
+
+
+class SkyboxRenderer {
+	+SkyboxRenderer()
+	-m_cubeTexture : CubeTexture
+	-m_skyCube : Model
+	-m_shader : SkyboxShader
+	+render(const Camera& camera) : void
+}
+
+
+class SkyboxShader {
+	+SkyboxShader()
+	-m_locationProjection : GLuint
+	-m_locationView : GLuint
+	-getUniforms() : void
+	+loadProjectionMatrix(const glm::mat4& proj) : void
+	+loadViewMatrix(glm::mat4 viewMatrix) : void
+}
+
+
+abstract class StateBase {
+	+StateBase(Application& app)
+	+~StateBase()
+	#m_pApplication : Application*
+	+{abstract} handleEvent(sf::Event e) : void
+	+{abstract} handleInput() : void
+	+{abstract} onOpen() : void
+	+{abstract} render(RenderMaster& renderer) : void
+	+{abstract} update(float deltaTime) : void
+}
+
+
+class StatePlay {
+	+StatePlay(Application& app, const Config& config)
+	-m_fpsCounter : FPSCounter
+	-m_keyboard : Keyboard
+	-m_player : Player
+	-m_world : World
+	+handleEvent(sf::Event e) : void
+	+handleInput() : void
+	+onOpen() : void
+	+render(RenderMaster& renderer) : void
+	+update(float deltaTime) : void
+}
+
+
+class StructureBuilder {
+	-m_blocks : std::vector<Block>
+	+addBlock(int x, int y, int z, BlockId block) : void
+	+build(Chunk& chunk) : void
+	+fill(int y, int xStart, int xEnd, int zStart, int zEnd, BlockId block) : void
+	+makeColumn(int x, int z, int yStart, int height, BlockId block) : void
+	+makeRowX(int xStart, int xEnd, int y, int z, BlockId block) : void
+	+makeRowZ(int zStart, int zEnd, int x, int y, BlockId block) : void
+}
+
+
+class SuperFlatGenerator {
+	+getMinimumSpawnHeight() : int {query}
+	+generateTerrainFor(Chunk& chunk) : void
+}
+
+
+class TemperateForestBiome {
+	+TemperateForestBiome(int seed)
+	+getPlant(Rand& rand) : ChunkBlock {query}
+	+getTopBlock(Rand& rand) : ChunkBlock {query}
+	+getUnderWaterBlock(Rand& rand) : ChunkBlock {query}
+	-getNoiseParameters() : NoiseParameters
+	+makeTree(Rand& rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+abstract class TerrainGenerator {
+	+~TerrainGenerator()
+	+{abstract} getMinimumSpawnHeight() : int {query}
+	+{abstract} generateTerrainFor(Chunk& chunk) : void
+}
+
+
+class TextureAtlas {
+	+TextureAtlas(const std::string& textureFileName)
+	-m_imageSize : int
+	-m_individualTextureSize : int
+	+getTexture(const sf::Vector2i& coords) : std::array<GLfloat , 8>
+}
+
+
+class ToggleKey {
+	+ToggleKey(sf::Keyboard::Key)
+	+isKeyPressed() : bool
+	-m_delayTimer : sf::Clock
+	-m_key : sf::Keyboard::Key
+}
+
+
+class ViewFrustum {
+	+isBoxInFrustum(const AABB& box) : bool {query}
+	-m_planes : std::array<Plane, 6>
+	+update(const glm::mat4& projViewMatrix) : void
+}
+
+
+class WaterRenderer {
+	-m_shader : WaterShader
+	-m_chunks : std::vector<const RenderInfo*>
+	+add(const ChunkMesh& mesh) : void
+	+render(const Camera& camera) : void
+}
+
+
+class WaterShader {
+	+WaterShader()
+	-m_time : GLuint
+	-getUniforms() : void
+	+loadTime(const float& time) : void
+}
+
+
+class World {
+	+World(const Camera& camera, const Config& config, Player& player)
+	+~World()
+	+getBlock(int x, int y, int z) : ChunkBlock
+	-m_chunkManager : ChunkManager
+	+getChunkManager() : ChunkManager&
+	+{static} getBlockXZ(int x, int z) : VectorXZ
+	+{static} getChunkXZ(int x, int z) : VectorXZ
+	-m_renderDistance : const int
+	-m_playerSpawnPoint : glm::vec3
+	-m_loadDistance : int
+	-m_isRunning : std::atomic<bool>
+	-m_genMutex : std::mutex
+	-m_mainMutex : std::mutex
+	-m_chunkUpdates : std::unordered_map<sf::Vector3i, ChunkSection*>
+	-m_chunkLoadThreads : std::vector<std::thread>
+	-m_events : std::vector<std::unique_ptr<IWorldEvent>>
+	+addEvent(Args&& ... args) : void
+	-loadChunks(const Camera& camera) : void
+	+renderWorld(RenderMaster& master, const Camera& camera) : void
+	+setBlock(int x, int y, int z, ChunkBlock block) : void
+	-setSpawnPoint() : void
+	+update(const Camera& camera) : void
+	+updateChunk(int blockX, int blockY, int blockZ) : void
+	-updateChunks() : void
+}
+
+
+enum BlockId {
+	Air
+	Cactus
+	DeadShrub
+	Dirt
+	Grass
+	NUM_TYPES
+	OakBark
+	OakLeaf
+	Rose
+	Sand
+	Stone
+	TallGrass
+	Water
+}
+
+
+enum BlockMeshType {
+	Cube
+	X
+}
+
+
+enum BlockShaderType {
+	Chunk
+	Flora
+	Liquid
+}
+
+
+enum Material::ID {
+	Cactus
+	DeadShrub
+	Dirt
+	Grass
+	Nothing
+	OakBark
+	OakLeaf
+	Rose
+	Sand
+	Stone
+	TallGrass
+}
+
+
+class AABB {
+	+AABB(const glm::vec3& dim)
+	+dimensions : const glm::vec3
+	+getVN(const glm::vec3& normal) : glm::vec3 {query}
+	+getVP(const glm::vec3& normal) : glm::vec3 {query}
+	+position : glm::vec3
+	+update(const glm::vec3& location) : void
+}
+
+
+abstract class Biome {
+	+Biome(const NoiseParameters& parameters, int treeFreq, int plantFreq, int seed)
+	+~Biome()
+	+getBeachBlock(Random<std::minstd_rand> rand) : ChunkBlock {query}
+	+{abstract} getPlant(Random<std::minstd_rand> rand) : ChunkBlock {query}
+	+{abstract} getTopBlock(Random<std::minstd_rand> rand) : ChunkBlock {query}
+	+{abstract} getUnderWaterBlock(Random<std::minstd_rand> rand) : ChunkBlock {query}
+	-m_heightGenerator : NoiseGenerator
+	#{abstract} getNoiseParameters() : NoiseParameters
+	+getHeight(int x, int z, int chunkX, int chunkZ) : int {query}
+	+getPlantFrequency() : int {query}
+	+getTreeFrequency() : int {query}
+	-m_plantFreq : int
+	-m_treeFreq : int
+	+{abstract} makeTree(Random<std::minstd_rand> rand, Chunk& chunk, int x, int y, int z) : void {query}
+}
+
+
+class BlockDataHolder {
+	+id : BlockId
+	+meshType : BlockMeshType
+	+shaderType : BlockShaderType
+	+isCollidable : bool
+	+isOpaque : bool
+	+texBottomCoord : sf::Vector2i
+	+texSideCoord : sf::Vector2i
+	+texTopCoord : sf::Vector2i
+}
+
+
+class ChunkBlock {
+	+ChunkBlock()
+	+ChunkBlock(Block_t id)
+	+ChunkBlock(BlockId id)
+	+getData() : BlockDataHolder& {query}
+	+getType() : BlockType& {query}
+	+id : Block_t
+	+operator!=(ChunkBlock other) : bool {query}
+	+operator==(ChunkBlock other) : bool {query}
+}
+
+
+class ChunkMeshCollection {
+	+floraMesh : ChunkMesh
+	+solidMesh : ChunkMesh
+	+waterMesh : ChunkMesh
+}
+
+
+class Config {
+	+isFullscreen : bool
+	+fov : int
+	+renderDistance : int
+	+windowX : int
+	+windowY : int
+}
+
+
+class Context {
+	+Context(const Config& config)
+	+window : sf::Window
+}
+
+
+class Entity {
+	+Entity()
+	+Entity(const glm::vec3& pos, const glm::vec3& rot)
+	+Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& box)
+	+box : AABB
+	+position : glm::vec3
+	+rotation : glm::vec3
+	+velocity : glm::vec3
+}
+
+
+abstract class IChunk {
+	+~IChunk()
+	+{abstract} getBlock(int x, int y, int z) : ChunkBlock {query}
+	+{abstract} setBlock(int x, int y, int z, ChunkBlock block) : void
+}
+
+
+abstract class IWorldEvent {
+	+~IWorldEvent()
+	+{abstract} handle(World& world) : void
+}
+
+
+class Material {
+	+Material(Material::ID id, int maxStack, bool isBlock, std::string&& name)
+	+toBlockID() : BlockId {query}
+	+{static} toMaterial(BlockId id) : Material&
+	+id : const Material::ID
+	+isBlock : const bool
+	+maxStackSize : const int
+	+{static} CACTUS_BLOCK : const static Material
+	+{static} DEAD_SHRUB : const static Material
+	+{static} DIRT_BLOCK : const static Material
+	+{static} GRASS_BLOCK : const static Material
+	+{static} NOTHING : const static Material
+	+{static} OAK_BARK_BLOCK : const static Material
+	+{static} OAK_LEAF_BLOCK : const static Material
+	+{static} ROSE : const static Material
+	+{static} SAND_BLOCK : const static Material
+	+{static} STONE_BLOCK : const static Material
+	+{static} TALL_GRASS : const static Material
+	+name : const std::string
+}
+
+
+class Mesh {
+	+textureCoords : std::vector<GLfloat>
+	+vertexPositions : std::vector<GLfloat>
+	+indices : std::vector<GLuint>
+}
+
+
+class NoiseParameters {
+	+roughness : double
+	+amplitude : int
+	+heightOffset : int
+	+octaves : int
+	+smoothness : int
+}
+
+
+class NonCopyable {
+	+NonCopyable()
+}
+
+
+class Plane {
+	+distanceToOrigin : float
+	+distanceToPoint(const glm::vec3& point) : float {query}
+	+normal : glm::vec3
+}
+
+
+class RenderInfo {
+	+indicesCount : GLuint
+	+vao : GLuint
+	+reset() : void
+}
+
+
+class StructureBuilder::Block {
+	+Block(BlockId id, int x, int y, int z)
+	+id : BlockId
+	+x : int
+	+y : int
+	+z : int
+}
+
+
+class VectorXZ {
+	+x : int
+	+z : int
+}
+
+
+namespace std {
+	class hashMaterial::ID <template<>> {
+		+operator()(const Material::ID& id) : size_t {query}
+	}
+
+	class hashVectorXZ <template<>> {
+		+operator()(const VectorXZ& vect) : size_t {query}
+	}
+
+	class hashsf::Vector3i <template<>> {
+		+operator()(const sf::Vector3i& vect) : size_t {query}
+	}
+}
+
+
+namespace GL {
+	namespace Enum {
+		enum Texture {
+			Tex2D
+			TexCubeMap
+		}
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+BasicShader <|-- ChunkShader
+
+
+BasicShader <|-- FloraShader
+
+
+BasicShader <|-- WaterShader
+
+
+BasicTexture <|-- TextureAtlas
+
+
+Biome <|-- DesertBiome
+
+
+Biome <|-- GrasslandBiome
+
+
+Biome <|-- LightForest
+
+
+Biome <|-- OceanBiome
+
+
+Biome <|-- TemperateForestBiome
+
+
+BlockType <|-- DefaultBlock
+
+
+Entity <|-- Camera
+
+
+Entity <|-- Player
+
+
+IChunk <|-- Chunk
+
+
+IChunk <|-- ChunkSection
+
+
+IWorldEvent <|-- PlayerDigEvent
+
+
+NonCopyable <|-- BasicTexture
+
+
+NonCopyable <|-- BlockData
+
+
+NonCopyable <|-- BlockDataHolder
+
+
+NonCopyable <|-- BlockType
+
+
+NonCopyable <|-- CubeTexture
+
+
+NonCopyable <|-- Material
+
+
+NonCopyable <|-- Model
+
+
+NonCopyable <|-- Shader
+
+
+NonCopyable <|-- Singleton
+
+
+NonCopyable <|-- World
+
+
+NonMovable <|-- Singleton
+
+
+Shader <|-- BasicShader
+
+
+Shader <|-- SkyboxShader
+
+
+Singleton <|-- BlockDatabase
+
+
+Singleton <|-- RandomSingleton
+
+
+StateBase <|-- StatePlay
+
+
+TerrainGenerator <|-- ClassicOverWorldGenerator
+
+
+TerrainGenerator <|-- SuperFlatGenerator
+
+
+
+
+
+/' Aggregation relationships '/
+
+Application *-- Camera
+
+
+Application *-- Config
+
+
+Application *-- Context
+
+
+Application *-- RenderMaster
+
+
+Application o-- StateBase
+
+
+Biome *-- NoiseGenerator
+
+
+BlockData *-- BlockDataHolder
+
+
+BlockDataHolder *-- BlockId
+
+
+BlockDataHolder *-- BlockMeshType
+
+
+BlockDataHolder *-- BlockShaderType
+
+
+BlockDatabase *-- TextureAtlas
+
+
+BlockType *-- BlockData
+
+
+Camera *-- Config
+
+
+Camera o-- Entity
+
+
+Camera *-- ViewFrustum
+
+
+Chunk *-- Array2D
+
+
+Chunk *-- ChunkSection
+
+
+Chunk o-- World
+
+
+ChunkManager o-- TerrainGenerator
+
+
+ChunkManager *-- VectorXZ
+
+
+ChunkManager o-- World
+
+
+ChunkMesh *-- Mesh
+
+
+ChunkMesh *-- Model
+
+
+ChunkMeshBuilder o-- BlockDataHolder
+
+
+ChunkMeshBuilder o-- ChunkBlock
+
+
+ChunkMeshBuilder o-- ChunkMesh
+
+
+ChunkMeshBuilder o-- ChunkMeshCollection
+
+
+ChunkMeshBuilder o-- ChunkSection
+
+
+ChunkMeshCollection "3" *-- ChunkMesh
+
+
+ChunkRenderer *-- ChunkShader
+
+
+ChunkRenderer o-- RenderInfo
+
+
+ChunkSection *-- AABB
+
+
+ChunkSection *-- ChunkBlock
+
+
+ChunkSection *-- ChunkMeshCollection
+
+
+ChunkSection o-- World
+
+
+ClassicOverWorldGenerator "2" *-- Array2D
+
+
+ClassicOverWorldGenerator o-- Chunk
+
+
+ClassicOverWorldGenerator *-- DesertBiome
+
+
+ClassicOverWorldGenerator *-- GrasslandBiome
+
+
+ClassicOverWorldGenerator *-- LightForest
+
+
+ClassicOverWorldGenerator *-- NoiseGenerator
+
+
+ClassicOverWorldGenerator *-- OceanBiome
+
+
+ClassicOverWorldGenerator *-- TemperateForestBiome
+
+
+Entity *-- AABB
+
+
+FloraRenderer *-- FloraShader
+
+
+FloraRenderer o-- RenderInfo
+
+
+ItemStack o-- Material
+
+
+Material "11" *-- Material
+
+
+Model *-- RenderInfo
+
+
+NoiseGenerator *-- NoiseParameters
+
+
+Player *-- ItemStack
+
+
+Player "9" *-- ToggleKey
+
+
+PlayerDigEvent o-- Player
+
+
+RenderMaster *-- ChunkRenderer
+
+
+RenderMaster *-- FloraRenderer
+
+
+RenderMaster *-- SkyboxRenderer
+
+
+RenderMaster *-- WaterRenderer
+
+
+SkyboxRenderer *-- CubeTexture
+
+
+SkyboxRenderer *-- Model
+
+
+SkyboxRenderer *-- SkyboxShader
+
+
+StateBase o-- Application
+
+
+StatePlay *-- FPSCounter
+
+
+StatePlay *-- Keyboard
+
+
+StatePlay *-- Player
+
+
+StatePlay *-- World
+
+
+StructureBuilder::Block *-- BlockId
+
+
+ViewFrustum *-- Plane
+
+
+WaterRenderer o-- RenderInfo
+
+
+WaterRenderer *-- WaterShader
+
+
+World *-- ChunkManager
+
+
+World o-- ChunkSection
+
+
+World o-- IWorldEvent
+
+
+
+
+
+
+/' Nested objects '/
+
+ChunkSection +-- ChunkSection::Layer
+
+
+Material +-- Material::ID
+
+
+StructureBuilder +-- StructureBuilder::Block
+
+
+
+
+@enduml
