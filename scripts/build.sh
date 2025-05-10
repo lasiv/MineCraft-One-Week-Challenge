@@ -2,7 +2,7 @@
 
 target_release() {
     cd release
-    cmake -DCMAKE_BUILD_TYPE=Release ../..
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ../..
     make
     echo "Built target in build/release/"
     cd ../..
@@ -10,7 +10,7 @@ target_release() {
 
 target_debug() {
     cd debug 
-    cmake -DCMAKE_BUILD_TYPE=Debug ../..
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ../..
     make
     echo "Built target in build/debug/"
     cd ../..
