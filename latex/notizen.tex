@@ -189,7 +189,7 @@ Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handlet sic
 Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das zwischen horizontaler und vertikaler Bewegung sowie zwischen Flug- und Bodenmodus unterscheidet. Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf Basis folgender Prinzipien berechnet:
 
 \begin{itemize}
-  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewendet, die die Geschwindigkeit exponentiell reduziert.
+  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewendet, die die Geschwindigkeit exponentiell reduziert.
 
   \item \textbf{Vertikale Bewegung:}  Die vertikale Bewegung unterscheidet sich je nach Modus, im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine konstante Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
 
@@ -324,7 +324,6 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[3a.] Es ist kein entfernbarer Block im Sichtfeld
   \item[3a.1.] UseCase endet erfolglos
   \item[4.] Block wird aus der Welt entfernt
-  \item[3\opt a.] Partikeleffekt beim Abbauen anzeigen
   \item[5.] Block wird dem Inventar hinzugefügt
   \item[5a.] Inventar ist voll
   \item[5a.1.] UseCase endet erfolglos 
@@ -355,6 +354,10 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[5.] Block wird aus dem Inventar entfernt
   \item[6.] UseCase endet erfolgreich
 \end{description}
+
+\subsubsection*{Spiel Verlassen}
+
+Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen verden, als das Programm zu beenden. Dies geschieht durch das Schließen des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
