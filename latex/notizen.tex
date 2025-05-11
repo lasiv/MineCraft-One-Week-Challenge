@@ -147,7 +147,13 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 \subsection{Informelle Beschreibung} \label{subsec:inf}
 
-Grundlegend basiert diese Softftware auf dem Spiel \href{https://www.minecraft.net}{Minecraft}. Bei der vorgestellen Software handelt es sich um eine wesentlich ausgedünnte Version dessen. Der Sinn des Spiels ist, dass ein Spieler sich in einer Welt, generiert aus Blöcken verschiedener Texturen, überleben soll und kreativ ausleben kann. Der Spieler hat dabei die Möglichkeit zu Springen, zu Sprinten und zu Schleichen um diese Welt zu erkunden. Außerdem kann der Spiler diese Welt manipulieren, indem er Blöcke abbaut und sie woanders wieder platzieren kann. Die generierte Welt ist groß genug, sodass sich der Spieler in ihr frei bewegen kann. Dabei stößt der Spieler auf verschiedenste generierte Strukturen und Biome. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
+Die ausgewählte Software ist ein Projekt eines Youtubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handlet es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
+
+Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Größen, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
+
+Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller einer Art Value-Noise, damit soll die Generierung des Geländes natürlicher wirken. Zudem gibt es verschiedene Biome in dieser Welt, die ebenso zufällig verstreut sind und mit sich verschiedene Strukturen der Vegetation und genutzten Blöcken mitbringen. So gibt es zum Beispiel Wüsten, in denen Kakteen wachsen oder Wälder in denen Bäume stehen.
+
+In dieser Kopie des Spiels sind einige Haupt Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten wie die Monster und Tiere im Basis Spiel. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
@@ -349,7 +355,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 In diesem Abschnitt befindet sich in der Abbildung \ref{fig:domain} das Domänenmodell. Aufgrund des enormen Umfangs, kann man nur bei sehr nahem zoom den Text erkennen und es ist zu empfehlen, sich das Bild separat anzusehen.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \hspace{-4.5cm}
   \includegraphics[width=0.95\paperwidth]{config_class.png}
   \caption{Domänenmodell}
