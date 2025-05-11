@@ -5,6 +5,7 @@ build/
 latex/*
 !latex/*.tex
 !latex/*.png
+!latex/*.md
 
 #doxygen
 doxygen/
