@@ -101,7 +101,7 @@
 %%% Head %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{Title}
-\author{Benjamin Brohs, Kevin Keheck, Justin Meng}
+\author{Benjamin Brohs, Kevin Hecke, Justin Meng}
 \date{Date}
 
 \setlength{\parindent}{0pt}
@@ -147,7 +147,7 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 \subsection{Informelle Beschreibung} \label{subsec:inf}
 
-Die ausgewählte Software ist ein Projekt eines Youtubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handlet es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
+Die ausgewählte Software ist ein Projekt eines Youtubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
 
 Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Größen, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
 
@@ -165,7 +165,7 @@ Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handlet sic
     \umlusecase[x=0, y=0]{Bewegen}
     \umlusecase[x=0, y=-1.5]{Springen}
     \umlusecase[x=0, y=-3]{Flugmodus umschalten}
-    \umlusecase[x=0, y=-4.5]{Maussteuerung umschalten}
+    \umlusecase[x=0, y=-4.5]{Maussteuerung deaktivieren}
     \umlusecase[x=0, y=-6]{Block abbauen}
     \umlusecase[x=0, y=-7.5]{Block platzieren}
   \end{umlsystem}
@@ -211,26 +211,22 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Name:} Bewegen \\
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Fortbewegung der Spielfigur in der Spielwelt entsprechend der Eingaben \\
-\textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv \\
+\textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv, Spielfigur schaut in eine ausgewählte Blickrichtung \\
 \textbf{Nachbedingungen:} Position der Spielfigur wurde ggf. angepasst \\
 \textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Bewegungstasten. Die Bewegungsrichtung wird durch die aktuelle Blickrichtung bestimmt. Der Use Case bleibt aktiv, solange Eingaben erfolgen. Sprinten, Schleichen sowie vertikale Flugbewegung (Flugmodus aktiv) beeinflussen die Fortbewegung.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
-  \item[1a.] Spieler behält Blickrichtung bei
   \item[2.] Spieler drückt Bewegungstaste (W/A/S/D)
-  \item[2a.] Speiler tätigt keine Eingabe - Use Case bleibt aktiv
+  \item[2a.] Spieler tätigt keine Eingabe
   \item[2a.1.] Wiederhole Schritt 1
-  \item[2\opt b.] Spieler drückt Sprinttaste (Shift)
-  \item[2\opt c.] Spieler drückt Schleichtaste (Strg)
-  \item[3.] System berechnet neue Position der Spielfigur
-  \item[3\opt a.] Spieler ist am Sprinten
-  \item[3\opt a.1.] Geschwindigkeit der Spielfigur wird erhöht
-  \item[3\opt b.] Spieler ist am Schleichen
-  \item[3\opt b.1.] Geschwindigkeit der Spielfigur wird verringert
-  \item[3\opt b.1a.] Spieler ist am fliegen.
-  \item[3\opt b.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
+  \item[2\opt b.] Spieler drückt zusätzlich Sprinttaste (Strg)
+  \item[2\opt b.1.] Spiel erhöht Geschwindigkeit der Spielfigur
+  \item[2\opt c.] Spieler drückt zusätzlich Schleichtaste (Shift)
+  \item[2\opt c.1.] Spiel verringert Geschwindigkeit der Spielfigur
+  \item[2\opt c.1a.] Spielfigur ist im Flugmodus
+  \item[2\opt c.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
+  \item[3.] Spiel berechnet neue Position der Spielfigur
   \item[4.] Spiel aktualisiert Position der Spielfigur
   \item[5.] Wiederhole Schritt 1
 \end{description}
@@ -250,8 +246,8 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler drückt Springtaste (Leertaste)
-  \item[2.] System validiert, dass Spieler springen kann
+  \item[1.] Spieler drückt Sprungtaste (Leertaste)
+  \item[2.] Spiel validiert, dass Spieler springen kann
   \item[2a.] Spielfigur hat keinen Bodenkontakt
   \item[2a.1.] UseCase endet erfolglos
   \item[2b.] Spielfigur ist im Flugmodus
@@ -275,17 +271,17 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spieler drückt die Fliegentaste (F)
-  \item[2.] Flugmodus wird aktiviert
+  \item[2.] Spiel aktiviert den Flugmodus für die Spielfigur
   \item[2a.] Flugmodus ist bereits aktiv
-  \item[2a.1.] Flugmodus wird deaktiviert
+  \item[2a.1.] Spiel deaktiviert den Flugmodus für die Spielfigur
   \item[3.] UseCase endet erfolgreich
 \end{description}
 
 \newpage
 
-\subsubsection*{UC04 – Maussteuerung umschalten}
+\subsubsection*{UC04 – Maussteuerung deaktivieren}
 
-\textbf{Name:} Maussteuerung umschalten \\
+\textbf{Name:} Maussteuerung deaktivieren \\
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) \\
 \textbf{Vorbedingungen:} Spielsteuerung ist aktiv \\
@@ -296,12 +292,11 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spieler drückt Mausfreigabetaste (L)
   \item[2.] System schaltet Mauszeiger frei
-  \item[2a.] Spieler kann Mauszeiger bewegen
+  \item[2a.] Mauszeiger ist bereits freigeschaltet
   \item[2a.1.] Mauszeiger wird eingefangen
-  \item[2a.2.] Kamera- und Bewegungssteuerung werden aktiviert
+  \item[2a.2.] Kamerasteuerung wird aktiviert
   \item[2a.3.] UseCase endet erfolglos
-  \item[3.] Kamera- und Bewegungssteuerung werden deaktiviert
-  \item[3\opt a.] Spieler kann Fenster verlassen
+  \item[3.] Kamerasteuerung wird deaktiviert
   \item[4.] UseCase endet erfolgreich
 \end{description}
 
@@ -312,20 +307,19 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Name:} Block abbauen \\
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Entfernen eines Blocks aus der Spielwelt \\
-\textbf{Vorbedingungen:} Spieler sieht einen erreichbaren Block \\
+\textbf{Vorbedingungen:} Spielfigur ist aktiv und schaut in eine ausgewählte Blickrichtung \\
 \textbf{Nachbedingungen:} Block ist nicht mehr in der Welt vorhanden \\
 \textbf{Beschreibung:} Durch Mausklick kann ein Block entfernt und ggf. aufgenommen werden.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
   \item[2.] Spieler klickt die linken Maustaste
-  \item[3.] System validiert, dass der Block abgebaut werden kann
+  \item[3.] Spiel validiert, dass ein Block ainvisiert wird und abgebaut werden kann
   \item[3a.] Es ist kein entfernbarer Block im Sichtfeld
   \item[3a.1.] UseCase endet erfolglos
-  \item[4.] Block wird aus der Welt entfernt
-  \item[5.] Block wird dem Inventar hinzugefügt
-  \item[5a.] Inventar ist voll
+  \item[4.] Spiel entfernt Block aus der Welt
+  \item[5.] Spiel fügt den Block dem Inventar der Spielfigur hinzu
+  \item[5a.] Inventar ist voll, Block kann nicht hinzugefügt werden
   \item[5a.1.] UseCase endet erfolglos 
   \item[6.] UseCase endet erfolgreich
 \end{description}
@@ -337,21 +331,20 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Name:} Block platzieren \\
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Platzieren eines Blocks an einer bestimmten Stelle \\
-\textbf{Vorbedingungen:} Ein Block ist ausgewählt \\
+\textbf{Vorbedingungen:} Spielfigur ist aktiv und schaut in eine ausgewählte Blickrichtung \\
 \textbf{Nachbedingungen:} Der Block ist in der Spielwelt sichtbar \\
 \textbf{Beschreibung:} Spieler kann Blöcke frei setzen, um die Spielwelt zu gestalten.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler passt die Blickrichtung an (Mausbewegung)
   \item[2.] Spieler klickt die linken Maustaste
-  \item[3.] System validiert, dass der Block platziert werden kann
+  \item[3.] Spiel validiert, dass der Block platziert werden kann
   \item[3a.] Es ist keine valide Oberfläche im Sichtfeld
   \item[3a.1.] UseCase endet erfolglos
-  \item[4.] Block wird an der Stelle platziert
-  \item[4a.] Spieler hat keinen Block im Inventar
+  \item[4.] Spiel platziert Block an ausgewählter Stelle
+  \item[4a.] Spielerfigur hat keinen platzierbaren Block im Inventar
   \item[4a.1.] UseCase endet erfolglos
-  \item[5.] Block wird aus dem Inventar entfernt
+  \item[5.] Spiel entfernt Block aus dem Inventar
   \item[6.] UseCase endet erfolgreich
 \end{description}
 
