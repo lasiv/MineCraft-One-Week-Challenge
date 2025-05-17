@@ -1,54 +1,52 @@
-#!/usr/bin/env python3
-
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Tuple
 import json
 import sys
 import os
 import re
 from collections import defaultdict
 
-# --- Data Models ---
+# --- JSON Data Models ---
 @dataclass
-class SourceLocation:
+class JsonSourceLocation:
     file: str
     line: int
     column: int
     translation_unit: str
 
 @dataclass
-class Metadata:
+class JsonMetadata:
     clang_uml_version: str
     llvm_version: str
     schema_version: int
 
 @dataclass
-class Parameter:
+class JsonParameter:
     name: str
     type: str
     default_value: Optional[str] = None
-    source_location: Optional[SourceLocation] = None
+    source_location: Optional[JsonSourceLocation] = None
 
 @dataclass
-class TemplateParameter:
+class JsonTemplateParameter:
     kind: str
     name: Optional[str] = None
     type: Optional[str] = None
     default: Optional[str] = None
     is_variadic: bool = False
-    template_parameters: List["TemplateParameter"] = field(default_factory=list)
+    template_parameters: List['JsonTemplateParameter'] = field(default_factory=list)
 
 @dataclass
-class Member:
+class JsonMember:
     name: str
     type: str
     access: str
     is_static: bool
     default_value: Optional[str] = None
-    source_location: Optional[SourceLocation] = None
+    source_location: Optional[JsonSourceLocation] = None
 
 @dataclass
-class Method:
+class JsonMethod:
     name: str
     display_name: str
     type: str
@@ -67,18 +65,18 @@ class Method:
     is_static: bool
     is_operator: bool
     is_coroutine: bool
-    parameters: List[Parameter] = field(default_factory=list)
-    template_parameters: List[TemplateParameter] = field(default_factory=list)
-    source_location: Optional[SourceLocation] = None
+    parameters: List[JsonParameter] = field(default_factory=list)
+    template_parameters: List[JsonTemplateParameter] = field(default_factory=list)
+    source_location: Optional[JsonSourceLocation] = None
 
 @dataclass
-class Base:
+class JsonBase:
     id: str
     access: str
     is_virtual: bool
 
 @dataclass
-class Element:
+class JsonElement:
     id: str
     name: str
     display_name: str
@@ -90,14 +88,14 @@ class Element:
     is_template: bool
     is_nested: bool
     constants: List[str] = field(default_factory=list)
-    members: List[Member] = field(default_factory=list)
-    methods: List[Method] = field(default_factory=list)
-    template_parameters: List[TemplateParameter] = field(default_factory=list)
-    bases: List[Base] = field(default_factory=list)
-    source_location: Optional[SourceLocation] = None
+    members: List[JsonMember] = field(default_factory=list)
+    methods: List[JsonMethod] = field(default_factory=list)
+    template_parameters: List[JsonTemplateParameter] = field(default_factory=list)
+    bases: List[JsonBase] = field(default_factory=list)
+    source_location: Optional[JsonSourceLocation] = None
 
 @dataclass
-class Relationship:
+class JsonRelationship:
     source: str
     destination: str
     type: str
@@ -105,133 +103,26 @@ class Relationship:
     label: Optional[str] = None
     multiplicity_source: Optional[str] = None
     multiplicity_destination: Optional[str] = None
-    source_location: Optional[SourceLocation] = None
+    source_location: Optional[JsonSourceLocation] = None
 
 @dataclass
-class Diagramm:
+class JsonDiagram:
     name: str
     diagram_type: str
     package_type: str
-    metadata: Metadata
-    elements: List[Element] = field(default_factory=list)
-    relationships: List[Relationship] = field(default_factory=list)
+    metadata: JsonMetadata
+    elements: List[JsonElement] = field(default_factory=list)
+    relationships: List[JsonRelationship] = field(default_factory=list)
 
-# --- Utilities ---
-def escape_latex(s: str) -> str:
-    return (s.replace('&', r'\\&')
-             .replace('{', r'\\{')
-             .replace('}', r'\\}')
-             .replace('#', r'\\#')
-             .replace('~', r'\\raisebox{0.5ex}{\\texttildelow}'))
+# --- JSON Parsing Helpers ---
 
-# Element type mapping
-ELEMENT_CMD_MAP: Dict[str, str] = {
-    'class': 'umlclass',
-    'interface': 'umlinterface',
-    'enum': 'umlenum',
-    'class_abstract': 'umlabstract'
-}
-# Relationship type mapping
-REL_TIKZ_MAP: Dict[str, str] = {
-    'extension': 'umlinherit',
-    'dependency': 'umldep',
-    'aggregation': 'umlaggreg',
-    'association': 'umluniassoc',
-    'composition': 'umlcompo',
-    'constraint': 'umlconstraint',
-    'instantiation': 'umlnest'
-}
-# Visibility
-ACCESS_SYM: Dict[str, str] = {
-    'public': '+',
-    'protected': '#',
-    'private': '-',
-    'package': '~'
-}
+def parse_source_location(data: dict) -> JsonSourceLocation:
+    return JsonSourceLocation(**data)
 
-_relation_re = re.compile(
-    r"\\(?P<cmd>\w+)"
-    r"(?:\[name=(?P<name>[^\],]+)[^\]]*\])?"
-    r"\{(?P<a>[^}]+)\}\{(?P<b>[^}]+)\}"
-)
-_node_re = re.compile(
-    r"\\node\[above\] at \("
-    r"(?P<name>[^-]+)-1\) \{(?P<labels>[^}]+)\};?"
-)
 
-def group_relations(lines: List[str]) -> List[str]:
-    """
-    Merge consecutive pairs of
-      \\cmd[name=X]{A}{B}
-      \\node[above] at (X-1) {lbl};
-    into one:
-      \\cmd[name=XY]{A}{B}
-      \\node[above] at (XY-1) {lbl1, lbl2};
-    """
-    groups = defaultdict(lambda: {"names": [], "labels": [], "cmd": None, "a": None, "b": None})
-    i = 0
-    # Walk in steps of 2 (assumes always pairs)
-    while i < len(lines) - 1:
-        rel_line = lines[i].strip()
-        node_line = lines[i+1].strip()
-        m1 = _relation_re.match(rel_line)
-        m2 = _node_re.match(node_line)
-        if m1 and m2:
-            cmd = m1.group("cmd")
-            name = m1.group("name")
-            a = m1.group("a")
-            b = m1.group("b")
-            lbls = [lbl.strip() for lbl in m2.group("labels").split(",")]
-            key = (cmd, a, b)
-            grp = groups[key]
-            grp["cmd"] = cmd
-            grp["a"] = a
-            grp["b"] = b
-            grp["names"].append(name)
-            grp["labels"].extend(lbls)
-            i += 2
-        else:
-            # something unexpected: keep line as-is
-            # emit it immediately and move on
-            key = ("__raw__", i)
-            grp = groups[key]
-            grp["raw"] = lines[i]
-            i += 1
-    # If there's a trailing line unpaired
-    if i < len(lines):
-        key = ("__raw__", i)
-        groups[key]["raw"] = lines[i]
-
-    # Build output
-    out: List[str] = []
-    for key, info in groups.items():
-        if key[0] == "__raw__":
-            out.append(info["raw"])
-        else:
-            cmd, a, b = info["cmd"], info["a"], info["b"]
-            # combine relation names and labels
-            combined_name = "".join(info["names"])
-            unique_labels = []
-            for lbl in info["labels"]:
-                if lbl not in unique_labels:
-                    unique_labels.append(lbl)
-            combined_label = ", ".join(unique_labels)
-            out.append(f"\\{cmd}[name={combined_name}]{{{a}}}{{{b}}}")
-            out.append(f"\\node[above] at ({combined_name}-1) {{{combined_label}}};")
-    return out
-
-# --- JSON Parsers ---
-def parse_source_location(data: dict) -> SourceLocation:
-    return SourceLocation(
-        file=data['file'],
-        line=data['line'],
-        column=data['column'],
-        translation_unit=data['translation_unit']
-    )
-
-def parse_template_parameter(data: dict) -> TemplateParameter:
+def parse_template_parameter(data: dict) -> JsonTemplateParameter:
     nested = [parse_template_parameter(tp) for tp in data.get('template_parameters', [])]
-    return TemplateParameter(
+    return JsonTemplateParameter(
         kind=data['kind'],
         name=data.get('name'),
         type=data.get('type'),
@@ -240,213 +131,323 @@ def parse_template_parameter(data: dict) -> TemplateParameter:
         template_parameters=nested
     )
 
-# --- Loader Implementation ---
-def load_diagram(file_path: str) -> Diagramm:
-    with open(file_path, 'r', encoding='utf-8') as f:
+# --- Load JSON Diagram ---
+
+def load_diagram(path: str) -> JsonDiagram:
+    with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    meta = Metadata(
-        clang_uml_version=data['metadata']['clang_uml_version'],
-        llvm_version=data['metadata']['llvm_version'],
-        schema_version=data['metadata']['schema_version']
-    )
-    elements: List[Element] = []
+    md = data['metadata']
+    metadata = JsonMetadata(**md)
+    elements: List[JsonElement] = []
     for el in data.get('elements', []):
         sl = parse_source_location(el['source_location']) if el.get('source_location') else None
-        members = [
-            Member(
-                name=m['name'], type=m['type'], access=m['access'],
-                is_static=m['is_static'], default_value=m.get('default_value'),
-                source_location=parse_source_location(m['source_location']) if m.get('source_location') else None
-            ) for m in el.get('members', [])
-        ]
-        methods_raw = el.get('methods', [])
-        non_def_ctors = [m for m in methods_raw if m.get('is_constructor') and not m.get('is_defaulted')]
-        non_def_dtors = [m for m in methods_raw if m.get('name', '').startswith('~') and not m.get('is_defaulted')]
-        methods: List[Method] = []
-        for mm in methods_raw:
-            if mm.get('is_defaulted'):
-                if mm.get('is_constructor') and not non_def_ctors:
-                    continue
-                if mm.get('name', '').startswith('~') and not non_def_dtors:
-                    continue
-            mm_sl = parse_source_location(mm['source_location']) if mm.get('source_location') else None
-            params = [
-                Parameter(
-                    name=p['name'], type=p['type'], default_value=p.get('default_value'),
-                    source_location=parse_source_location(p['source_location']) if p.get('source_location') else None
-                ) for p in mm.get('parameters', [])
-            ]
+        members = [JsonMember(
+            name=m['name'],
+            type=m['type'],
+            access=m['access'],
+            is_static=m['is_static'],
+            default_value=m.get('default_value'),
+            source_location=parse_source_location(m['source_location']) if m.get('source_location') else None
+        ) for m in el.get('members', [])]
+        methods = []
+        for mm in el.get('methods', []):
+            msl = parse_source_location(mm['source_location']) if mm.get('source_location') else None
+            params = [JsonParameter(
+                name=p['name'],
+                type=p['type'],
+                default_value=p.get('default_value'),
+                source_location=parse_source_location(p['source_location']) if p.get('source_location') else None
+            ) for p in mm.get('parameters', [])]
             tmpls = [parse_template_parameter(tp) for tp in mm.get('template_parameters', [])]
-            methods.append(Method(
-                name=mm['name'], display_name=mm['display_name'], type=mm['type'],
-                access=mm['access'], is_constructor=mm['is_constructor'],
-                is_defaulted=mm['is_defaulted'], is_deleted=mm['is_deleted'],
-                is_copy_assignment=mm['is_copy_assignment'], is_move_assignment=mm['is_move_assignment'],
-                is_virtual=mm['is_virtual'], is_pure_virtual=mm['is_pure_virtual'],
-                is_noexcept=mm['is_noexcept'], is_const=mm['is_const'],
-                is_consteval=mm['is_consteval'], is_constexpr=mm['is_constexpr'],
-                is_static=mm['is_static'], is_operator=mm['is_operator'],
-                is_coroutine=mm['is_coroutine'], parameters=params,
-                template_parameters=tmpls, source_location=mm_sl
+            methods.append(JsonMethod(
+                name=mm['name'],
+                display_name=mm['display_name'],
+                type=mm['type'],
+                access=mm['access'],
+                is_constructor=mm['is_constructor'],
+                is_defaulted=mm['is_defaulted'],
+                is_deleted=mm['is_deleted'],
+                is_copy_assignment=mm['is_copy_assignment'],
+                is_move_assignment=mm['is_move_assignment'],
+                is_virtual=mm['is_virtual'],
+                is_pure_virtual=mm['is_pure_virtual'],
+                is_noexcept=mm['is_noexcept'],
+                is_const=mm['is_const'],
+                is_consteval=mm['is_consteval'],
+                is_constexpr=mm['is_constexpr'],
+                is_static=mm['is_static'],
+                is_operator=mm['is_operator'],
+                is_coroutine=mm['is_coroutine'],
+                parameters=params,
+                template_parameters=tmpls,
+                source_location=msl
             ))
-        class_tmps = [parse_template_parameter(tp) for tp in el.get('template_parameters', [])]
-        bases = [Base(id=b['id'], access=b['access'], is_virtual=b['is_virtual']) for b in el.get('bases', [])]
-        elements.append(Element(
-            id=el['id'], name=el['name'], display_name=el['display_name'],
-            namespace=el.get('namespace',''), type=el['type'],
-            is_abstract=el.get('is_abstract',False), is_struct=el.get('is_struct',False),
-            is_union=el.get('is_union',False), is_template=el.get('is_template',False),
-            is_nested=el.get('is_nested',False), constants=el.get('constants',[]),
-            members=members, methods=methods, template_parameters=class_tmps,
-            bases=bases, source_location=sl
+        tps = [parse_template_parameter(tp) for tp in el.get('template_parameters', [])]
+        bases = [JsonBase(**b) for b in el.get('bases', [])]
+        elements.append(JsonElement(
+            id=el['id'],
+            name=el['name'],
+            display_name=el['display_name'],
+            namespace=el.get('namespace', ''),
+            type=el['type'],
+            is_abstract=el.get('is_abstract', False),
+            is_struct=el.get('is_struct', False),
+            is_union=el.get('is_union', False),
+            is_template=el.get('is_template', False),
+            is_nested=el.get('is_nested', False),
+            constants=el.get('constants', []),
+            members=members,
+            methods=methods,
+            template_parameters=tps,
+            bases=bases,
+            source_location=sl
         ))
-    rels: List[Relationship] = []
-    for r in data.get('relationships', []):
-        r_sl = parse_source_location(r['source_location']) if r.get('source_location') else None
-        rels.append(Relationship(
-            source=r['source'], destination=r['destination'], type=r['type'],
-            access=r.get('access'), label=r.get('label'),
-            multiplicity_source=r.get('multiplicity_source'),
-            multiplicity_destination=r.get('multiplicity_destination'),
-            source_location=r_sl
-        ))
-    return Diagramm(
-        name=data['name'], diagram_type=data['diagram_type'],
-        package_type=data.get('package_type',''), metadata=meta,
-        elements=elements, relationships=rels
+    relationships = [JsonRelationship(
+        **{k: v for k, v in r.items() if k != 'source_location'},
+        source_location=parse_source_location(r['source_location']) if r.get('source_location') else None
+    ) for r in data.get('relationships', [])]
+    return JsonDiagram(
+        name=data['name'],
+        diagram_type=data['diagram_type'],
+        package_type=data.get('package_type', ''),
+        metadata=metadata,
+        elements=elements,
+        relationships=relationships
     )
 
-# --- Render Helpers ---
-def map_relation_type(rel_type: str) -> str:
-    return REL_TIKZ_MAP.get(rel_type, 'umlassoc')
+# --- TikZ Models ---
+class TikzMember:
+    def __init__(self, name: str, type: str, access: str, is_static: bool, default: Optional[str]):
+        self.name = name
+        self.type = type
+        self.access = access
+        self.is_static = is_static
+        self.default = default
 
-def member_to_tikz(m: Member) -> str:
-    sym = ACCESS_SYM.get(m.access, '')
-    text = f"{sym} {m.name}: {m.type}"
-    if m.default_value is not None:
-        text += f" = {m.default_value}"
-    return f"\\umlstatic{{{escape_latex(text)}}}" if m.is_static else escape_latex(text)
+    @classmethod
+    def from_json(cls, jm: JsonMember) -> 'TikzMember':
+        return cls(jm.name, jm.type, jm.access, jm.is_static, jm.default_value)
 
-def method_to_tikz(m: Method) -> str:
-    tmpl_prefix = ''
-    if m.template_parameters:
-        names = [tp.name or tp.type for tp in m.template_parameters]
-        tmpl_prefix = f"template<{', '.join(names)}> "
-    sym = ACCESS_SYM.get(m.access, '')
-    params = ", ".join(f"{p.name}: {p.type}" for p in m.parameters)
-    sig = f"{m.name}({params})"
-    if m.type:
-        sig += f": {m.type}"
-    text = f"{tmpl_prefix}{sym} {sig}"
-    if m.is_const:
-        text += ' const'
-    if m.is_noexcept:
-        text += ' noexcept'
-    if m.is_constexpr:
-        text = 'constexpr ' + text
-    if m.is_consteval:
-        text = 'consteval ' + text
-    if m.is_deleted:
-        text += ' = delete'
-    if m.is_static:
-        text = f"\\umlstatic{{{escape_latex(text)}}}"
-    if m.is_virtual or m.is_pure_virtual:
-        text = f"\\umlvirt{{{escape_latex(text)}}}"
-    return text
+    def render(self) -> str:
+        sym = {'public': '+', 'protected': '#', 'private': '-', 'package': '~'}.get(self.access, '')
+        text = f"{sym} {self.name}: {self.type}" + (f" = {self.default}" if self.default else '')
+        return f"\\umlstatic{{{text}}}" if self.is_static else text
 
-def render_element(el: Element) -> List[str]:
-    lines: List[str] = []
-    opts = ['x=0', 'y=0']
-    if el.is_abstract:
-        opts.append('type=abstract')
-    if el.template_parameters:
-        names = [tp.name or tp.type for tp in el.template_parameters]
-        opts.append(f"template={{ {', '.join(names)} }}")
-    # pick element command
-    if el.type == 'enum':
-        cmd = ELEMENT_CMD_MAP['enum']
-    elif el.type == 'interface':
-        cmd = ELEMENT_CMD_MAP['interface']
-    elif el.type == 'class' and el.is_abstract:
-        cmd = ELEMENT_CMD_MAP['class_abstract']
-    else:
-        cmd = ELEMENT_CMD_MAP.get(el.type, ELEMENT_CMD_MAP['class'])
-    opt_str = '[' + ', '.join(opts) + ']'
-    if cmd == 'umlenum':
-        lines.append(f"\\{cmd}{opt_str}{{{el.display_name}}}")
+class TikzMethod:
+    def __init__(
+        self, name: str, access: str, is_const: bool, is_noexcept: bool,
+        is_constexpr: bool, is_consteval: bool, is_deleted: bool,
+        is_static: bool, is_virtual: bool,
+        parameters: List[Tuple[str, str]], template_names: List[str]
+    ):
+        self.name = name
+        self.access = access
+        self.is_const = is_const
+        self.is_noexcept = is_noexcept
+        self.is_constexpr = is_constexpr
+        self.is_consteval = is_consteval
+        self.is_deleted = is_deleted
+        self.is_static = is_static
+        self.is_virtual = is_virtual
+        self.parameters = parameters
+        self.template_names = template_names
+
+    @classmethod
+    def from_json(cls, jm: JsonMethod) -> 'TikzMethod':
+        params = [(p.name, p.type) for p in jm.parameters]
+        tnames = [tp.name or tp.type for tp in jm.template_parameters]
+        return cls(
+            jm.name,
+            jm.access,
+            jm.is_const,
+            jm.is_noexcept,
+            jm.is_constexpr,
+            jm.is_consteval,
+            jm.is_deleted,
+            jm.is_static,
+            jm.is_virtual or jm.is_pure_virtual,
+            params,
+            tnames
+        )
+
+    def render(self) -> str:
+        parts = []
+        if self.template_names:
+            parts.append(f"template<{', '.join(self.template_names)}> ")
+        sym = {'public': '+', 'protected': '#', 'private': '-', 'package': '~'}.get(self.access, '')
+        params = ', '.join(f"{n}: {t}" for n, t in self.parameters)
+        parts.append(f"{sym} {self.name}({params})")
+        if self.is_const:
+            parts.append(' const')
+        if self.is_noexcept:
+            parts.append(' noexcept')
+        if self.is_constexpr:
+            parts.insert(0, 'constexpr ')
+        if self.is_consteval:
+            parts.insert(0, 'consteval ')
+        if self.is_deleted:
+            parts.append(' = delete')
+        text = ''.join(parts)
+        if self.is_static:
+            text = f"\\umlstatic{{{text}}}"
+        if self.is_virtual:
+            text = f"\\umlvirt{{{text}}}"
+        return text
+
+class TikzElement:
+    def __init__(
+        self,
+        display_name: str,
+        type: str,
+        is_abstract: bool,
+        template_names: List[str],
+        members: List[TikzMember],
+        methods: List[TikzMethod],
+        x: float = 0,
+        y: float = 0
+    ):
+        self.display_name = display_name
+        self.type = type
+        self.is_abstract = is_abstract
+        self.template_names = template_names
+        self.members = members
+        self.methods = methods
+        self.x = x
+        self.y = y
+
+    def render(self) -> List[str]:
+        opts = [f"x={self.x}", f"y={self.y}"]
+        if self.is_abstract:
+            opts.append('type=abstract')
+        if self.template_names:
+            opts.append(f"template={{ {', '.join(self.template_names)} }}")
+        cmd = 'umlclass'
+        if self.type == 'enum':
+            cmd = 'umlenum'
+        elif self.type == 'interface':
+            cmd = 'umlinterface'
+        elif self.type == 'class' and self.is_abstract:
+            cmd = 'umlabstract'
+        opt_str = '[' + ','.join(opts) + ']'
+        lines: List[str] = [f"\\{cmd}{opt_str}{{{self.display_name}}}"]
         lines.append('{')
-        for v in el.constants:
-            lines.append(f"  {escape_latex(v)} \\\\")
+        for i, m in enumerate(self.members):
+            suffix = ' \\\\' if i < len(self.members) - 1 else ''
+            lines.append('  ' + m.render() + suffix)
         lines.append('}')
-        lines.append('{}')
+        lines.append('{')
+        for i, m in enumerate(self.methods):
+            suffix = ' \\\\' if i < len(self.methods) - 1 else ''
+            lines.append('  ' + m.render() + suffix)
+        lines.append('}')
         return lines
-    lines.append(f"\\{cmd}{opt_str}{{{el.display_name}}}")
-    lines.append('{')
-    for idx, m in enumerate(el.members):
-        suffix = " \\\\" if idx < len(el.members) - 1 else ""
-        lines.append("  " + member_to_tikz(m) + suffix)
-    lines.append('}')
-    lines.append('{')
-    for idx, m in enumerate(el.methods):
-        suffix = " \\\\" if idx < len(el.methods) - 1 else ""
-        lines.append("  " + method_to_tikz(m) + suffix)
-    lines.append('}')
-    return lines
 
-def render_relationships(diag: Diagramm) -> List[str]:
-    lines: List[str] = []
-    name_map = {e.id: e.display_name for e in diag.elements}
-    for r in diag.relationships:
-        cmd = map_relation_type(r.type)
+class TikzRelationship:
+    def __init__(
+        self,
+        cmd: str,
+        a: str,
+        b: str,
+        label: Optional[str],
+        m1: Optional[str],
+        m2: Optional[str],
+        name: str
+    ):
+        self.cmd = cmd
+        self.a = a
+        self.b = b
+        self.label = label
+        self.m1 = m1
+        self.m2 = m2
+        self.name = name
+
+    @classmethod
+    def from_json(cls, jr: JsonRelationship, nm: Dict[str, str]) -> 'TikzRelationship':
+        cmd_map = {
+            'extension': 'umlinherit',
+            'dependency': 'umldep',
+            'aggregation': 'umlaggreg',
+            'association': 'umluniassoc',
+            'composition': 'umlcompo',
+            'constraint': 'umlconstraint',
+            'instantiation': 'umlnest'
+        }
+        cmd = cmd_map.get(jr.type, 'umluniassoc')
+        a = nm.get(jr.source, jr.source)
+        b = nm.get(jr.destination, jr.destination)
+        name = f"{cmd}{a}{b}"
+        return cls(cmd, a, b, jr.label, jr.multiplicity_source, jr.multiplicity_destination, name)
+
+    def key(self) -> Tuple[str, str, str]:
+        return (self.cmd, self.a, self.b)
+
+    def render(self) -> List[str]:
         args: List[str] = []
-        if r.label:
-            args.append(f"name={escape_latex(r.label)}")
-        if r.multiplicity_source:
-            args.append(f"mult1={r.multiplicity_source}")
-            args.append("pos1=0.1")
-        if r.multiplicity_destination:
-            args.append(f"mult2={r.multiplicity_destination}")
-            args.append("pos2=0.9")
-        arg_str = f"[{', '.join(args)}]" if args else ''
-        a = escape_latex(name_map.get(r.source, r.source))
-        b = escape_latex(name_map.get(r.destination, r.destination))
-        if r.source == r.destination:
-            lines.append(f"\\{cmd}{arg_str}{{{a}}}{{{a}}}")
-        else:
-            lines.append(f"\\{cmd}{arg_str}{{{a}}}{{{b}}}")
-        if r.label:
-            lbl = escape_latex(r.label)
-            lines.append(f"\\node[above] at ({lbl}-1) {{{lbl}}};")
-    # inheritance
-    for el in diag.elements:
-        for base in el.bases:
-            cmd = map_relation_type('extension')
-            a = escape_latex(el.display_name)
-            b = escape_latex(name_map.get(base.id, base.id))
-            lines.append(f"\\{cmd}{{{a}}}{{{b}}}")
-    return lines
+        args.append(f"name={self.name}")
+        if self.m1:
+            args.extend([f"mult1={self.m1}", "pos1=0.1"])
+        if self.m2:
+            args.extend([f"mult2={self.m2}", "pos2=0.9"])
+        arg_str = '[' + ','.join(args) + ']' if args else ''
+        lines = [f"\\{self.cmd}{arg_str}{{{self.a}}}{{{self.b}}}"]
+        if self.label:
+            lines.append(f"\\node[above] at ({self.name}-1) {{{self.label}}};")
+        return lines
+
+class TikzDiagram:
+    def __init__(self, elements: List[TikzElement], relationships: List[TikzRelationship]):
+        self.elements = elements
+        self.relationships = relationships
+
+    def group_relations(self) -> None:
+        grouped = defaultdict(lambda: {'rels': [], 'labels': []})
+        for r in self.relationships:
+            key = r.key()
+            grouped[key]['rels'].append(r)
+            if r.label and r.label not in grouped[key]['labels']:
+                grouped[key]['labels'].append(r.label)
+        merged: List[TikzRelationship] = []
+        for (cmd, a, b), info in grouped.items():
+            base = info['rels'][0]
+            combined_label = ', '.join(info['labels'])
+            name = f"{cmd}{a}{b}"
+            merged.append(TikzRelationship(cmd, a, b, combined_label, base.m1, base.m2, name))
+        self.relationships = merged
+
+    def render(self) -> List[str]:
+        lines: List[str] = ['\\begin{tikzpicture}']
+        for el in self.elements:
+            lines.extend(el.render())
+            lines.append('')
+        self.group_relations()
+        for r in self.relationships:
+            lines.extend(r.render())
+            lines.append('')
+        lines.append('\\end{tikzpicture}')
+        return lines
+
+# --- Conversion ---
+def convert_json_to_tikz(jd: JsonDiagram) -> TikzDiagram:
+    elems: List[TikzElement] = []
+    for el in jd.elements:
+        members = [TikzMember.from_json(m) for m in el.members]
+        methods = [TikzMethod.from_json(m) for m in el.methods]
+        tnames = [tp.name or tp.type for tp in el.template_parameters]
+        elems.append(TikzElement(el.display_name, el.type, el.is_abstract, tnames, members, methods))
+    name_map = {el.id: el.display_name for el in jd.elements}
+    rels = [TikzRelationship.from_json(r, name_map) for r in jd.relationships]
+    return TikzDiagram(elems, rels)
 
 # --- Main CLI ---
 if __name__ == '__main__':
-    argv = sys.argv
-    prog = os.path.basename(argv[0])
-    if len(argv) not in (2,3):
-        print(f"Usage: {prog} <input.json> [<output.txt>]")
+    if len(sys.argv) not in (2, 3):
+        print(f"Usage: {os.path.basename(sys.argv[0])} <input.json> [<output.txt>]", file=sys.stderr)
         sys.exit(1)
-    inp = argv[1]
-    if not inp.lower().endswith('.json'):
-        print("Error: input must be a .json file")
-        sys.exit(1)
-    out = argv[2] if len(argv)==3 else os.path.join(os.path.dirname(inp) or '.', 'tikz.txt')
-    diag = load_diagram(inp)
-    lines: List[str] = []
-    lines.append('\\begin{tikzpicture}')
-    for el in diag.elements:
-        lines.extend(render_element(el))
-        lines.append("")
-    lines.extend(group_relations(render_relationships(diag)))
-    lines.append("")
-    lines.append('\\end{tikzpicture}')
+    inp = sys.argv[1]
+    out = sys.argv[2] if len(sys.argv) == 3 else os.path.splitext(inp)[0] + '_tikz.txt'
+    jd = load_diagram(inp)
+    td = convert_json_to_tikz(jd)
+    lines = td.render()
     with open(out, 'w', encoding='utf-8') as f:
         f.write("\n".join(lines))
     print(f"Wrote {out}")
