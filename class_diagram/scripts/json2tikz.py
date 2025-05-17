@@ -1,10 +1,16 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Tuple
+import subprocess
+from typing import List, Optional, Dict, Set, Tuple
 import json
 import sys
 import os
-import re
-from collections import defaultdict
+import math
+from collections import defaultdict, deque
+
+
+# --- Positioning Constants ---
+H_STRETCH: float = 5.0  # horizontal grid spacing multiplier
+V_STRETCH: float = 5.0  # vertical grid spacing multiplier
 
 # --- JSON Data Models ---
 @dataclass
@@ -114,11 +120,23 @@ class JsonDiagram:
     elements: List[JsonElement] = field(default_factory=list)
     relationships: List[JsonRelationship] = field(default_factory=list)
 
+
+# --- LaTeX Escaping ---
+def escape_latex(s: str) -> str:
+    return (s.replace('&', r'\&')
+             .replace('{', r'\{')
+             .replace('}', r'\}')
+             .replace('#', r'\#')
+             .replace('~', r'\raisebox{0.5ex}{\texttildelow}')
+             .replace('<<', r'$\ll$')
+             .replace('>>', r'$\gg$')
+             .replace('<', r'$<$')
+             .replace('>', r'$>$'))
+
 # --- JSON Parsing Helpers ---
 
 def parse_source_location(data: dict) -> JsonSourceLocation:
     return JsonSourceLocation(**data)
-
 
 def parse_template_parameter(data: dict) -> JsonTemplateParameter:
     nested = [parse_template_parameter(tp) for tp in data.get('template_parameters', [])]
@@ -149,7 +167,7 @@ def load_diagram(path: str) -> JsonDiagram:
             default_value=m.get('default_value'),
             source_location=parse_source_location(m['source_location']) if m.get('source_location') else None
         ) for m in el.get('members', [])]
-        methods = []
+        methods: List[JsonMethod] = []
         for mm in el.get('methods', []):
             msl = parse_source_location(mm['source_location']) if mm.get('source_location') else None
             params = [JsonParameter(
@@ -231,6 +249,7 @@ class TikzMember:
     def render(self) -> str:
         sym = {'public': '+', 'protected': '#', 'private': '-', 'package': '~'}.get(self.access, '')
         text = f"{sym} {self.name}: {self.type}" + (f" = {self.default}" if self.default else '')
+        text = escape_latex(text)
         return f"\\umlstatic{{{text}}}" if self.is_static else text
 
 class TikzMethod:
@@ -288,6 +307,7 @@ class TikzMethod:
         if self.is_deleted:
             parts.append(' = delete')
         text = ''.join(parts)
+        text = escape_latex(text)
         if self.is_static:
             text = f"\\umlstatic{{{text}}}"
         if self.is_virtual:
@@ -329,7 +349,8 @@ class TikzElement:
         elif self.type == 'class' and self.is_abstract:
             cmd = 'umlabstract'
         opt_str = '[' + ','.join(opts) + ']'
-        lines: List[str] = [f"\\{cmd}{opt_str}{{{self.display_name}}}"]
+        disp = escape_latex(self.display_name)
+        lines: List[str] = [f"\\{cmd}{opt_str}{{{disp}}}"]
         lines.append('{')
         for i, m in enumerate(self.members):
             suffix = ' \\\\' if i < len(self.members) - 1 else ''
@@ -389,15 +410,103 @@ class TikzRelationship:
         if self.m2:
             args.extend([f"mult2={self.m2}", "pos2=0.9"])
         arg_str = '[' + ','.join(args) + ']' if args else ''
-        lines = [f"\\{self.cmd}{arg_str}{{{self.a}}}{{{self.b}}}"]
+        a = escape_latex(self.a)
+        b = escape_latex(self.b)
+        lines = [f"\\{self.cmd}{arg_str}{{{a}}}{{{b}}}"]
         if self.label:
-            lines.append(f"\\node[above] at ({self.name}-1) {{{self.label}}};")
+            label = escape_latex(self.label)
+            lines.append(f"\\node[above] at ({self.name}-1) {{{label}}};")
         return lines
 
 class TikzDiagram:
     def __init__(self, elements: List[TikzElement], relationships: List[TikzRelationship]):
         self.elements = elements
         self.relationships = relationships
+
+    def assign_positions(self) -> None:
+        """
+        Place nodes using Graphviz 'dot' for a layered layout:
+        - Ranks nodes top-down, minimizes crossings in each layer.
+        - Parses plain text output for positions.
+        """
+        # 1) Produce a DOT description in-memory
+        dot_lines = ["digraph G {"]
+        for el in self.elements:
+            dot_lines.append(f'  "{el.display_name}";')
+        for rel in self.relationships:
+            dot_lines.append(f'  "{rel.a}" -> "{rel.b}";')
+        dot_lines.append("}")
+
+        # 2) Call dot with plain output
+        proc = subprocess.run(
+            ["dot", "-Tplain"],
+            input="\n".join(dot_lines).encode(),
+            stdout=subprocess.PIPE,
+            check=True
+        )
+        out = proc.stdout.decode().splitlines()
+
+        # 3) Parse 'node <name> <x> <y> ...'
+        for line in out:
+            parts = line.split()
+            if parts[0] == 'node':
+                name, xs, ys = parts[1], float(parts[2]), float(parts[3])
+                for el in self.elements:
+                    if el.display_name == name:
+                        el.x = xs * H_STRETCH
+                        el.y = ys * V_STRETCH
+                        break
+
+    def _radial_layout_for_comp(
+        self,
+        adj: Dict[str, List[str]],
+        comp: Set[str]
+    ) -> Tuple[Dict[str, Tuple[float,float]], int]:
+        """
+        Do your existing “equidistant spokes” radial BFS,
+        restricted to the nodes in comp.
+        Returns (pos, max_depth).
+        """
+        # pick root = highest-degree in this comp
+        root = max(comp, key=lambda n: len([v for v in adj[n] if v in comp]))
+        # gather neighbors in comp
+        nbrs = [v for v in adj[root] if v in comp]
+        m = len(nbrs)
+        angles: Dict[str, float] = {}
+        # assign equally spaced angles around the circle
+        for i, nbr in enumerate(nbrs):
+            angles[nbr] = 2 * math.pi * i / m
+
+        # positions and depths
+        pos: Dict[str, Tuple[float,float]] = {root: (0.0, 0.0)}
+        depth: Dict[str, int] = {root: 0}
+        # initialize BFS
+        q = deque(nbrs)
+        for nbr in nbrs:
+            depth[nbr] = 1
+            θ = angles[nbr]
+            pos[nbr] = (H_STRETCH * math.cos(θ), V_STRETCH * math.sin(θ))
+
+        max_depth = 1
+
+        # BFS outward, each child inherits parent’s angle
+        while q:
+            u = q.popleft()
+            θ = angles[u]
+            d = depth[u]
+            for v in adj[u]:
+                if v not in comp or v in depth:
+                    continue
+                depth[v] = d + 1
+                max_depth = max(max_depth, d + 1)
+                angles[v] = θ
+                r = (d + 1) * H_STRETCH
+                pos[v] = (r * math.cos(θ), r * math.sin(θ))
+                q.append(v)
+
+        return pos, max_depth
+
+
 
     def group_relations(self) -> None:
         grouped = defaultdict(lambda: {'rels': [], 'labels': []})
@@ -415,10 +524,13 @@ class TikzDiagram:
         self.relationships = merged
 
     def render(self) -> List[str]:
+        # Compute positions first
+        self.assign_positions()
         lines: List[str] = ['\\begin{tikzpicture}']
         for el in self.elements:
             lines.extend(el.render())
             lines.append('')
+        # Group and render relations
         self.group_relations()
         for r in self.relationships:
             lines.extend(r.render())
@@ -430,10 +542,17 @@ class TikzDiagram:
 def convert_json_to_tikz(jd: JsonDiagram) -> TikzDiagram:
     elems: List[TikzElement] = []
     for el in jd.elements:
+        is_interface = (
+            len(el.members) == 0
+            and len(el.methods) > 0
+            and all(m.is_pure_virtual for m in el.methods)
+        )
+
         members = [TikzMember.from_json(m) for m in el.members]
         methods = [TikzMethod.from_json(m) for m in el.methods]
         tnames = [tp.name or tp.type for tp in el.template_parameters]
-        elems.append(TikzElement(el.display_name, el.type, el.is_abstract, tnames, members, methods))
+        elems.append(TikzElement(el.display_name, "interface" if is_interface else el.type, el.is_abstract, tnames, members, methods))
+    
     name_map = {el.id: el.display_name for el in jd.elements}
     rels = [TikzRelationship.from_json(r, name_map) for r in jd.relationships]
     return TikzDiagram(elems, rels)
