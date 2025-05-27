@@ -1,156 +1,110 @@
 \documentclass{article}
-\usepackage[paperwidth=3000pt, paperheight=3000pt, margin=20pt]{geometry}
+\usepackage[paperwidth=1000pt, paperheight=1000pt, margin=20pt]{geometry}
+\usepackage{tikz}
 \usepackage{tikz-uml}
 
 \begin{document}
 
 \begin{tikzpicture}
-\umlclass[x=-0.31226256542594916,y=-9.844200534964006]{Components::Wheel}
+\umlclass[x=23.01,y=-5.59]{World}
 {
+  isRunning: std::atomic\textless{}bool\textgreater{} \\
 }
 {
 }
-
-\umlclass[x=-9.650652294890222,y=-0.16785590424133703]{Engines::Engine}
+\umlclass[x=31.20,y=-5.59]{Chunk}
 {
+  -- isLoaded: bool \\
 }
 {
 }
-
-\umlclass[x=8.084112410865043,y=5.944353469820086]{Engines::ElectricEngine}
+\umlclass[x=31.07,y=-14.43]{ChunkBlock}
 {
+  -- id: int \\
 }
 {
 }
-
-\umlclass[x=4.667100653722636,y=-9.380027748205809]{Engines::FuelEngine}
+\umlsimpleclass[x=23.01,y=-9.75]{Player}
+\umlclass[x=14.17,y=-10.01]{ItemStack}
 {
+  -- numInStack: int \\
 }
 {
 }
-
-\umlclass[x=8.148335902429674,y=-4.087103125714166]{Engines::Internal::TurboEngine}
+\umlclass[x=23.14,y=-15.73]{3D Vector}
 {
+  x: float \\
+  y: float \\
+  z: float \\
 }
 {
 }
-
-\umlclass[x=-4.370059674821428,y=9.44497473269314]{Vehicles::Vehicle}
+\umlclass[x=31.20,y=-9.88]{ChunkSection}
 {
+  -- hasMesh: bool \\
+  -- hasBufferedMesh: bool \\
 }
 {
 }
-
-\umlclass[x=2.23482750754424,y=9.757279370395016]{Vehicles::Car}
+\umlsimpleclass[x=31.33,y=-1.82]{ChunkManager}
+\umlclass[x=14.04,y=-5.07]{3D Vector}
 {
-  + engine: Engines::Engine * \\
-  + wheels: std::vector\textless Wheel *\textgreater
+  x: float \\
+  y: float \\
+  z: float \\
 }
 {
 }
-
-\umlclass[x=10.0,y=-3.39067136718703]{Vehicles::Bicycle}
+\umlclass[x=14.17,y=-14.43]{Material}
 {
-  + frontWheel: Components::Wheel \\
-  + rearWheel: Components::Wheel
+  -- maxStackSize: int \\
+  -- isBlock: bool \\
+  -- name: string \\
 }
 {
 }
-
-\umlclass[x=-8.979172641574843,y=3.608695469705146]{People::Driver}
-{
-  + myCar: Vehicles::Car \&
-}
-{
-  + Driver(c: Vehicles::Car \&)
-}
-
-\umlclass[x=5.687255684414438,y=8.652844460706715]{People::Person}
-{
-}
-{
-  + service(car: Vehicles::Car \&)
-}
-
-\umlclass[x=7.604412048378575,y=-7.45780473328823]{People::Mechanic}
-{
-}
-{
-}
-
-\umlclass[x=-2.618947393431788,y=8.759350425528062]{People::Insurance}
-{
-}
-{
-}
-
-\umlclass[x=-7.882878633687551,y=-6.137973350852536]{People::Customer}
-{
-  + insurance: People::Insurance *
-}
-{
-}
-
-\umlclass[x=-7.82768602969262,y=7.022438965763897]{Services::Garage}
-{
-  + parkedCar: Vehicles::Car *
-}
-{
-}
-
-\umlclass[x=2.2043613665491533,y=-8.233806203659533]{Services::RentalService}
-{
-  + rentals: std::map\textless int,Car *\textgreater
-}
-{
-}
-
-\umlclass[x=-2.4984355882946114,y=-8.692171830024677]{Services::Workshop}
-{
-  + staff: std::vector\textless Mechanic *\textgreater
-}
-{
-}
-
-\umlinherit[name=umlinheritEnginesElectricEngineEnginesEngine]{Engines::ElectricEngine}{Engines::Engine}
-
-\umlinherit[name=umlinheritEnginesFuelEngineEnginesEngine]{Engines::FuelEngine}{Engines::Engine}
-
-\umlinherit[name=umlinheritEnginesInternalTurboEngineEnginesEngine]{Engines::Internal::TurboEngine}{Engines::Engine}
-
-\umluniassoc[name=umluniassocVehiclesCarEnginesEngine]{Vehicles::Car}{Engines::Engine}
-\node[above] at (umluniassocVehiclesCarEnginesEngine-1) {engine};
-
-\umluniassoc[name=umluniassocVehiclesCarComponentsWheel]{Vehicles::Car}{Components::Wheel}
-\node[above] at (umluniassocVehiclesCarComponentsWheel-1) {wheels};
-
-\umlinherit[name=umlinheritVehiclesCarVehiclesVehicle]{Vehicles::Car}{Vehicles::Vehicle}
-
-\umlaggreg[name=umlaggregVehiclesBicycleComponentsWheel]{Vehicles::Bicycle}{Components::Wheel}
-\node[above] at (umlaggregVehiclesBicycleComponentsWheel-1) {frontWheel, rearWheel};
-
-\umlinherit[name=umlinheritVehiclesBicycleVehiclesVehicle]{Vehicles::Bicycle}{Vehicles::Vehicle}
-
-\umluniassoc[name=umluniassocPeopleDriverVehiclesCar]{People::Driver}{Vehicles::Car}
-\node[above] at (umluniassocPeopleDriverVehiclesCar-1) {myCar};
-
-\umldep[name=umldepPeoplePersonVehiclesCar]{People::Person}{Vehicles::Car}
-
-\umluniassoc[name=umluniassocPeopleMechanicVehiclesCar]{People::Mechanic}{Vehicles::Car}
-\node[above] at (umluniassocPeopleMechanicVehiclesCar-1) {$\ll$friend$\gg$};
-
-\umluniassoc[name=umluniassocPeopleCustomerPeopleInsurance]{People::Customer}{People::Insurance}
-\node[above] at (umluniassocPeopleCustomerPeopleInsurance-1) {insurance};
-
-\umluniassoc[name=umluniassocServicesGarageVehiclesCar]{Services::Garage}{Vehicles::Car}
-\node[above] at (umluniassocServicesGarageVehiclesCar-1) {parkedCar};
-
-\umluniassoc[name=umluniassocServicesRentalServiceVehiclesCar]{Services::RentalService}{Vehicles::Car}
-\node[above] at (umluniassocServicesRentalServiceVehiclesCar-1) {rentals};
-
-\umluniassoc[name=umluniassocServicesWorkshopPeopleMechanic]{Services::Workshop}{People::Mechanic}
-\node[above] at (umluniassocServicesWorkshopPeopleMechanic-1) {staff};
-
+\node at (31.14,-12.94) [name=Relation0_3114_-1294]{};
+\node at (31.14,-14.54) [name=Relation0_3114_-1454]{};
+\umlassoc[name=Relation0]{Relation0_3114_-1294}{Relation0_3114_-1454}
+\node at (25.68,-7.16) [name=Relation1_2568_-716]{};
+\node at (28.48,-7.16) [name=Relation1_2848_-716]{};
+\umlassoc[name=Relation1]{Relation1_2568_-716}{Relation1_2848_-716}
+\node at (23.08,-8.26) [name=Relation2_2308_-826]{};
+\node at (23.08,-10.26) [name=Relation2_2308_-1026]{};
+\umlassoc[name=Relation2]{Relation2_2308_-826}{Relation2_2308_-1026}
+\node at (19.44,-11.58) [name=Relation3_1944_-1158]{};
+\node at (16.84,-11.58) [name=Relation3_1684_-1158]{};
+\umlassoc[name=Relation3]{Relation3_1944_-1158}{Relation3_1684_-1158}
+\node at (20.50,-13.20) [name=Relation4_2050_-1320]{};
+\node at (20.50,-16.60) [name=Relation4_2050_-1660]{};
+\node at (21.50,-16.60) [name=Relation4_2150_-1660]{};
+\draw (Relation4_2050_-1320) -- (Relation4_2050_-1660);
+\umlassoc[name=Relation4]{Relation4_2050_-1660}{Relation4_2150_-1660}
+\node at (23.08,-13.20) [name=Relation5_2308_-1320]{};
+\node at (23.08,-16.00) [name=Relation5_2308_-1600]{};
+\umlassoc[name=Relation5]{Relation5_2308_-1320}{Relation5_2308_-1600}
+\node at (24.92,-13.20) [name=Relation6_2492_-1320]{};
+\node at (24.92,-16.60) [name=Relation6_2492_-1660]{};
+\node at (24.12,-16.60) [name=Relation6_2412_-1660]{};
+\draw (Relation6_2492_-1320) -- (Relation6_2492_-1660);
+\umlassoc[name=Relation6]{Relation6_2492_-1660}{Relation6_2412_-1660}
+\node at (31.14,-8.26) [name=Relation7_3114_-826]{};
+\node at (31.14,-10.26) [name=Relation7_3114_-1026]{};
+\umlassoc[name=Relation7]{Relation7_3114_-826}{Relation7_3114_-1026}
+\node at (23.08,-5.54) [name=Relation8_2308_-554]{};
+\node at (23.08,-2.74) [name=Relation8_2308_-274]{};
+\node at (28.08,-2.74) [name=Relation8_2808_-274]{};
+\draw (Relation8_2308_-554) -- (Relation8_2308_-274);
+\umlassoc[name=Relation8]{Relation8_2308_-274}{Relation8_2808_-274}
+\node at (31.14,-3.32) [name=Relation9_3114_-332]{};
+\node at (31.14,-5.72) [name=Relation9_3114_-572]{};
+\umlassoc[name=Relation9]{Relation9_3114_-332}{Relation9_3114_-572}
+\node at (19.02,-7.42) [name=Relation10_1902_-742]{};
+\node at (15.02,-7.42) [name=Relation10_1502_-742]{};
+\umlassoc[name=Relation10]{Relation10_1902_-742}{Relation10_1502_-742}
+\node at (13.98,-12.68) [name=Relation11_1398_-1268]{};
+\node at (13.98,-14.88) [name=Relation11_1398_-1488]{};
+\umlassoc[name=Relation11]{Relation11_1398_-1268}{Relation11_1398_-1488}
 \end{tikzpicture}
 
 \end{document}

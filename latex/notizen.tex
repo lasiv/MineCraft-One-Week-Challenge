@@ -291,12 +291,12 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spieler drückt Mausfreigabetaste (L)
-  \item[2.] System schaltet Mauszeiger frei
+  \item[2.] Spiel schaltet Mauszeiger frei
   \item[2a.] Mauszeiger ist bereits freigeschaltet
-  \item[2a.1.] Mauszeiger wird eingefangen
-  \item[2a.2.] Kamerasteuerung wird aktiviert
+  \item[2a.1.] Spiel fängt den Mauszeiger ein
+  \item[2a.2.] Spiel aktiviert Kamerasteuerung
   \item[2a.3.] UseCase endet erfolglos
-  \item[3.] Kamerasteuerung wird deaktiviert
+  \item[3.] Spiel deaktiviert Kamerasteuerung
   \item[4.] UseCase endet erfolgreich
 \end{description}
 
@@ -313,15 +313,16 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[2.] Spieler klickt die linken Maustaste
-  \item[3.] Spiel validiert, dass ein Block ainvisiert wird und abgebaut werden kann
-  \item[3a.] Es ist kein entfernbarer Block im Sichtfeld
-  \item[3a.1.] UseCase endet erfolglos
-  \item[4.] Spiel entfernt Block aus der Welt
-  \item[5.] Spiel fügt den Block dem Inventar der Spielfigur hinzu
-  \item[5a.] Inventar ist voll, Block kann nicht hinzugefügt werden
-  \item[5a.1.] UseCase endet erfolglos 
-  \item[6.] UseCase endet erfolgreich
+  \item[1.] Spieler klickt die linken Maustaste
+  \item[2.] Spiel validiert, dass ein Block anvisiert wird und abgebaut werden kann
+  \item[2a.] Es ist kein entfernbarer Block im Sichtfeld
+  \item[2a.1.] UseCase endet erfolglos
+  \item[3.] Spiel entfernt Block aus der Welt
+  \item[4.] Spiel fügt den Block dem Inventar der Spielfigur hinzu
+  \item[4a.] Das Inventar der Spielfigur ist voll
+  \item[4a.1.] Spiel fügt den Block nicht dem inventar der Spielfigur hinzu
+  \item[4a.2.] UseCase endet erfolglos 
+  \item[5.] UseCase endet erfolgreich
 \end{description}
 
 \newpage
@@ -337,15 +338,15 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[2.] Spieler klickt die linken Maustaste
-  \item[3.] Spiel validiert, dass der Block platziert werden kann
-  \item[3a.] Es ist keine valide Oberfläche im Sichtfeld
+  \item[1.] Spieler klickt die linken Maustaste
+  \item[2.] Spiel validiert, dass der Block platziert werden kann
+  \item[2a.] Es ist keine valide Oberfläche im Sichtfeld
+  \item[2a.1.] UseCase endet erfolglos
+  \item[3.] Spiel platziert Block an ausgewählter Stelle
+  \item[3a.] Spielerfigur hat keinen platzierbaren Block im Inventar
   \item[3a.1.] UseCase endet erfolglos
-  \item[4.] Spiel platziert Block an ausgewählter Stelle
-  \item[4a.] Spielerfigur hat keinen platzierbaren Block im Inventar
-  \item[4a.1.] UseCase endet erfolglos
-  \item[5.] Spiel entfernt Block aus dem Inventar
-  \item[6.] UseCase endet erfolgreich
+  \item[4.] Spiel entfernt Block aus dem Inventar
+  \item[5.] UseCase endet erfolgreich
 \end{description}
 
 \subsubsection*{Spiel Verlassen}
@@ -385,7 +386,21 @@ Genau Verändern soll sich folgendes:
 
 \textbf{Movement/Physik:}
 
+Anpassung der Bewegung
+Schleichen kanten
+Schleimblöcke
+blöcke slipperyness werte
+schwimmen
+
 \textbf{Generierung von Strukturen:}
+
+evtl Dörfer
+
+\begin{tikzpicture}
+  \node at (0,0) [name=start]{start};
+  \node at (3,3) [name=end]{end};
+  \umlaggreg[name=sartend]{start}{end};
+\end{tikzpicture}
 
 \newpage
 
