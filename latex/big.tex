@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[paperwidth=3000pt, paperheight=3000pt, margin=20pt]{geometry}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+\umlclass[x=-0.31226256542594916,y=-9.844200534964006]{Components::Wheel}
+{
+}
+{
+}
+
+\umlclass[x=-9.650652294890222,y=-0.16785590424133703]{Engines::Engine}
+{
+}
+{
+}
+
+\umlclass[x=8.084112410865043,y=5.944353469820086]{Engines::ElectricEngine}
+{
+}
+{
+}
+
+\umlclass[x=4.667100653722636,y=-9.380027748205809]{Engines::FuelEngine}
+{
+}
+{
+}
+
+\umlclass[x=8.148335902429674,y=-4.087103125714166]{Engines::Internal::TurboEngine}
+{
+}
+{
+}
+
+\umlclass[x=-4.370059674821428,y=9.44497473269314]{Vehicles::Vehicle}
+{
+}
+{
+}
+
+\umlclass[x=2.23482750754424,y=9.757279370395016]{Vehicles::Car}
+{
+  + engine: Engines::Engine * \\
+  + wheels: std::vector\textless Wheel *\textgreater
+}
+{
+}
+
+\umlclass[x=10.0,y=-3.39067136718703]{Vehicles::Bicycle}
+{
+  + frontWheel: Components::Wheel \\
+  + rearWheel: Components::Wheel
+}
+{
+}
+
+\umlclass[x=-8.979172641574843,y=3.608695469705146]{People::Driver}
+{
+  + myCar: Vehicles::Car \&
+}
+{
+  + Driver(c: Vehicles::Car \&)
+}
+
+\umlclass[x=5.687255684414438,y=8.652844460706715]{People::Person}
+{
+}
+{
+  + service(car: Vehicles::Car \&)
+}
+
+\umlclass[x=7.604412048378575,y=-7.45780473328823]{People::Mechanic}
+{
+}
+{
+}
+
+\umlclass[x=-2.618947393431788,y=8.759350425528062]{People::Insurance}
+{
+}
+{
+}
+
+\umlclass[x=-7.882878633687551,y=-6.137973350852536]{People::Customer}
+{
+  + insurance: People::Insurance *
+}
+{
+}
+
+\umlclass[x=-7.82768602969262,y=7.022438965763897]{Services::Garage}
+{
+  + parkedCar: Vehicles::Car *
+}
+{
+}
+
+\umlclass[x=2.2043613665491533,y=-8.233806203659533]{Services::RentalService}
+{
+  + rentals: std::map\textless int,Car *\textgreater
+}
+{
+}
+
+\umlclass[x=-2.4984355882946114,y=-8.692171830024677]{Services::Workshop}
+{
+  + staff: std::vector\textless Mechanic *\textgreater
+}
+{
+}
+
+\umlinherit[name=umlinheritEnginesElectricEngineEnginesEngine]{Engines::ElectricEngine}{Engines::Engine}
+
+\umlinherit[name=umlinheritEnginesFuelEngineEnginesEngine]{Engines::FuelEngine}{Engines::Engine}
+
+\umlinherit[name=umlinheritEnginesInternalTurboEngineEnginesEngine]{Engines::Internal::TurboEngine}{Engines::Engine}
+
+\umluniassoc[name=umluniassocVehiclesCarEnginesEngine]{Vehicles::Car}{Engines::Engine}
+\node[above] at (umluniassocVehiclesCarEnginesEngine-1) {engine};
+
+\umluniassoc[name=umluniassocVehiclesCarComponentsWheel]{Vehicles::Car}{Components::Wheel}
+\node[above] at (umluniassocVehiclesCarComponentsWheel-1) {wheels};
+
+\umlinherit[name=umlinheritVehiclesCarVehiclesVehicle]{Vehicles::Car}{Vehicles::Vehicle}
+
+\umlaggreg[name=umlaggregVehiclesBicycleComponentsWheel]{Vehicles::Bicycle}{Components::Wheel}
+\node[above] at (umlaggregVehiclesBicycleComponentsWheel-1) {frontWheel, rearWheel};
+
+\umlinherit[name=umlinheritVehiclesBicycleVehiclesVehicle]{Vehicles::Bicycle}{Vehicles::Vehicle}
+
+\umluniassoc[name=umluniassocPeopleDriverVehiclesCar]{People::Driver}{Vehicles::Car}
+\node[above] at (umluniassocPeopleDriverVehiclesCar-1) {myCar};
+
+\umldep[name=umldepPeoplePersonVehiclesCar]{People::Person}{Vehicles::Car}
+
+\umluniassoc[name=umluniassocPeopleMechanicVehiclesCar]{People::Mechanic}{Vehicles::Car}
+\node[above] at (umluniassocPeopleMechanicVehiclesCar-1) {$\ll$friend$\gg$};
+
+\umluniassoc[name=umluniassocPeopleCustomerPeopleInsurance]{People::Customer}{People::Insurance}
+\node[above] at (umluniassocPeopleCustomerPeopleInsurance-1) {insurance};
+
+\umluniassoc[name=umluniassocServicesGarageVehiclesCar]{Services::Garage}{Vehicles::Car}
+\node[above] at (umluniassocServicesGarageVehiclesCar-1) {parkedCar};
+
+\umluniassoc[name=umluniassocServicesRentalServiceVehiclesCar]{Services::RentalService}{Vehicles::Car}
+\node[above] at (umluniassocServicesRentalServiceVehiclesCar-1) {rentals};
+
+\umluniassoc[name=umluniassocServicesWorkshopPeopleMechanic]{Services::Workshop}{People::Mechanic}
+\node[above] at (umluniassocServicesWorkshopPeopleMechanic-1) {staff};
+
+\end{tikzpicture}
+
+\end{document}
