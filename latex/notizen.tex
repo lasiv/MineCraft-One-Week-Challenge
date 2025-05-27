@@ -128,7 +128,7 @@
 	\\[3cm]
 	\normalsize
 	\begin{tabular}{ll}
-	      \textbf{Erstellt von:} & Benjamin Brohs, Kevin Keheck, Justin Meng \\
+	      \textbf{Erstellt von:} & Benjamin Brohs, Kevin Hecke, Justin Meng \\
         \textbf{Modul:} & Softwaretechnik \\
         \textbf{Semester:} & Sommersemester 2025 \\
 	\textbf{Dozent:} & Thomas Baar
@@ -355,6 +355,37 @@ Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des
 \subsection{Domänenmodell} \label{subsec:domain}
 
 Das Domönenmodell ist in Abbildung \ref{fig:domain} zu sehen. Es wurde mithilfe von Clang und PlantUML generiert. Aufgrund der Größe des Projekts ist eine vollständige Modellierung der Software etwas groß und unübersichtlich. Demensprechend empfehlen wir die beigelegten Originaldateien seperat anzuschauen.
+
+\section{Meilenstein 2} \label{sec:ms2}
+
+In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projektes zu Beschreiben. Hier ebenfalls wieder in Modell- und Textform. 
+
+\subsection{Designmodell} \label{subsec:design}
+
+\subsection{Zustandsmodell} \label{subsec:statemodel}
+
+\subsection{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
+
+Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äußern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
+
+Bei den Hauptthemen der Änderungen geht es vorallem um einen grafische Benutzeroberfläche, die Änderung von Bewegungsabläufen und der Physik und die Generierung von Strukturen.
+
+\textbf{GUI \& Logik:}
+
+Der aktuelle Zustand der Benutzeroberfläche ist quasi Null. Denn es ist noch nicht wirklich eine Oberfläche vorhanden. Dies macht die Verwendung von der Software sperrig und unnötig schwerer. Dahingehend ist geplant, dass die Bedienung deutlich einfacher wird, indem an verschiedenen Stellen eine grafische Oberfläche implementiert wird.
+
+Genau Verändern soll sich folgendes:
+
+\begin{description}
+  \item[Inventarsystem:] Das Inventar wird ersichtlich. Durch eine Schnellzugriffsleiste und zusätzliches Inventar durch drücken einer Taste wird das Verwalten von Gegenständen im Inventar stark vereinfacht.
+  \item[Fadenkreuz] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt ainvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
+  \item[Lebensanzeige] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. [FORM NOCH NICHT KLAR] Im zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmene kann.
+  \item[Kompass] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
+\end{description}
+
+\textbf{Movement/Physik:}
+
+\textbf{Generierung von Strukturen:}
 
 \newpage
 
