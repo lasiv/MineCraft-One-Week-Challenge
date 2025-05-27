@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import shlex
 import subprocess
 from typing import List, Optional, Dict, Set, Tuple
 import json
@@ -6,11 +7,12 @@ import sys
 import os
 import math
 from collections import defaultdict, deque
+import networkx as nx
 
 
 # --- Positioning Constants ---
-H_STRETCH: float = 5.0  # horizontal grid spacing multiplier
-V_STRETCH: float = 5.0  # vertical grid spacing multiplier
+H_STRETCH: float = 10.0  # horizontal grid spacing multiplier
+V_STRETCH: float = 10.0  # vertical grid spacing multiplier
 
 # --- JSON Data Models ---
 @dataclass
@@ -130,8 +132,12 @@ def escape_latex(s: str) -> str:
              .replace('~', r'\raisebox{0.5ex}{\texttildelow}')
              .replace('<<', r'$\ll$')
              .replace('>>', r'$\gg$')
-             .replace('<', r'$<$')
-             .replace('>', r'$>$'))
+             .replace('<', r'\textless ')
+             .replace('>', r'\textgreater')
+             .replace('_', r'\_'))
+
+def escape_arg(s: str) -> str:
+    return (s.replace('::', ''))
 
 # --- JSON Parsing Helpers ---
 
@@ -317,6 +323,7 @@ class TikzMethod:
 class TikzElement:
     def __init__(
         self,
+        id: str,
         display_name: str,
         type: str,
         is_abstract: bool,
@@ -326,6 +333,7 @@ class TikzElement:
         x: float = 0,
         y: float = 0
     ):
+        self.id = id
         self.display_name = display_name
         self.type = type
         self.is_abstract = is_abstract
@@ -340,7 +348,9 @@ class TikzElement:
         if self.is_abstract:
             opts.append('type=abstract')
         if self.template_names:
-            opts.append(f"template={{ {', '.join(self.template_names)} }}")
+            template_names = escape_latex(', '.join(self.template_names))
+            opts.append(f"template={{ {template_names} }}")
+            self.display_name = self.display_name.split('<')[0]
         cmd = 'umlclass'
         if self.type == 'enum':
             cmd = 'umlenum'
@@ -394,8 +404,8 @@ class TikzRelationship:
             'instantiation': 'umlnest'
         }
         cmd = cmd_map.get(jr.type, 'umluniassoc')
-        a = nm.get(jr.source, jr.source)
-        b = nm.get(jr.destination, jr.destination)
+        a = nm.get(jr.source, jr.source).split("<")[0]
+        b = nm.get(jr.destination, jr.destination).split("<")[0]
         name = f"{cmd}{a}{b}"
         return cls(cmd, a, b, jr.label, jr.multiplicity_source, jr.multiplicity_destination, name)
 
@@ -404,7 +414,8 @@ class TikzRelationship:
 
     def render(self) -> List[str]:
         args: List[str] = []
-        args.append(f"name={self.name}")
+        safe_name = escape_arg(self.name)
+        args.append(f"name={safe_name}")
         if self.m1:
             args.extend([f"mult1={self.m1}", "pos1=0.1"])
         if self.m2:
@@ -415,7 +426,7 @@ class TikzRelationship:
         lines = [f"\\{self.cmd}{arg_str}{{{a}}}{{{b}}}"]
         if self.label:
             label = escape_latex(self.label)
-            lines.append(f"\\node[above] at ({self.name}-1) {{{label}}};")
+            lines.append(f"\\node[above] at ({safe_name}-1) {{{label}}};")
         return lines
 
 class TikzDiagram:
@@ -425,88 +436,24 @@ class TikzDiagram:
 
     def assign_positions(self) -> None:
         """
-        Place nodes using Graphviz 'dot' for a layered layout:
-        - Ranks nodes top-down, minimizes crossings in each layer.
-        - Parses plain text output for positions.
+        Place nodes using a force-directed layout (spring_layout) to reduce crossings.
         """
-        # 1) Produce a DOT description in-memory
-        dot_lines = ["digraph G {"]
+        # 1) Build an undirected graph of your elements
+        G = nx.Graph()
         for el in self.elements:
-            dot_lines.append(f'  "{el.display_name}";')
+            G.add_node(el.id)
         for rel in self.relationships:
-            dot_lines.append(f'  "{rel.a}" -> "{rel.b}";')
-        dot_lines.append("}")
+            G.add_edge(rel.a, rel.b)
 
-        # 2) Call dot with plain output
-        proc = subprocess.run(
-            ["dot", "-Tplain"],
-            input="\n".join(dot_lines).encode(),
-            stdout=subprocess.PIPE,
-            check=True
-        )
-        out = proc.stdout.decode().splitlines()
+        # 2) Compute positions with spring_layout (you can tweak k and iterations)
+        #    k=None (default) lets NetworkX pick optimal repulsion; iterations=500+ gives better convergence.
+        pos = nx.pos = nx.spring_layout(G)
 
-        # 3) Parse 'node <name> <x> <y> ...'
-        for line in out:
-            parts = line.split()
-            if parts[0] == 'node':
-                name, xs, ys = parts[1], float(parts[2]), float(parts[3])
-                for el in self.elements:
-                    if el.display_name == name:
-                        el.x = xs * H_STRETCH
-                        el.y = ys * V_STRETCH
-                        break
-
-    def _radial_layout_for_comp(
-        self,
-        adj: Dict[str, List[str]],
-        comp: Set[str]
-    ) -> Tuple[Dict[str, Tuple[float,float]], int]:
-        """
-        Do your existing “equidistant spokes” radial BFS,
-        restricted to the nodes in comp.
-        Returns (pos, max_depth).
-        """
-        # pick root = highest-degree in this comp
-        root = max(comp, key=lambda n: len([v for v in adj[n] if v in comp]))
-        # gather neighbors in comp
-        nbrs = [v for v in adj[root] if v in comp]
-        m = len(nbrs)
-        angles: Dict[str, float] = {}
-        # assign equally spaced angles around the circle
-        for i, nbr in enumerate(nbrs):
-            angles[nbr] = 2 * math.pi * i / m
-
-        # positions and depths
-        pos: Dict[str, Tuple[float,float]] = {root: (0.0, 0.0)}
-        depth: Dict[str, int] = {root: 0}
-        # initialize BFS
-        q = deque(nbrs)
-        for nbr in nbrs:
-            depth[nbr] = 1
-            θ = angles[nbr]
-            pos[nbr] = (H_STRETCH * math.cos(θ), V_STRETCH * math.sin(θ))
-
-        max_depth = 1
-
-        # BFS outward, each child inherits parent’s angle
-        while q:
-            u = q.popleft()
-            θ = angles[u]
-            d = depth[u]
-            for v in adj[u]:
-                if v not in comp or v in depth:
-                    continue
-                depth[v] = d + 1
-                max_depth = max(max_depth, d + 1)
-                angles[v] = θ
-                r = (d + 1) * H_STRETCH
-                pos[v] = (r * math.cos(θ), r * math.sin(θ))
-                q.append(v)
-
-        return pos, max_depth
-
-
+        # 3) Apply and scale into your TikZ coordinates
+        for el in self.elements:
+            x, y = pos[el.id]
+            el.x = x * H_STRETCH
+            el.y = y * V_STRETCH
 
     def group_relations(self) -> None:
         grouped = defaultdict(lambda: {'rels': [], 'labels': []})
@@ -551,7 +498,7 @@ def convert_json_to_tikz(jd: JsonDiagram) -> TikzDiagram:
         members = [TikzMember.from_json(m) for m in el.members]
         methods = [TikzMethod.from_json(m) for m in el.methods]
         tnames = [tp.name or tp.type for tp in el.template_parameters]
-        elems.append(TikzElement(el.display_name, "interface" if is_interface else el.type, el.is_abstract, tnames, members, methods))
+        elems.append(TikzElement(el.id, el.display_name, "interface" if is_interface else el.type, el.is_abstract, tnames, members, methods))
     
     name_map = {el.id: el.display_name for el in jd.elements}
     rels = [TikzRelationship.from_json(r, name_map) for r in jd.relationships]
