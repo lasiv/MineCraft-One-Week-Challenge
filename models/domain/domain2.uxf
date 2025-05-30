@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <help_text/>
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>930</x>
+      <y>420</y>
+      <w>120</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;DatenObjekt&gt;&gt;
+Vektor
+--
+x: Zahl
+y: Zahl
+z: Zahl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>210</y>
+      <w>310</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>World
+--
+block_entfernen(position: Vektor): void
+block_platzieren(position: Vektor): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>520</x>
+      <y>390</y>
+      <w>160</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Spielfigur
+--
+position: Vektor
+bewegung: Vektor
+am_fliegen: Bool
+--
+springen(): void
+sprinten(): void
+schleichen(): void
+fliegen(): void
+abbauen(): viod
+platzieren(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>930</x>
+      <y>210</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Block
+--
+block_id: Zahl
+textur_id: Zahl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>700</y>
+      <w>280</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Inventar
+--
+item_entfernen(item_id: Zahl): void
+item_hinzufügen(itme_id: Zahl): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>230</y>
+      <w>200</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>270</y>
+      <w>40</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>560</y>
+      <w>40</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>720</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>920</x>
+      <y>680</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>ItemStack
+--
+item_id: Zahl
+anzahl: Zahl
+--
+ahzahl_erhöhen(): void
+anzahl_verringern(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
