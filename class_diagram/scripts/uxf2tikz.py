@@ -18,10 +18,11 @@ import html
 import math
 from typing import List, Tuple, Optional, Dict
 
-STRETCH_FACTOR = 0.02
+UNIT = 0.02
+PADDING = UNIT / 2.0
 
 def convert(x_raw: float, y_raw: float) -> Tuple[float, float]:
-    return x_raw * STRETCH_FACTOR, -y_raw * STRETCH_FACTOR
+    return x_raw * UNIT, -y_raw * UNIT
 
 def escape_latex(s: str) -> str:
     return (s.replace('&', r'\&').replace('{', r'\{').replace('}', r'\}')
@@ -63,6 +64,83 @@ class Package:
     def contains(self, px: float, py: float) -> bool:
         return (self.posx1 <= px <= self.posx2
                 and self.posy2 <= py <= self.posy1)
+    
+    def contains_box(self, other: 'Package') -> bool:
+        """Prüft, ob dieses Package das andere vollständig enthält."""
+        return (self.posx1 <= other.posx1 <= other.posx2 <= self.posx2
+                and self.posy2 <= other.posy2 <= other.posy1 <= self.posy1)
+
+    def overlaps(self, other: 'Package') -> bool:
+        """Prüft, ob sich die Boxen zumindest teilweise überlappen."""
+        horiz = not (self.posx2 < other.posx1 or other.posx2 < self.posx1)
+        vert  = not (self.posy1 < other.posy2 or other.posy1 < self.posy2)
+        return horiz and vert and not self.contains_box(other) and not other.contains_box(self)
+
+    def sort_packages(self) -> None:
+        """
+        Schachtelt die Packages in self.packages rekursiv.
+        Wird von Diagram.nest_packages() aufgerufen.
+        """
+        changed = True
+        while changed:
+            changed = False
+            i = 0
+            while i < len(self.packages):
+                p = self.packages[i]
+                j = i + 1
+                while j < len(self.packages):
+                    q = self.packages[j]
+                    if p.contains_box(q):
+                        p.packages.append(q)
+                        del self.packages[j]
+                        changed = True
+                    elif q.contains_box(p):
+                        q.packages.append(p)
+                        del self.packages[i]
+                        changed = True
+                        i -= 1
+                        break
+                    elif p.overlaps(q):
+                        warn(f"Überlappung ohne Verschachtelung: {p.id} & {q.id}, entferne {q.id}")
+                        del self.packages[j]
+                        changed = True
+                    else:
+                        j += 1
+                i += 1
+        # rekursiv in allen Unterpackages
+        for p in self.packages:
+            p.sort_packages()
+
+    def render_tree(self, depth: int = 0) -> List[str]:
+        """
+        Rendert dieses Package und alles, was in ihm steckt.
+        Depth steuert die Einrückung.
+        """
+        indent = "  " * depth
+        # Name und Tags wie gehabt:
+        header = self.code[0] if self.code else ""
+        name = escape_latex(header.strip('/_<> '))
+        stereo = None
+        props = None
+        # evtl. Stereotyp / Tags parsen …
+        # (genau wie in Deinem bisherigen Code)
+
+        opts = [f"alias={self.id}", f"x={self.posx1}", f"y={self.posy1}"]
+        # … type=… und tags=… analog zu Element …
+
+        opt_str = "[" + ",".join(opts) + "]"
+        lines: List[str] = []
+        lines.append(f"{indent}\\begin{{umlpackage}}{opt_str}{{{name}}}")
+        # nested packages
+        for pkg in self.packages:
+            for l in pkg.render_tree(depth+1):
+                lines.append(l)
+        # elements
+        for el in self.elements:
+            for l in el.render().splitlines():
+                lines.append("  "*(depth+1) + l)
+        lines.append(f"{indent}\\end{{umlpackage}}")
+        return lines
 
 class Element:
     def __init__(self, type_: str, xml_id: str, code: str,
@@ -82,8 +160,8 @@ class Element:
         self.posx2, self.posy2 = convert(x2, y2)
 
     def contains_point(self, px: float, py: float) -> bool:
-        return (self.posx1 <= px <= self.posx2
-                and self.posy2 <= py <= self.posy1)
+        return (self.posx1 - PADDING <= px <= self.posx2 + PADDING
+                and self.posy2 - PADDING <= py <= self.posy1 + PADDING)
 
     def anchor_angle(self, ex: float, ey: float) -> float:
         """
@@ -161,7 +239,9 @@ class Element:
         lines = code.splitlines()
         parts, buf = [], []
         for L in lines:
-            if L.strip() == '--':
+            token = L.strip()
+            # treat a line consisting of either "-" or "--" (and only that) as a section break
+            if token in ('-', '--'):
                 parts.append(buf)
                 buf = []
             else:
@@ -461,6 +541,69 @@ class Diagram:
         self.elements:  List[Element]  = []
         self.relations: List[Relation] = []
 
+    def _find_deepest(self, pkg: Package, px: float, py: float) -> Optional[Package]:
+        """
+        Rekursiv: findet das innerste Package, das den Punkt (px,py) enthält.
+        """
+        for child in pkg.packages:
+            if child.contains(px, py):
+                return self._find_deepest(child, px, py)
+        return pkg if pkg.contains(px, py) else None
+
+    def nest_packages(self) -> None:
+        """
+        Nimmt self.packages und schachtelt sie hierarchisch,
+        entfernt überzählige Einträge oder warnt bei Teil-Überlappung.
+        """
+        changed = True
+        while changed:
+            changed = False
+            i = 0
+            while i < len(self.packages):
+                p = self.packages[i]
+                j = i + 1
+                while j < len(self.packages):
+                    q = self.packages[j]
+                    if p.contains_box(q):
+                        p.packages.append(q)
+                        del self.packages[j]
+                        changed = True
+                    elif q.contains_box(p):
+                        q.packages.append(p)
+                        del self.packages[i]
+                        changed = True
+                        i -= 1
+                        break
+                    elif p.overlaps(q):
+                        warn(f"Überlappung ohne Verschachtelung: {p.id} & {q.id}, entferne {q.id}")
+                        del self.packages[j]
+                        changed = True
+                    else:
+                        j += 1
+                i += 1
+        # und nun rekursiv in allen Unterpackages
+        for p in self.packages:
+            p.sort_packages()
+
+    def assign_elements(self) -> None:
+        """
+        Weist jedes Element dem tiefsten Package zu, dessen Bounding-Box es enthält.
+        Alle ungebundenen bleiben in self.elements.
+        """
+        unbound: List[Element] = []
+        for el in list(self.elements):
+            placed = False
+            for pkg in self.packages:
+                target = self._find_deepest(pkg, el.posx, el.posy)
+                if target:
+                    target.elements.append(el)
+                    placed = True
+                    break
+            if not placed:
+                unbound.append(el)
+        self.elements = unbound
+
+
     def calculate_all(self) -> None:
         for pkg in self.packages:
             pkg.derive_coords()
@@ -471,19 +614,23 @@ class Diagram:
             rel.parse_attributes()
             rel.determine_connections(self.elements)
             rel.determine_geometry()
+        self.nest_packages()
+        self.assign_elements()
 
     def render(self) -> List[str]:
         lines = ["\\begin{tikzpicture}"]
+        # Packages (rekursiv)
+        for pkg in self.packages:
+            lines.extend(pkg.render_tree())
+        # Elemente, die außerhalb jeder Package geblieben sind
         for el in self.elements:
-            txt = el.render()
-            if txt:
-                lines.extend(txt.splitlines())
+            lines.extend(el.render().splitlines())
+        # Relationen
         for rel in self.relations:
-            txt = rel.render()
-            if txt:
-                lines.extend(txt.splitlines())
+            lines.extend(rel.render().splitlines())
         lines.append("\\end{tikzpicture}")
         return lines
+
 
 def parse_uxf(path: str) -> Diagram:
     tree = ET.parse(path)

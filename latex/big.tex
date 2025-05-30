@@ -6,32 +6,49 @@
 \begin{document}
 
 \begin{tikzpicture}
-\umlclass[x=23.01,y=-5.59]{World}
+\umlclass[x=24.50,y=-9.10,alias=UMLClass0]{World}
 {
   isRunning: std::atomic\textless{}bool\textgreater{} \\
+  playerSpawnPoint: vec3 \\
 }
 {
 }
-\umlclass[x=31.20,y=-5.59]{Chunk}
+\umlclass[x=30.80,y=-9.00,alias=UMLClass1]{Chunk}
 {
-  -- isLoaded: bool \\
+  isLoaded: bool \\
 }
 {
 }
-\umlclass[x=31.07,y=-14.43]{ChunkBlock}
+\umlclass[x=30.70,y=-15.30,alias=UMLClass2]{ChunkBlock}
 {
-  -- id: int \\
+  id: int \\
 }
 {
 }
-\umlsimpleclass[x=23.01,y=-9.75]{Player}
-\umlclass[x=14.17,y=-10.01]{ItemStack}
+\umlclass[x=24.50,y=-12.90,alias=UMLClass3]{Player}
+{
+  isOnGround: bool \\
+  isFlying: bool \\
+  isSneak: bool \\
+  acceleration: vec3 \\
+}
+{
+}
+\umlclass[x=24.30,y=-16.50,alias=UMLClass4]{ItemStack}
 {
   -- numInStack: int \\
 }
 {
 }
-\umlclass[x=23.14,y=-15.73]{3D Vector}
+\umlclass[x=30.80,y=-12.40,alias=UMLClass5]{ChunkSection}
+{
+  hasMesh: bool \\
+  hasBufferedMesh: bool \\
+}
+{
+}
+\umlsimpleclass[x=30.90,y=-5.60,alias=UMLClass6]{ChunkManager}
+\umlclass[x=6.20,y=-1.00,alias=UMLClass7,type={struct}]{vec3}
 {
   x: float \\
   y: float \\
@@ -39,72 +56,153 @@
 }
 {
 }
-\umlclass[x=31.20,y=-9.88]{ChunkSection}
+\umlclass[x=24.50,y=-20.00,alias=UMLClass8]{Material}
 {
-  -- hasMesh: bool \\
-  -- hasBufferedMesh: bool \\
+  maxStackSize: int \\
+  isBlock: bool \\
+  name: string \\
+  id: Material::ID \\
 }
 {
 }
-\umlsimpleclass[x=31.33,y=-1.82]{ChunkManager}
-\umlclass[x=14.04,y=-5.07]{3D Vector}
+\umlclass[x=20.40,y=-15.10,alias=UMLClass9]{Entity}
+{
+  position: vec3 \\
+  rotation: vec3 \\
+  velocity: vec3 \\
+}
+{
+}
+\umlclass[x=20.30,y=-18.30,alias=UMLClass10]{AABB}
+{
+  position: vec3 \\
+  dimensions: vec3 \\
+}
+{
+}
+\umlclass[x=8.30,y=-2.30,alias=UMLClass11,type={enum}]{Material::ID}
+{
+  Nothing \\
+  Grass \\
+  Dirt \\
+  Stone \\
+  OakBark \\
+  OakLeaf \\
+  Sand \\
+  Cactus \\
+  Rose \\
+  TallGrass \\
+  DeadShrub \\
+}
+{
+}
+\umlsimpleclass[x=17.90,y=-9.00,alias=UMLClass12]{PlayState}
+\umlsimpleclass[x=18.00,y=-6.20,alias=UMLClass13]{Application}
+\umlclass[x=5.50,y=-8.80,alias=UMLClass14]{RenderMaster}
+{
+  drawBox: bool \\
+}
+{
+}
+\umlsimpleclass[x=6.80,y=-11.70,alias=UMLClass15]{WaterRenderer}
+\umlsimpleclass[x=9.60,y=-11.70,alias=UMLClass16]{ChunkRenderer}
+\umlsimpleclass[x=4.20,y=-11.70,alias=UMLClass17]{FloraRenderer}
+\umlsimpleclass[x=1.40,y=-11.70,alias=UMLClass18]{SkyboxRenderer}
+\umlclass[x=5.70,y=-14.80,alias=UMLClass19,type={abstract}]{Renderer}
+{
+  chunks: vector\textless{}RenderInfo\textgreater{} \\
+}
+{
+}
+\umlsimpleclass[x=5.80,y=-17.70,alias=UMLClass20]{Shader}
+\umlclass[x=11.70,y=-0.80,alias=UMLClass21,type={struct}]{RenderInfo}
+{
+  vao: unsigned int \\
+  indicesCount: unsigned int \\
+}
+{
+}
+\umlclass[x=15.20,y=-0.70,alias=UMLClass22,type={struct}]{mat4}
+{
+  rows: vec4[4] \\
+}
+{
+}
+\umlclass[x=17.20,y=-1.10,alias=UMLClass23,type={struct}]{vec3}
 {
   x: float \\
   y: float \\
   z: float \\
+  w: float \\
 }
 {
 }
-\umlclass[x=14.17,y=-14.43]{Material}
+\umlclass[x=13.70,y=-14.90,alias=UMLClass24]{Camera}
 {
-  -- maxStackSize: int \\
-  -- isBlock: bool \\
-  -- name: string \\
+  projectionMatrix: mat4 \\
+  viewMatrix: mat4 \\
+  projViewMatrix: mat4 \\
+  frustum: ViewFrustum \\
+  config: Config \\
 }
 {
 }
-\node at (31.14,-12.94) [name=Relation0_3114_-1294]{};
-\node at (31.14,-14.54) [name=Relation0_3114_-1454]{};
-\umlassoc[name=Relation0]{Relation0_3114_-1294}{Relation0_3114_-1454}
-\node at (25.68,-7.16) [name=Relation1_2568_-716]{};
-\node at (28.48,-7.16) [name=Relation1_2848_-716]{};
-\umlassoc[name=Relation1]{Relation1_2568_-716}{Relation1_2848_-716}
-\node at (23.08,-8.26) [name=Relation2_2308_-826]{};
-\node at (23.08,-10.26) [name=Relation2_2308_-1026]{};
-\umlassoc[name=Relation2]{Relation2_2308_-826}{Relation2_2308_-1026}
-\node at (19.44,-11.58) [name=Relation3_1944_-1158]{};
-\node at (16.84,-11.58) [name=Relation3_1684_-1158]{};
-\umlassoc[name=Relation3]{Relation3_1944_-1158}{Relation3_1684_-1158}
-\node at (20.50,-13.20) [name=Relation4_2050_-1320]{};
-\node at (20.50,-16.60) [name=Relation4_2050_-1660]{};
-\node at (21.50,-16.60) [name=Relation4_2150_-1660]{};
-\draw (Relation4_2050_-1320) -- (Relation4_2050_-1660);
-\umlassoc[name=Relation4]{Relation4_2050_-1660}{Relation4_2150_-1660}
-\node at (23.08,-13.20) [name=Relation5_2308_-1320]{};
-\node at (23.08,-16.00) [name=Relation5_2308_-1600]{};
-\umlassoc[name=Relation5]{Relation5_2308_-1320}{Relation5_2308_-1600}
-\node at (24.92,-13.20) [name=Relation6_2492_-1320]{};
-\node at (24.92,-16.60) [name=Relation6_2492_-1660]{};
-\node at (24.12,-16.60) [name=Relation6_2412_-1660]{};
-\draw (Relation6_2492_-1320) -- (Relation6_2492_-1660);
-\umlassoc[name=Relation6]{Relation6_2492_-1660}{Relation6_2412_-1660}
-\node at (31.14,-8.26) [name=Relation7_3114_-826]{};
-\node at (31.14,-10.26) [name=Relation7_3114_-1026]{};
-\umlassoc[name=Relation7]{Relation7_3114_-826}{Relation7_3114_-1026}
-\node at (23.08,-5.54) [name=Relation8_2308_-554]{};
-\node at (23.08,-2.74) [name=Relation8_2308_-274]{};
-\node at (28.08,-2.74) [name=Relation8_2808_-274]{};
-\draw (Relation8_2308_-554) -- (Relation8_2308_-274);
-\umlassoc[name=Relation8]{Relation8_2308_-274}{Relation8_2808_-274}
-\node at (31.14,-3.32) [name=Relation9_3114_-332]{};
-\node at (31.14,-5.72) [name=Relation9_3114_-572]{};
-\umlassoc[name=Relation9]{Relation9_3114_-332}{Relation9_3114_-572}
-\node at (19.02,-7.42) [name=Relation10_1902_-742]{};
-\node at (15.02,-7.42) [name=Relation10_1502_-742]{};
-\umlassoc[name=Relation10]{Relation10_1902_-742}{Relation10_1502_-742}
-\node at (13.98,-12.68) [name=Relation11_1398_-1268]{};
-\node at (13.98,-14.88) [name=Relation11_1398_-1488]{};
-\umlassoc[name=Relation11]{Relation11_1398_-1268}{Relation11_1398_-1488}
+\umlclass[x=19.80,y=-0.80,alias=UMLClass25,type={struct}]{Plane}
+{
+  distanceToOrigin: float \\
+  normal: vec3 \\
+}
+{
+}
+\umlclass[x=19.80,y=-2.60,alias=UMLClass26,type={struct}]{VewFrustum}
+{
+  planes: Plane[6] \\
+}
+{
+}
+\umlclass[x=23.20,y=-1.30,alias=UMLClass27,type={struct}]{Config}
+{
+  windowX: int \\
+  windowY: int \\
+  isFullscreen: bool \\
+  renderDistance: int \\
+  fow: int \\
+}
+{
+}
+\umlcompo[name=Relation0,geometry=--,anchor1=-90.0,anchor2=78.7,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass5}{UMLClass2}
+\umlassoc[name=Relation1,geometry=--,anchor1=2.7,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},arg2={pWorld},pos2=0.8]{UMLClass0}{UMLClass1}
+\umlcompo[name=Relation2,geometry=--,anchor1=-81.9,anchor2=84.8,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass0}{UMLClass3}
+\umlcompo[name=Relation3,geometry=--,anchor1=-95.2,anchor2=78.7,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass3}{UMLClass4}
+\umlaggreg[name=Relation4,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={mchunks},pos2=0.8]{UMLClass1}{UMLClass5}
+\umlassoc[name=Relation5,geometry=|-,anchor1=81.9,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass0}{UMLClass6}
+\umlassoc[name=Relation6,geometry=--,anchor1=-104.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass6}{UMLClass1}
+\umlassoc[name=Relation7,geometry=--,anchor1=-78.7,anchor2=95.7,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass4}{UMLClass8}
+\umlinherit[name=Relation8,geometry=-|,anchor1=-171.9,anchor2=90.0]{UMLClass3}{UMLClass9}
+\umlaggreg[name=Relation9,geometry=--,anchor1=-90.0,anchor2=81.9]{UMLClass9}{UMLClass10}
+\umlassoc[name=Relation10,geometry=--,anchor1=10.0,anchor2=166.6,mult1={*},pos1=0.2,mult2={1},arg2={world},pos2=0.8]{UMLClass12}{UMLClass0}
+\umlassoc[name=Relation11,geometry=-|-,anchor1=-10.3,anchor2=166.6,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=2.8]{UMLClass12}{UMLClass3}
+\umlcompo[name=Relation12,geometry=--,anchor1=-90.0,anchor2=82.9,mult1={1},pos1=0.2,mult2={*},arg2={states},pos2=0.8]{UMLClass13}{UMLClass12}
+\umlaggreg[name=Relation13,geometry=-|,anchor1=180.0,anchor2=99.5,mult1={1},pos1=0.2,mult2={1},arg2={renderMaster},pos2=1.8]{UMLClass13}{UMLClass14}
+\umlaggreg[name=Relation14,geometry=-|,anchor1=180.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass14}{UMLClass18}
+\umlaggreg[name=Relation15,geometry=--,anchor1=-155.2,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass14}{UMLClass17}
+\umlaggreg[name=Relation16,geometry=--,anchor1=-24.8,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass14}{UMLClass15}
+\umlaggreg[name=Relation17,geometry=-|,anchor1=0.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass14}{UMLClass16}
+\umlinherit[name=Relation18,geometry=|-|,anchor1=-90.0,anchor2=131.2]{UMLClass17}{UMLClass19}
+\umlinherit[name=Relation19,geometry=|-|,anchor1=-90.0,anchor2=58.0]{UMLClass15}{UMLClass19}
+\umlinherit[name=Relation20,geometry=|-,anchor1=-90.0,anchor2=10.8]{UMLClass16}{UMLClass19}
+\umlaggreg[name=Relation21,geometry=--,anchor1=-82.9,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},arg2={shader},pos2=0.8]{UMLClass19}{UMLClass20}
+\umlaggreg[name=Relation22,geometry=--,anchor1=175.9,anchor2=-2.7,mult1={1},arg1={entity},pos1=0.2,mult2={1},pos2=0.8]{UMLClass9}{UMLClass24}
 \end{tikzpicture}
 
 \end{document}
+
+
+% todo 
+% position relationen auf bounding box
+% winkel verbindung relation
+% geometry bestimmen
+% relationen argumente einfügen
+% packages fixen
+% farbsupport
+
