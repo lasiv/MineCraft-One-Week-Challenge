@@ -36,7 +36,6 @@ mc-one-week-challenge/
 config.txt
 
 # clang-uml
-class_diagram/*
-!class_diagram/config_class.svg
+class_diagram/
 
 CMakeFiles/
