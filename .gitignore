@@ -38,7 +38,5 @@ config.txt
 # clang-uml
 class_diagram/*
 !class_diagram/config_class.svg
-!class_diagram/scripts/
-!class_diagram/scripts/puml2tikz.py
 
 CMakeFiles/
