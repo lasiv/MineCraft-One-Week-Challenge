@@ -28,8 +28,8 @@ z: Zahl</panel_attributes>
     </coordinates>
     <panel_attributes>World
 --
-block_entfernen(position: Vektor): void
-block_platzieren(position: Vektor): void</panel_attributes>
+block_entfernen(position: Vektor): Bool
+block_platzieren(position: Vektor): Bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -78,8 +78,8 @@ textur_id: Zahl</panel_attributes>
     </coordinates>
     <panel_attributes>Inventar
 --
-item_entfernen(item_id: Zahl): void
-item_hinzufügen(itme_id: Zahl): void</panel_attributes>
+item_entfernen(item_id: Zahl): Bool
+item_hinzufügen(itme_id: Zahl): Bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
