@@ -394,13 +394,29 @@ schwimmen
 
 \subsubsection{Generierung von Strukturen:}
 
-evtl Dörfer
+Aktuell gibt es nur wenig Code, der für die Generierung von Strukturen
+verantwortlich ist. Es gibt eine Klasse, welche Strukturen in der Welt platziert
+und eine zum erstellen von ''Multi-Block'' Vegetation wie Kakteen oder Bäume.
+Diese Strukturen sind jedoch hart in den Code eingebaut, und es gibt nur wenig
+Variation zwischen einzelnen Strukturen. Auch ist es der aktuellen Architektur
+unmöglich, Chunk übergreifende Strukturen zu bauen: diese sind dann an den
+Chunkgrenzen abgehackt. Daher soll der Strukturgenerierungscode um folgende
+Punkte erweitert werden:
 
-\begin{tikzpicture}
-  \node at (0,0) [name=start]{start};
-  \node at (3,3) [name=end]{end};
-  \umlaggreg[name=sartend]{start}{end};
-\end{tikzpicture}
+\begin{itemize}
+	\item Laden und halten des Aufbaus der Struktur
+	\item Generieren der Struktur, ggf. angepasst an das Terrain (z.B. Straßen,
+	die der Wölbung des Bodens folgen)
+	\item Logik implementieren für ''Puzzle'' Strukturen, bei der mehrere Teile
+	ineinander passen
+	\item Chunk übergreifende Strukturen
+\end{itemize}
+
+%\begin{tikzpicture}
+%  \node at (0,0) [name=start]{start};
+%  \node at (3,3) [name=end]{end};
+%  \umlaggreg[name=sartend]{start}{end};
+%\end{tikzpicture}
 
 \newpage
 
