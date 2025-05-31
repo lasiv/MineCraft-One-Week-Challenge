@@ -441,7 +441,7 @@ Genau Verändern soll sich folgendes:
 
 \begin{description}
   \item[Inventarsystem:] Das Inventar wird ersichtlich. Durch eine Schnellzugriffsleiste und zusätzliches Inventar durch drücken einer Taste wird das Verwalten von Gegenständen im Inventar stark vereinfacht.
-  \item[Fadenkreuz] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt ainvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
+  \item[Fadenkreuz] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt anvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
   \item[Lebensanzeige] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. Im zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmene kann.
   \item[Kompass] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
 \end{description}
@@ -453,6 +453,18 @@ Schleichen kanten
 Schleimblöcke
 blöcke slipperyness werte
 schwimmen
+
+Der minecraft Klin bietet bereits ein grundlegendes Bewegungssystem des Spielers. Es fehlen jedoch noch einige weiteren Features, die im Basisspiel enthalten sind und auch einige zusätzliche Spielereien, um das Erlebnis etwas spannender zu machen. Auch soll die existierende Berechnung der Position etwas angepasst werden, da sich die Steuerung mit aktueller Bewegung nicht intuitiv anfühlt
+
+Folgende Änderungen sollen folgen:
+
+\begin{description}
+  \item[Anpassung der Berechnung:] Die aktuelle berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Außerdem eröffnt das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
+  \item[Schleichen] Im normalen Spiel bietet das Schleichen die besondere Fähigkeit, an die Kante von Blöcken zu laufen und nicht herunterzufallen. Dieses Feature ist hier noch nicht umgesetzt. Es soll ermöglichen dem Spieler mehr Sicherheit zu geben.
+  \item[Schwimmen] Wasserblöcke im Basisspeil sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schimmen kann und nicht in ihnen versinkt.
+  \item[Slypperiness] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
+  \item[Schleimblöcke] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eiganschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
+\end{description}
 
 \subsubsection{Generierung von Strukturen:}
 
