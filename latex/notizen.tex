@@ -355,7 +355,69 @@ Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
-Das Domönenmodell ist in Abbildung \ref{fig:domain} zu sehen. Es wurde mithilfe von Clang und PlantUML generiert. Aufgrund der Größe des Projekts ist eine vollständige Modellierung der Software etwas groß und unübersichtlich. Demensprechend empfehlen wir die beigelegten Originaldateien seperat anzuschauen.
+Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde besierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Außen hin sichtbar sind, mit denen interagiert wird. 
+
+\begin{gfx}{Domänenmodell}{domain}{ht}
+\umlclass[x=11.2,y=-14.0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
+{
+  x: Zahl \\
+  y: Zahl \\
+  z: Zahl \\
+}
+{
+}
+\umlclass[x=12.70,y=-4.50,alias=UMLClass1]{World}
+{
+}
+{
+  block\_entfernen(position: Vektor): Bool \\
+  block\_platzieren(position: Vektor): Bool \\
+}
+\umlclass[x=11.20,y=-9.50,alias=UMLClass2]{Spielfigur}
+{
+  position: Vektor \\
+  bewegung: Vektor \\
+  am\_fliegen: Bool \\
+}
+{
+  springen(): void \\
+  sprinten(): void \\
+  schleichen(): void \\
+  fliegen(): void \\
+  abbauen(): viod \\
+  platzieren(): void \\
+}
+\umlclass[x=19.40,y=-4.50,alias=UMLClass3]{Block}
+{
+  block\_id: Zahl \\
+  textur\_id: Zahl \\
+  position: Vektor
+}
+{
+}
+\umlclass[x=18.00,y=-8.50,alias=UMLClass4]{Inventar}
+{
+}
+{
+  item\_entfernen(item\_id: Zahl): Bool \\
+  item\_hinzufügen(itme\_id: Zahl): Bool \\
+}
+\umlclass[x=18.60,y=-14.0,alias=UMLClass5]{ItemStack}
+{
+  item\_id: Zahl \\
+  anzahl: Zahl \\
+}
+{
+  ahzahl\_erhöhen(): void \\
+  anzahl\_verringern(): void \\
+}
+\umlcompo[name=Relation0,geometry=--,anchor1=0,anchor2=180,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass1}{UMLClass3}
+\umlassoc[name=Relation1,geometry=--,anchor1=-146.9,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,anchor1=32.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass2}{UMLClass4}
+\umlaggreg[name=Relation3,geometry=--,anchor1=-59,anchor2=90,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass4}{UMLClass5}
+\end{gfx}
+
+Es ist zu sehen, wie sich die Spielfigur in einer Welt aus Blöcken befindet und sich in dieser auf verschiedene Arten bewegen kann. Die Blöcke der Welt können abgebaut und wieder platziert werden, und befinden sich zwischenzeitig als Item auf einem ItemStack in dem Inventar der Spielfigur.
 
 \section{Meilenstein 2} \label{sec:ms2}
 
@@ -396,12 +458,6 @@ schwimmen
 
 evtl Dörfer
 
-\begin{tikzpicture}
-  \node at (0,0) [name=start]{start};
-  \node at (3,3) [name=end]{end};
-  \umlaggreg[name=sartend]{start}{end};
-\end{tikzpicture}
-
 \newpage
 
 %%% Verzeichnisse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -426,12 +482,14 @@ Hauptteil des Dokuments enthalten sind.
 
 %%% Anhänge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\iffalse
 \begin{figure}[ht]
   \hspace{-4.5cm}
   \includegraphics[width=0.95\paperwidth]{config_class.png}
   \caption{Domänenmodell}
   \label{fig:domain}
 \end{figure}
+\fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

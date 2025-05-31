@@ -39,3 +39,5 @@ config.txt
 class_diagram/
 
 CMakeFiles/
+
+models/sripts/out/
