@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>1232</x>
-      <y>462</y>
+      <y>638</y>
       <w>231</w>
       <h>77</h>
     </coordinates>
@@ -19,7 +19,7 @@ playerSpawnPoint: vec3</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1617</x>
-      <y>462</y>
+      <y>638</y>
       <w>154</w>
       <h>66</h>
     </coordinates>
@@ -34,7 +34,7 @@ isLoaded: bool
     <id>UMLClass</id>
     <coordinates>
       <x>1606</x>
-      <y>814</y>
+      <y>990</y>
       <w>165</w>
       <h>55</h>
     </coordinates>
@@ -47,7 +47,7 @@ id: int</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1683</x>
-      <y>715</y>
+      <y>891</y>
       <w>44</w>
       <h>121</h>
     </coordinates>
@@ -60,7 +60,7 @@ m2=*</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1452</x>
-      <y>473</y>
+      <y>649</y>
       <w>187</w>
       <h>55</h>
     </coordinates>
@@ -74,7 +74,7 @@ m2=*</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1232</x>
-      <y>649</y>
+      <y>825</y>
       <w>231</w>
       <h>121</h>
     </coordinates>
@@ -90,7 +90,7 @@ acceleration: vec3</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1342</x>
-      <y>528</y>
+      <y>704</y>
       <w>44</w>
       <h>143</h>
     </coordinates>
@@ -103,7 +103,7 @@ m2=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1221</x>
-      <y>880</y>
+      <y>1056</y>
       <w>231</w>
       <h>55</h>
     </coordinates>
@@ -116,8 +116,8 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1331</x>
-      <y>759</y>
-      <w>77</w>
+      <y>935</y>
+      <w>66</w>
       <h>143</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
@@ -131,7 +131,7 @@ r2=items
     <id>UMLClass</id>
     <coordinates>
       <x>1584</x>
-      <y>638</y>
+      <y>814</y>
       <w>220</w>
       <h>88</h>
     </coordinates>
@@ -145,8 +145,8 @@ hasBufferedMesh: bool</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1683</x>
-      <y>517</y>
-      <w>110</w>
+      <y>693</y>
+      <w>99</w>
       <h>143</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
@@ -159,7 +159,7 @@ r2=m_chunks</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1628</x>
-      <y>286</y>
+      <y>462</y>
       <w>143</w>
       <h>44</h>
     </coordinates>
@@ -171,7 +171,7 @@ r2=m_chunks</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1342</x>
-      <y>286</y>
+      <y>462</y>
       <w>308</w>
       <h>198</h>
     </coordinates>
@@ -186,7 +186,7 @@ r1=world</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1683</x>
-      <y>319</y>
+      <y>495</y>
       <w>88</w>
       <h>165</h>
     </coordinates>
@@ -200,7 +200,7 @@ m1=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>297</x>
-      <y>0</y>
+      <y>176</y>
       <w>88</w>
       <h>110</h>
     </coordinates>
@@ -216,7 +216,7 @@ z: float</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1232</x>
-      <y>1045</y>
+      <y>1221</y>
       <w>231</w>
       <h>110</h>
     </coordinates>
@@ -232,8 +232,8 @@ id: Material::ID</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1331</x>
-      <y>924</y>
-      <w>99</w>
+      <y>1100</y>
+      <w>88</w>
       <h>143</h>
     </coordinates>
     <panel_attributes>lt=-
@@ -246,7 +246,7 @@ m2=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1045</x>
-      <y>781</y>
+      <y>957</y>
       <w>154</w>
       <h>99</h>
     </coordinates>
@@ -261,7 +261,7 @@ velocity: vec3</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1111</x>
-      <y>715</y>
+      <y>891</y>
       <w>143</w>
       <h>88</h>
     </coordinates>
@@ -272,7 +272,7 @@ velocity: vec3</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1045</x>
-      <y>968</y>
+      <y>1144</y>
       <w>143</w>
       <h>77</h>
     </coordinates>
@@ -286,7 +286,7 @@ dimensions: vec3</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1111</x>
-      <y>869</y>
+      <y>1045</y>
       <w>33</w>
       <h>121</h>
     </coordinates>
@@ -297,7 +297,7 @@ dimensions: vec3</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>407</x>
-      <y>0</y>
+      <y>176</y>
       <w>99</w>
       <h>253</h>
     </coordinates>
@@ -321,7 +321,7 @@ DeadShrub</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>924</x>
-      <y>451</y>
+      <y>627</y>
       <w>121</w>
       <h>88</h>
     </coordinates>
@@ -333,7 +333,7 @@ DeadShrub</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1034</x>
-      <y>451</y>
+      <y>627</y>
       <w>220</w>
       <h>55</h>
     </coordinates>
@@ -347,7 +347,7 @@ r2=world</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1034</x>
-      <y>495</y>
+      <y>671</y>
       <w>220</w>
       <h>220</h>
     </coordinates>
@@ -361,7 +361,7 @@ r2=player</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>913</x>
-      <y>319</y>
+      <y>495</y>
       <w>154</w>
       <h>44</h>
     </coordinates>
@@ -373,7 +373,7 @@ r2=player</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>979</x>
-      <y>352</y>
+      <y>528</y>
       <w>77</w>
       <h>121</h>
     </coordinates>
@@ -387,7 +387,7 @@ m1=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>187</x>
-      <y>451</y>
+      <y>627</y>
       <w>231</w>
       <h>66</h>
     </coordinates>
@@ -400,7 +400,7 @@ drawBox: bool</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>308</x>
-      <y>627</y>
+      <y>803</y>
       <w>132</w>
       <h>33</h>
     </coordinates>
@@ -411,7 +411,7 @@ drawBox: bool</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>451</x>
-      <y>627</y>
+      <y>803</y>
       <w>154</w>
       <h>33</h>
     </coordinates>
@@ -422,7 +422,7 @@ drawBox: bool</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>165</x>
-      <y>627</y>
+      <y>803</y>
       <w>132</w>
       <h>33</h>
     </coordinates>
@@ -433,7 +433,7 @@ drawBox: bool</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>627</y>
+      <y>803</y>
       <w>154</w>
       <h>33</h>
     </coordinates>
@@ -444,7 +444,7 @@ drawBox: bool</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>286</x>
-      <y>330</y>
+      <y>506</y>
       <w>649</w>
       <h>143</h>
     </coordinates>
@@ -458,7 +458,7 @@ r2=renderMaster</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>66</x>
-      <y>473</y>
+      <y>649</y>
       <w>143</w>
       <h>176</h>
     </coordinates>
@@ -471,7 +471,7 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>220</x>
-      <y>506</y>
+      <y>682</y>
       <w>44</w>
       <h>143</h>
     </coordinates>
@@ -484,7 +484,7 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>363</x>
-      <y>506</y>
+      <y>682</y>
       <w>44</w>
       <h>143</h>
     </coordinates>
@@ -497,7 +497,7 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>407</x>
-      <y>473</y>
+      <y>649</y>
       <w>154</w>
       <h>176</h>
     </coordinates>
@@ -510,7 +510,7 @@ m2=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>198</x>
-      <y>770</y>
+      <y>946</y>
       <w>231</w>
       <h>88</h>
     </coordinates>
@@ -524,7 +524,7 @@ chunks: vector&lt;RenderInfo&gt;</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>220</x>
-      <y>649</y>
+      <y>825</y>
       <w>77</w>
       <h>143</h>
     </coordinates>
@@ -535,7 +535,7 @@ chunks: vector&lt;RenderInfo&gt;</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>330</x>
-      <y>649</y>
+      <y>825</y>
       <w>66</w>
       <h>143</h>
     </coordinates>
@@ -546,7 +546,7 @@ chunks: vector&lt;RenderInfo&gt;</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>418</x>
-      <y>649</y>
+      <y>825</y>
       <w>132</w>
       <h>165</h>
     </coordinates>
@@ -557,7 +557,7 @@ chunks: vector&lt;RenderInfo&gt;</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>264</x>
-      <y>957</y>
+      <y>1133</y>
       <w>110</w>
       <h>33</h>
     </coordinates>
@@ -568,8 +568,8 @@ chunks: vector&lt;RenderInfo&gt;</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>308</x>
-      <y>847</y>
-      <w>88</w>
+      <y>1023</y>
+      <w>77</w>
       <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
@@ -582,7 +582,7 @@ r2=shader</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>528</x>
-      <y>0</y>
+      <y>176</y>
       <w>231</w>
       <h>88</h>
     </coordinates>
@@ -597,7 +597,7 @@ indicesCount: unsigned int</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>781</x>
-      <y>0</y>
+      <y>176</y>
       <w>110</w>
       <h>77</h>
     </coordinates>
@@ -611,12 +611,12 @@ rows: vec4[4]</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>902</x>
-      <y>0</y>
+      <y>176</y>
       <w>88</w>
       <h>121</h>
     </coordinates>
     <panel_attributes>&lt;&lt;struct&gt;&gt;
-vec3
+vec4
 --
 x: float
 y: float
@@ -628,7 +628,7 @@ w: float</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>638</x>
-      <y>759</y>
+      <y>935</y>
       <w>231</w>
       <h>121</h>
     </coordinates>
@@ -645,7 +645,7 @@ config: Config</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>858</x>
-      <y>803</y>
+      <y>979</y>
       <w>209</w>
       <h>55</h>
     </coordinates>
@@ -659,7 +659,7 @@ r1=entity</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1001</x>
-      <y>0</y>
+      <y>176</y>
       <w>176</w>
       <h>88</h>
     </coordinates>
@@ -674,7 +674,7 @@ normal: vec3</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1001</x>
-      <y>99</y>
+      <y>275</y>
       <w>176</w>
       <h>88</h>
     </coordinates>
@@ -688,7 +688,7 @@ planes: Plane[6]</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1199</x>
-      <y>0</y>
+      <y>176</y>
       <w>154</w>
       <h>143</h>
     </coordinates>
