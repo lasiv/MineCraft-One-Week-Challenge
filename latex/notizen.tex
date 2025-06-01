@@ -223,18 +223,18 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[2.] Spieler drückt Bewegungstaste (W/A/S/D)
-  \item[2a.] Spieler tätigt keine Eingabe
-  \item[2a.1.] Wiederhole Schritt 1
-  \item[2\opt b.] Spieler drückt zusätzlich Sprinttaste (Strg)
-  \item[2\opt b.1.] Spiel erhöht Geschwindigkeit der Spielfigur
-  \item[2\opt c.] Spieler drückt zusätzlich Schleichtaste (Shift)
-  \item[2\opt c.1.] Spiel verringert Geschwindigkeit der Spielfigur
-  \item[2\opt c.1a.] Spielfigur ist im Flugmodus
-  \item[2\opt c.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
-  \item[3.] Spiel berechnet neue Position der Spielfigur
-  \item[4.] Spiel aktualisiert Position der Spielfigur
-  \item[5.] Wiederhole Schritt 1
+  \item[1.] Spieler drückt Bewegungstaste (W/A/S/D)
+  \item[1a.] Spieler tätigt keine Eingabe
+  \item[1a.1.] Wiederhole Schritt 1
+  \item[1\opt b.] Spieler drückt zusätzlich Sprinttaste (Strg)
+  \item[1\opt b.1.] Spiel erhöht Geschwindigkeit der Spielfigur
+  \item[1\opt c.] Spieler drückt zusätzlich Schleichtaste (Shift)
+  \item[1\opt c.1.] Spiel verringert Geschwindigkeit der Spielfigur
+  \item[1\opt c.1a.] Spielfigur ist im Flugmodus
+  \item[1\opt c.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
+  \item[2.] Spiel berechnet neue Position der Spielfigur
+  \item[3.] Spiel aktualisiert Position der Spielfigur
+  \item[4.] Wiederhole Schritt 1
 \end{description}
 
 
@@ -259,7 +259,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[2b.] Spielfigur ist im Flugmodus
   \item[2b.1.] Solange Springtaste gedrückt ist, erhält die Spielfigur Bewegung nach oben
   \item[2b.2.] Der Use Case endet erfolgreich, sobald die Taste losgelassen wird
-  \item[3.] Sprungbewegung wird ausgelöst
+  \item[3.] Spiel löst Sprungbewegung der Spielfigur aus
   \item[4.] UseCase endet erfolgreich
 \end{description}
 
@@ -319,8 +319,8 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler klickt die linken Maustaste
-  \item[2.] Spiel validiert, dass ein Block anvisiert wird und abgebaut werden kann
+  \item[1.] Spieler klickt die linke Maustaste
+  \item[2.] Spiel validiert, dass ein entfernbarer Block im Sichtfeld ist
   \item[2a.] Es ist kein entfernbarer Block im Sichtfeld
   \item[2a.1.] UseCase endet erfolglos
   \item[3.] Spiel entfernt Block aus der Welt
@@ -344,7 +344,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler klickt die linken Maustaste
+  \item[1.] Spieler klickt die rechte Maustaste
   \item[2.] Spiel validiert, dass der Block platziert werden kann
   \item[2a.] Es ist keine valide Oberfläche im Sichtfeld
   \item[2a.1.] UseCase endet erfolglos
