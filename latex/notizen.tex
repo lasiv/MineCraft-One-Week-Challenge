@@ -476,26 +476,26 @@ Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im La
 Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt.
 
 \begin{gfx}{Rendering of Chunks}{render}{t}
-\umlsimpleclass[x=4.20,y=-2.40,alias=UMLClass0]{Chunk}
-\umlsimpleclass[x=4.20,y=-0.40,alias=UMLClass1,type={interface}]{IChunk}
+\umlsimpleclass[x=4.20,y=-3,alias=UMLClass0]{Chunk}
+\umlsimpleclass[x=4.20,y=-1,alias=UMLClass1,type={interface}]{IChunk}
 \umlsimpleclass[x=10.10,y=-7.40,alias=UMLClass2]{ChunkMeshCollection}
 \umlsimpleclass[x=10.10,y=-10.00,alias=UMLClass3]{ChunkMesh}
-\umlsimpleclass[x=12.10,y=-12,alias=UMLClass4]{Mesh}
-\umlsimpleclass[x=8.10,y=-12,alias=UMLClass5]{Model}
+\umlsimpleclass[x=11.60,y=-12.5,alias=UMLClass4]{Mesh}
+\umlsimpleclass[x=8.60,y=-12.5,alias=UMLClass5]{Model}
 \umlsimpleclass[x=4.60,y=-5.60,alias=UMLClass6]{ChunkSection}
 \umlsimpleclass[x=10.10,y=-3.80,alias=UMLClass7]{ChunkMeshBuilder}
 \umlsimpleclass[x=4.60,y=-8.60,alias=UMLClass8]{ChunkBlock}
 \umlimpl[name=Relation0,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass0}{UMLClass1}
 \umldep[name=Relation1,geometry=|-,anchor1=36.0,anchor2=180.0]{UMLClass6}{UMLClass7}
 \node[above] at (Relation1-3) {\textless{}\textless{}uses\textgreater{}\textgreater{}};
-\umlcompo[name=Relation2,geometry=|-,anchor1=-160.0,anchor2=5.0]{UMLClass7}{UMLClass6}
-\umlcompo[name=Relation3,geometry=--]{UMLClass7}{UMLClass2}
-\umlcompo[name=Relation4,geometry=|-,anchor1=-36,anchor2=180.0]{UMLClass6}{UMLClass2}
-\umlcompo[name=Relation5,geometry=--,anchor2=136]{UMLClass0}{UMLClass6}
-\umlcompo[name=Relation6,geometry=--]{UMLClass2}{UMLClass3}
-\umlcompo[name=Relation7,geometry=--]{UMLClass3}{UMLClass4}
-\umlcompo[name=Relation8,geometry=--]{UMLClass3}{UMLClass5}
-\umlcompo[name=Relation9,geometry=--,anchor1=-136,anchor2=136.0]{UMLClass6}{UMLClass8}
+\umlcompo[name=Relation2,geometry=|-,anchor1=-160.0,anchor2=5.0,mult1=1,mult2=1,pos2=1.9,pos1=0.3]{UMLClass7}{UMLClass6}
+\umlcompo[name=Relation3,geometry=--,mult1=1,mult2=1]{UMLClass7}{UMLClass2}
+\umlcompo[name=Relation4,geometry=|-,anchor1=-36,anchor2=180.0,mult1=1,mult2=1,pos2=1.9,pos1=0.3]{UMLClass6}{UMLClass2}
+\umlcompo[name=Relation5,geometry=--,anchor2=136,mult1=1,mult2={*}]{UMLClass0}{UMLClass6}
+\umlcompo[name=Relation6,geometry=--,mult1=1,mult2=3,arg2={solid, water, flora}]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation7,geometry=--,mult1=1,mult2=1]{UMLClass3}{UMLClass4}
+\umlcompo[name=Relation8,geometry=--,mult1=1,mult2=1]{UMLClass3}{UMLClass5}
+\umlcompo[name=Relation9,geometry=--,anchor1=-136,anchor2=136.0,mult1=1,mult2={*}]{UMLClass6}{UMLClass8}
 \end{gfx}
 
 \subsubsection*{Input}
