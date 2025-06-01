@@ -478,7 +478,7 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
 
 \subsubsection*{World}
 
-Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt sind. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. Die Welt initiiert auch das Rendern der Chunks. 
+Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
 
 \subsubsection*{Generation}
 
