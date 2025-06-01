@@ -490,9 +490,7 @@ Die Biomkarte und Höhenkarte werden durch eine Rauchfunktion erstellt, welches 
 
 Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im Laufe unseres Projekts nicht verändert. Aufgrund der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
 
-Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt.
-
-\begin{gfx}{Rendering of Chunks}{render}{t}
+\begin{gfx}{Rendering von Chunks}{render}{ht}
 \umlsimpleclass[x=4.20,y=-3,alias=UMLClass0]{Chunk}
 \umlsimpleclass[x=4.20,y=-1,alias=UMLClass1,type={interface}]{IChunk}
 \umlsimpleclass[x=10.10,y=-7.40,alias=UMLClass2]{ChunkMeshCollection}
@@ -514,6 +512,8 @@ Die Application hat eine Referenz zum sog. RenderMaster, die von der Application
 \umlcompo[name=Relation8,geometry=--,mult1=1,mult2=1]{UMLClass3}{UMLClass5}
 \umlcompo[name=Relation9,geometry=--,anchor1=-136,anchor2=136.0,mult1=1,mult2={*}]{UMLClass6}{UMLClass8}
 \end{gfx}
+
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt.
 
 \subsubsection*{Input}
 
