@@ -432,7 +432,13 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 \subsubsection*{Application}
 
-\subsubsection*{States}
+Die Klasse Application ist der Einstiegspunkt in de Software. Sie enthält alle wichtigen Komponenten, wie den Kontext des Fensters, die Kamera, die Oberklasse für das Rendern sowie die ganzen States der Software.
+
+Gängiges Verhalten, ist eine Software in mehrer Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
+
+Der einzige Zustand, den unser Spiel momentant kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
+
+
 
 \subsubsection*{Player}
 
@@ -442,9 +448,21 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 \subsubsection*{Rendering}
 
+Das Rendering des Spiels ist eine komplexe Angelegenheit, und wir von uns im Laufe unserer Änderungen nicht verändert und als gegeben angesehen. Aufgruind der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
+
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen Aufrfen wollen. 
+
 \subsubsection*{Input}
 
+
+
 \subsubsection*{Dependencies}
+
+Unser Projekt benutzt verschiedene Bobliotheken, die oft in solchen \texttt{C++} Projekten vorkommen. Für komplexere Rechnungen zieht der Programmierer hier \texttt{GLM} heran. Davon benutzt das Programm unterschiedlichen Vektoren, Materialien und Matrizen oder wird für z.B. Strahlenrechnung benutzt.
+
+Die Bibliothek \texttt{SFML} ermöglicht die Erstellung von Fenstern in denen das Spiel angezeigt wird, unterstützt Eingabeerkennung z.B. für die Klassen Keyboard und ToggleKey und kann später für UI Elemente genutzt werden.
+
+\texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfer des Meshes und Modelle und den Shadern das Spiel darzustellen.
 
 \subsection{Zustandsmodell} \label{subsec:statemodel}
 
