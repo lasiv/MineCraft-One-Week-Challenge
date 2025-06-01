@@ -6,7 +6,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>603</x>
-      <y>468</y>
+      <y>603</y>
       <w>90</w>
       <h>36</h>
     </coordinates>
@@ -30,9 +30,9 @@
     <id>UMLClass</id>
     <coordinates>
       <x>576</x>
-      <y>351</y>
+      <y>468</y>
       <w>144</w>
-      <h>27</h>
+      <h>36</h>
     </coordinates>
     <panel_attributes>PlayerDigEvent
 </panel_attributes>
@@ -42,7 +42,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>603</x>
-      <y>252</y>
+      <y>369</y>
       <w>90</w>
       <h>36</h>
     </coordinates>
@@ -88,36 +88,24 @@ IWorldEvent
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>594</x>
-      <y>603</y>
-      <w>108</w>
-      <h>36</h>
-    </coordinates>
-    <panel_attributes>PlayState
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
       <x>684</x>
-      <y>252</y>
+      <y>369</y>
       <w>117</w>
-      <h>234</h>
+      <h>117</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 m2=*
 m1=1
 r2=events</panel_attributes>
-    <additional_attributes>100.0;240.0;100.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>100.0;110.0;100.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>639</x>
-      <y>279</y>
+      <y>396</y>
       <w>27</w>
       <h>90</h>
     </coordinates>
@@ -128,28 +116,28 @@ r2=events</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>639</x>
-      <y>369</y>
+      <y>495</y>
       <w>72</w>
-      <h>117</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 m1=*
 m2=1
 r1=pPLayer</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>684</x>
-      <y>477</y>
-      <w>90</w>
-      <h>36</h>
+      <y>495</y>
+      <w>117</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>100.0;10.0;100.0;140.0;10.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -198,20 +186,6 @@ m2=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>693</x>
-      <y>495</y>
-      <w>135</w>
-      <h>153</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=*
-m2=1
-r2=world</panel_attributes>
-    <additional_attributes>10.0;140.0;90.0;140.0;90.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
       <x>999</x>
       <y>396</y>
       <w>72</w>
@@ -236,19 +210,5 @@ m1=1
 m2=*
 r2=chunks</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>639</x>
-      <y>495</y>
-      <w>63</w>
-      <h>126</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=*
-m2=1
-r2=player</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

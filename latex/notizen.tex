@@ -456,31 +456,67 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 
 
 \subsubsection*{Player}
-\begin{figure}[h]
-  \begin{tikzpicture}
-    \umlsimpleclass[x=15.90,y=-8.30,alias=UMLClass0]{Player}
-    \umlsimpleclass[x=16.00,y=-6.30,alias=UMLClass1]{Entity}
-    \umlsimpleclass[x=20.80,y=-6.30,alias=UMLClass2]{AABB}
-    \umlsimpleclass[x=15.90,y=-10.90,alias=UMLClass3]{ItemStack}
-    \umlsimpleclass[x=15.90,y=-13.50,alias=UMLClass4]{Material}
-    \umlsimpleclass[x=12.40,y=-6.30,alias=UMLClass5]{PlayState}
-    \umlinherit[name=Relation0,geometry=--,anchor1=71.6,anchor2=-90.0]{UMLClass0}{UMLClass1}
-    \umlcompo[name=Relation1,geometry=--,anchor1=-4.1,anchor2=-175.9]{UMLClass1}{UMLClass2}
-    \umlcompo[name=Relation2,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass0}{UMLClass3}
-    \umlcompo[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
-    \umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
-  \end{tikzpicture}
-  \label{fig:player_design}
-  \caption{Designmodell: Player}  
-\end{figure}
+\begin{gfx}{Player}{player-design}{ht}
+\umlsimpleclass[x=15.90,y=-8.30,alias=UMLClass0]{Player}
+\umlsimpleclass[x=16.00,y=-6.30,alias=UMLClass1]{Entity}
+\umlsimpleclass[x=20.80,y=-6.30,alias=UMLClass2]{AABB}
+\umlsimpleclass[x=15.90,y=-10.90,alias=UMLClass3]{ItemStack}
+\umlsimpleclass[x=15.90,y=-13.50,alias=UMLClass4]{Material}
+\umlsimpleclass[x=12.40,y=-6.30,alias=UMLClass5]{PlayState}
+\umlinherit[name=Relation0,geometry=--,anchor1=71.6,anchor2=-90.0]{UMLClass0}{UMLClass1}
+\umlcompo[name=Relation1,geometry=--,anchor1=-4.1,anchor2=-175.9]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass0}{UMLClass3}
+\umlcompo[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
+\umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
+\end{gfx}
 
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \subsubsection*{World}
 
-Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt sind. Sobald eine Welt instanziiert wird, startet ein neuer Thread, der für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. Die Welt initiiert auch das Rendern der Chunks, angesto\ss{}en in regelmäßigen Abständen durch die Anwendung.
+\begin{gfx}{World}{world}{ht}
+  \umlsimpleclass[x=14.40,y=-13.80,alias=UMLClass0]{Player}
+  \umlsimpleclass[x=17.90,y=-10.80,alias=UMLClass1]{World}
+  \umlsimpleclass[x=14.40,y=-10.80,alias=UMLClass2]{PlayerDigEvent}
+  \umlsimpleclass[x=14.40,y=-8.60,alias=UMLClass3,type={interface}]{IWorldEvent}
+  \umlsimpleclass[x=22.30,y=-8.60,alias=UMLClass4]{ChunkManager}
+  \umlsimpleclass[x=22.40,y=-10.80,alias=UMLClass5]{Chunk}
+  \umlsimpleclass[x=22.50,y=-13.80,alias=UMLClass6]{ChunkSection}
+  \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.8]{UMLClass1}{UMLClass3}
+  \umlinherit[name=Relation1,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass2}{UMLClass3}
+  \umluniassoc[name=Relation2,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={*},arg1={pPLayer},pos1=0.2,mult2={1},pos2=0.8]{UMLClass2}{UMLClass0}
+  \umlassoc[name=Relation3,geometry=|-,anchor1=-150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass1}{UMLClass0}
+  \umluniassoc[name=Relation4,geometry=--,anchor1=180.0,anchor2=0.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=0.8]{UMLClass5}{UMLClass1}
+  \umlcompo[name=Relation5,geometry=|-,anchor1=29.7,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass1}{UMLClass4}
+  \umlassoc[name=Relation6,geometry=|-,anchor1=-29.7,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},arg2={chunkUpdates},pos2=1.8]{UMLClass1}{UMLClass6}
+  \umluniassoc[name=Relation7,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass4}{UMLClass5}
+  \umlcompo[name=Relation8,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass5}{UMLClass6}
+\end{gfx}
+
+Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
 
 \subsubsection*{Generierung}
+
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \umlsimpleclass[x=11.30,y=-11.80,alias=UMLClass0]{World}
+    \umlsimpleclass[x=14.60,y=-14.60,alias=UMLClass1]{Chunk}
+    \umlsimpleclass[x=14.50,y=-11.80,alias=UMLClass2]{ChunkManager}
+    \umlsimpleclass[x=21.60,y=-6.80,alias=UMLClass3]{StructureBuilder}
+    \umlsimpleclass[x=21.60,y=-11.80,alias=UMLClass4]{ClassicOverworldGenerator}
+    \umlsimpleclass[x=21.50,y=-9.20,alias=UMLClass5]{Biome}
+    \umlsimpleclass[x=21.70,y=-14.60,alias=UMLClass6]{NoiseGenerator}
+    \umluniassoc[name=Relation0,geometry=-|,anchor1=180.0,anchor2=-104.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
+    \umlcompo[name=Relation1,geometry=--,anchor1=104.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
+    \umluniassoc[name=Relation2,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass2}{UMLClass1}
+    \umldep[name=Relation3,geometry=--,anchor1=76.0,anchor2=-90.0]{UMLClass5}{UMLClass3}
+    \node[above] at (Relation3-1) {\textless{}\textless{}uses\textgreater{}\textgreater{}};
+    \umlcompo[name=Relation4,geometry=--,anchor1=0.0,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=0.8]{UMLClass2}{UMLClass4}
+    \umlcompo[name=Relation5,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass4}{UMLClass6}
+    \umlcompo[name=Relation6,geometry=--,anchor1=90.0,anchor2=-76.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass4}{UMLClass5}
+    \umlcompo[name=Relation7,geometry=-|-,anchor1=0.0,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=2.8]{UMLClass5}{UMLClass6}
+  \end{tikzpicture}
+\end{figure}
 
 Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
 
