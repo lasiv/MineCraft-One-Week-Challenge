@@ -5,139 +5,68 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>690</x>
       <y>400</y>
       <w>210</w>
-      <h>110</h>
+      <h>30</h>
     </coordinates>
     <panel_attributes>Player
--
-isOnGround: bool
-isFlying: bool
-isSneak: bool
-acceleration: vec3</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>730</x>
-      <y>230</y>
-      <w>140</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>Entity
---
-position: vec3
-rotation: vec3
-velocity: vec3</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>730</x>
-      <y>100</y>
-      <w>140</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>AABB
---
-position: vec3
-dimensions: vec3</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>470</x>
-      <y>230</y>
-      <w>210</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>Camera
---
-projectionMatrix: mat4
-viewMatrix: mat4
-projViewMatrix: mat4
-frustum: ViewFrustum
-config: Config</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>680</x>
-      <y>600</y>
-      <w>210</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>ItemStack
---
-- numInStack: int</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>680</x>
-      <y>740</y>
-      <w>210</w>
-      <h>100</h>
-    </coordinates>
-    <panel_attributes>Material
---
-maxStackSize: int
-isBlock: bool
-name: string
-id: Material::ID</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1010</x>
-      <y>400</y>
-      <w>230</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>World
---
-isRunning: std::atomic&lt;bool&gt;
-playerSpawnPoint: vec3</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>910</x>
-      <y>230</y>
-      <w>190</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>PlayerDigEvent
---
-digSpot: vec3</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>950</x>
-      <y>100</y>
-      <w>100</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;interface&gt;&gt;
-IWorldEvent
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>510</x>
-      <y>600</y>
+      <x>730</x>
+      <y>300</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Entity
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>970</x>
+      <y>300</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>AABB
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>690</x>
+      <y>530</y>
+      <w>210</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>ItemStack
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>690</x>
+      <y>660</y>
+      <w>210</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Material
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>300</y>
       <w>120</w>
       <h>30</h>
     </coordinates>
@@ -146,183 +75,68 @@ IWorldEvent
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>520</x>
-      <y>740</y>
-      <w>100</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>Keyboard</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>560</x>
-      <y>330</y>
-      <w>140</w>
-      <h>130</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=1
-m2=1
-r2=entity</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0;120.0;100.0</additional_attributes>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
       <x>790</x>
-      <y>310</y>
+      <y>320</y>
       <w>30</w>
-      <h>110</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>310</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>790</x>
-      <y>160</y>
-      <w>30</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>850</x>
-      <y>270</y>
-      <w>220</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-m1=*
-m2=1
-r1=pPLayer</panel_attributes>
-    <additional_attributes>150.0;10.0;150.0;90.0;10.0;90.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>990</x>
-      <y>130</y>
-      <w>30</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>780</x>
-      <y>500</y>
+      <y>420</y>
       <w>60</w>
-      <h>120</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*
 r2=items
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
-      <y>640</y>
+      <x>790</x>
+      <y>550</y>
       <w>80</w>
-      <h>120</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=material
 m1=*
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>560</x>
-      <y>460</y>
-      <w>140</w>
-      <h>160</h>
+      <x>610</x>
+      <y>320</y>
+      <w>100</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=*
 m2=1
 r2=player</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;20.0;120.0;20.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>560</x>
-      <y>620</y>
-      <w>90</w>
-      <h>140</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=*
-m2=1
-r2=keyboard</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>880</x>
-      <y>460</y>
-      <w>150</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>lt=-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>940</x>
-      <y>600</y>
-      <w>90</w>
-      <h>230</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;enum&gt;&gt;
-Material::ID
---
-Nothing
-Grass
-Dirt
-Stone
-OakBark
-OakLeaf
-Sand
-Cactus
-Rose
-TallGrass
-DeadShrub</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1040</x>
-      <y>100</y>
-      <w>120</w>
-      <h>320</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-m2=*
-m1=1
-r2=events</panel_attributes>
-    <additional_attributes>90.0;300.0;90.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0;80.0;100.0</additional_attributes>
   </element>
 </diagram>
