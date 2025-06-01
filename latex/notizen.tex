@@ -456,6 +456,23 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 
 
 \subsubsection*{Player}
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \umlsimpleclass[x=15.90,y=-8.30,alias=UMLClass0]{Player}
+    \umlsimpleclass[x=16.00,y=-6.30,alias=UMLClass1]{Entity}
+    \umlsimpleclass[x=20.80,y=-6.30,alias=UMLClass2]{AABB}
+    \umlsimpleclass[x=15.90,y=-10.90,alias=UMLClass3]{ItemStack}
+    \umlsimpleclass[x=15.90,y=-13.50,alias=UMLClass4]{Material}
+    \umlsimpleclass[x=12.40,y=-6.30,alias=UMLClass5]{PlayState}
+    \umlinherit[name=Relation0,geometry=--,anchor1=71.6,anchor2=-90.0]{UMLClass0}{UMLClass1}
+    \umlcompo[name=Relation1,geometry=--,anchor1=-4.1,anchor2=-175.9]{UMLClass1}{UMLClass2}
+    \umlcompo[name=Relation2,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass0}{UMLClass3}
+    \umlcompo[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
+    \umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
+  \end{tikzpicture}
+  \label{fig:player_design}
+  \caption{Designmodell: Player}  
+\end{figure}
 
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Er anthält eine Bounding Box (\texttt{AABB}) im Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegun und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
