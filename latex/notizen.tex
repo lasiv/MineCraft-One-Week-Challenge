@@ -562,7 +562,7 @@ Unser Projekt benutzt verschiedene Bibliotheken, die oft in solchen \texttt{C++}
 
 Die Bibliothek \texttt{SFML} ermöglicht die Erstellung von Fenstern in denen das Spiel angezeigt wird, unterstützt Eingabeerkennung z.B. für die Klassen Keyboard und ToggleKey und kann später für UI Elemente genutzt werden.
 
-\texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfe des Meshes und Modelle und den Shadern das Spiel darzustellen.
+\texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfe der Meshes, Modelle und Shadern das Spiel darzustellen.
 
 \subsection{Zustandsmodell} \label{subsec:statemodel}
 
@@ -673,7 +673,15 @@ Hauptteil des Dokuments enthalten sind.
 \end{mylist}
 \fi
 
+\newpage
 %%% Anhänge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure} [ht]
+  \centering
+  \includegraphics[angle=-90,width=.65\linewidth]{design_full.png}
+  \caption{Designmodell}
+  \label{pic:design}
+\end{figure}
 
 \iffalse
 \begin{figure}[ht]
