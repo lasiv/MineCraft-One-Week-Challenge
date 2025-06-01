@@ -8,6 +8,7 @@
 \pgfplotsset{compat=1.18}
 \usetikzlibrary{shapes.misc}
 \usepackage[european,straightvoltages]{circuitikz}
+\usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel} 
 \usepackage[colorlinks]{hyperref}
 \usepackage{caption, float, subcaption}
@@ -20,6 +21,10 @@
 \usepackage{minted}
 
 \usepackage{tikz-uml}
+
+% manuelle hyponation
+\hyphenation{Än-de-run-gen}
+
 
 % maths
 \newcommand{\abs}[1]{\left| #1 \right|}
@@ -427,6 +432,8 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 \subsection{Zustandsmodell} \label{subsec:statemodel}
 
+In unserem Projekt bietet sich nicht an, Zustandsdiagramme zu ertellen. Viele Prozesse laufen sehr statisch ab und würden in zu simplen Zustandsdiagrammen resultieren.
+
 \subsection{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
 
 Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äußern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
@@ -441,12 +448,12 @@ Genau Verändern soll sich folgendes:
 
 \begin{description}
   \item[Inventarsystem:] Das Inventar wird ersichtlich. Durch eine Schnellzugriffsleiste und zusätzliches Inventar durch drücken einer Taste wird das Verwalten von Gegenständen im Inventar stark vereinfacht.
-  \item[Fadenkreuz] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt anvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
-  \item[Lebensanzeige] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. Im zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmene kann.
-  \item[Kompass] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
+  \item[Fadenkreuz:] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt anvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
+  \item[Lebensanzeige:] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. Im zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmene kann.
+  \item[Kompass:] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
 \end{description}
 
-\subsubsection{Movement/Physik:}
+\subsubsection{Movement/Physik}
 
 Anpassung der Bewegung
 Schleichen kanten
@@ -460,13 +467,13 @@ Folgende Änderungen sollen folgen:
 
 \begin{description}
   \item[Anpassung der Berechnung:] Die aktuelle berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Außerdem eröffnt das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
-  \item[Schleichen] Im normalen Spiel bietet das Schleichen die besondere Fähigkeit, an die Kante von Blöcken zu laufen und nicht herunterzufallen. Dieses Feature ist hier noch nicht umgesetzt. Es soll ermöglichen dem Spieler mehr Sicherheit zu geben.
-  \item[Schwimmen] Wasserblöcke im Basisspeil sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schimmen kann und nicht in ihnen versinkt.
-  \item[Slypperiness] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
-  \item[Schleimblöcke] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eiganschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
+  \item[Schleichen:] Im normalen Spiel bietet das Schleichen die besondere Fähigkeit, an die Kante von Blöcken zu laufen und nicht herunterzufallen. Dieses Feature ist hier noch nicht umgesetzt. Es soll ermöglichen dem Spieler mehr Sicherheit zu geben.
+  \item[Schwimmen:] Wasserblöcke im Basisspeil sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schimmen kann und nicht in ihnen versinkt.
+  \item[Slypperiness:] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
+  \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eiganschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
 \end{description}
 
-\subsubsection{Generierung von Strukturen:}
+\subsubsection{Generierung von Strukturen}
 
 Aktuell gibt es nur wenig Code, der für die Generierung von Strukturen
 verantwortlich ist. Es gibt eine Klasse, welche Strukturen in der Welt platziert
@@ -485,6 +492,20 @@ Punkte erweitert werden:
 	ineinander passen
 	\item Chunk übergreifende Strukturen
 \end{itemize}
+
+\subsubsection{Speichersystem}
+
+Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen and den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
+
+Folgende Änderungen können hier getätigt werden:
+
+\begin{description}
+  \item[Speichern bei Laufzeit:] Die erste Funktion wäre herauszufinden, wie die Änderungen platzeffizient gespeichert werden könnten, und wie man sie dann während des Spiels speichern und laden kann
+  \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte welt wieder geöffnet werden kann. Dies bracuht dann einige zusätzliche Features der Bedienung.
+  \item[Weltauswahl:] Eine Möglichkeit wäre, im Zuge der Änderungen an UI eine Art Auswahl-Menü zu bauen, in der Welten generiert und gestartet werden können.
+\end{description}
+
+
 
 %\begin{tikzpicture}
 %  \node at (0,0) [name=start]{start};
