@@ -455,7 +455,7 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 
 \subsubsection*{Player}
 
-Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren. Sie handhabt Tastatureingaben zum bewegen in der Welt als auch Mausbewegungen, um sich umschauen zu können oder auch mit der Welt zu interagieren. Diese Interaktionen beinhalten zum Beispiel das Abbauen und Platzieren von Blöcken in der Welt. An den Spieler ist auch die Kamera befestigt, durch welche der Benutzer die Welt sehen kann.
+Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie ist eng verknüpft mit der Klasse \texttt{PlayState} und somit auch \texttt{Keyboard}. Dadurch werden die Tastatureingaben zum bewegen in der Welt verarbeitet. So auch die Mausbewegungen, um sich umschauen zu können, oder Interaktionen mit der Welt vornehmen zu können. Diese Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. Durch die \texttt{Kamera}, welcher der Spieler angehört, kann der Benutzer die Welt sehen.
 
 \subsubsection*{World}
 
