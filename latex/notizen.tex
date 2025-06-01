@@ -154,15 +154,15 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 Die ausgewählte Software ist ein Projekt eines YouTubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
 
-Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Größen, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
+Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Grö\ss{}en, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
 
-Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller einer Art Value-Noise, damit soll die Generierung des Geländes natürlicher wirken. Zudem gibt es verschiedene Biome in dieser Welt, die ebenso zufällig verstreut sind und mit sich verschiedene Strukturen der Vegetation und genutzten Blöcken mitbringen. So gibt es zum Beispiel Wüsten, in denen Kakteen wachsen oder Wälder in denen Bäume stehen.
+Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller einer Art Value-Noise. Damit soll die Generierung des Geländes natürlicher wirken. Zudem gibt es verschiedene Biome in der Welt, die ebenso zufällig verstreut sind und mit sich verschiedene Strukturen von Vegetation und unterschiedliche Arten von Blöcken mitbringen. So gibt es zum Beispiel Wüsten, in denen Kakteen wachsen oder Wälder in denen Bäume stehen.
 
 In dieser Kopie des Spiels sind einige Haupt Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten wie die Monster und Tiere im Basis Spiel. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
-Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sich hier um ein Spiel, dass alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
+Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
 
 \begin{gfx}{UseCase Diagramm}{usecase}{ht}
   % Systemgrenze
@@ -194,13 +194,13 @@ Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sic
 Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das zwischen horizontaler und vertikaler Bewegung sowie zwischen Flug- und Bodenmodus unterscheidet. Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf Basis folgender Prinzipien berechnet:
 
 \begin{itemize}
-  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewendet, die die Geschwindigkeit exponentiell reduziert.
+  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewandt, die die Geschwindigkeit über die Zeit exponentiell reduziert.
 
-  \item \textbf{Vertikale Bewegung:}  Die vertikale Bewegung unterscheidet sich je nach Modus, im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine konstante Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
+  \item \textbf{Vertikale Bewegung:}  Diese unterscheidet sich je nach Modus: im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
 
   \item \textbf{Zusammenfassung der Logik:}
   \begin{itemize}
-    \item Dämpfung wirkt \textbf{immer} in allen Richtungen außer vertikal im Bodenmodus.
+    \item Dämpfung wirkt \textbf{immer} in allen Richtungen au\ss{}er vertikal im Bodenmodus.
     \item Gravitation ersetzt im Bodenmodus die vertikale Dämpfung.
     \item Sprung ist eine \textit{diskrete Initialisierung der vertikalen Geschwindigkeit}, kein kontinuierlicher Prozess.
     \item Die Dämpfung erfolgt exponentiell, die Gravitation linear.
@@ -247,7 +247,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \textbf{Nachbedingungen:} Spielfigur bewegt sich vertikal nach oben oder bleibt unverändert \\
 \textbf{Beschreibung:} Durch Drücken der Springtaste kann die Spielfigur entweder einen einmaligen Sprung ausführen (bei Bodenkontakt) oder im Flugmodus kontinuierlich aufsteigen. Das Verhalten hängt vom Zustand der Spielfigur (am Boden oder im Flug) ab.
 
-\textit{Hinweis: Im Flugmodus verhält sich der Use Case wie eine kontinuierliche Bewegungseingabe. Außerhalb des Flugmodus handelt es sich um eine einmalige Aktion.}
+\textit{Hinweis: Im Flugmodus verhält sich der Use Case wie eine kontinuierliche Bewegungseingabe. Au\ss{}erhalb des Flugmodus handelt es sich um eine einmalige Aktion.}
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
@@ -356,11 +356,11 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \subsubsection*{Spiel Verlassen}
 
-Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schließen des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
+Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schlie\ss{}en des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
-Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde basierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Außen hin sichtbar sind, mit denen interagiert wird. 
+Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde basierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Au\ss{}en hin sichtbar sind, mit denen interagiert wird. 
 
 \begin{gfx}{Domänenmodell}{domain}{ht}
 \umlclass[x=11.2,y=-14.0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
@@ -430,7 +430,7 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 \subsection{Designmodell} \label{subsec:design}
 
-Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unterteilt worden. Dies ist dem großen Umfang des Modells geschuldet. Jeder Teil des Modells ist textuell erklärt. Die Erklärungen werden durch stark vereinfachte Ausschnitte des Designmodells unterstützt. Das komplette Designmodell kann hier eingesehen werden: [LINK ZUR DATEI]
+Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unterteilt worden. Dies ist dem gro\ss{}en Umfang des Modells geschuldet. Jeder Teil des Modells ist textuell erklärt. Die Erklärungen werden durch stark vereinfachte Ausschnitte des Designmodells unterstützt. Das komplette Designmodell kann hier eingesehen werden: [LINK ZUR DATEI]
 
 \subsubsection*{Application}
 
@@ -474,13 +474,13 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
   \caption{Designmodell: Player}  
 \end{figure}
 
-Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Er anthält eine Bounding Box (\texttt{AABB}) im Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegun und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
+Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \subsubsection*{World}
 
-Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt sind. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. Die Welt initiiert auch das Rendern der Chunks. 
+Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt sind. Sobald eine Welt instanziiert wird, startet ein neuer Thread, der für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. Die Welt initiiert auch das Rendern der Chunks, angesto\ss{}en in regelmäßigen Abständen durch die Anwendung.
 
-\subsubsection*{Generation}
+\subsubsection*{Generierung}
 
 Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
 
@@ -513,11 +513,11 @@ Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im La
 \umlcompo[name=Relation9,geometry=--,anchor1=-136,anchor2=136.0,mult1=1,mult2={*}]{UMLClass6}{UMLClass8}
 \end{gfx}
 
-Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt. Abbildung \ref{gfx:render} zeigt den groben Aufbau von Modell und Mesh in einem Chunk, ist in dieser Forma aber nicht im Gesamtmodell mit drin.
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlich nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt. Abbildung \ref{gfx:render} zeigt den groben Aufbau von Modell und Mesh in einem Chunk, ist in dieser Form aber nicht im Gesamtmodell mit drin.
 
 \subsubsection*{Input}
 
-Der Input erfoglt wie nächste Section beschrieben über die externe Bibliothek \texttt{SFML}. Wie werden zwie Klassen definiert, die an verschiedenen Stellen im Projekt verwendet werden. Einmal eine \texttt{Keyboard} Klasse, die alle zur Zeit gedrückten Tasten als Boolean werte speichert. Eine weitere Klasse \texttt{ToggleKey}, die eine bestimmte Taste softwareseitig entprellt, um sie als Schalter nutzen zu können.
+Der Input erfolgt wie im nächstem Abschnitt beschrieben über die externe Bibliothek \texttt{SFML}. Es werden zwei Klassen definiert, die an verschiedenen Stellen im Projekt verwendet werden. Einmal eine \texttt{Keyboard} Klasse, die alle zur Zeit gedrückten Tasten als Boolean werte speichert. Eine weitere Klasse \texttt{ToggleKey}, die eine bestimmte Taste softwareseitig entprellt, um sie als Schalter nutzen zu können.
 
 \subsubsection*{Dependencies}
 
@@ -533,17 +533,17 @@ In unserem Projekt bietet sich nicht an, Zustandsdiagramme zu erstellen. Viele P
 
 \subsection{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
 
-Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äußern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
+Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äu\ss{}ern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
 
 Bei den Hauptthemen der Änderungen geht es vor allem um einen grafische Benutzeroberfläche, die Änderung von Bewegungsabläufen und der Physik und die Generierung von Strukturen.
 
 \subsubsection{Code}
 
-Neben den tatsächlichen Änderungen, steht eine Aufgabe an erster stelle. Der Programmierer diese Projekts hat einige Funktionen, die letztenendes doch nicht benutzt werden, im Code stehen lassen. Deswegen versuchen wir zuerst unbenutzte Klassen und Codebereiche ''aufzuräumen'' bevor wir mit unseren Änderungen anfangen.
+Neben den tatsächlichen Änderungen, steht eine Aufgabe an erster Stelle. Der Programmierer diese Projekts hat einige Funktionen, die letztenendes doch nicht benutzt werden, im Code stehen lassen. Deswegen versuchen wir zuerst unbenutzte Klassen und Codebereiche ''aufzuräumen'' bevor wir mit unseren Änderungen anfangen.
 
 \subsubsection{GUI \& Logik}
 
-Der aktuelle Zustand der Benutzeroberfläche ist quasi Null. Denn es ist noch nicht wirklich eine Oberfläche vorhanden. Dies macht die Verwendung von der Software sperrig und unnötig schwerer. Dahingehend ist geplant, dass die Bedienung deutlich einfacher wird, indem an verschiedenen Stellen eine grafische Oberfläche implementiert wird.
+Der aktuelle Zustand der Benutzeroberfläche ist quasi nicht existent. Denn es ist noch nicht wirklich eine Oberfläche vorhanden. Dies macht die Verwendung von der Software sperrig und unnötig schwerer. Dahingehend ist geplant, dass die Bedienung deutlich einfacher wird, indem an verschiedenen Stellen eine grafische Oberfläche implementiert wird.
 
 Genau Verändern soll sich folgendes:
 
@@ -559,19 +559,19 @@ Genau Verändern soll sich folgendes:
 Anpassung der Bewegung
 Schleichen kanten
 Schleimblöcke
-blöcke slipperyness werte
-schwimmen
+Block Slipperyness Werte
+Schwimmen
 
 Der Minecraft Klon bietet bereits ein grundlegendes Bewegungssystem des Spielers. Es fehlen jedoch noch einige weiteren Features, die im Basisspiel enthalten sind und auch einige zusätzliche Spielereien, um das Erlebnis etwas spannender zu machen. Auch soll die existierende Berechnung der Position etwas angepasst werden, da sich die Steuerung mit aktueller Bewegung nicht intuitiv anfühlt
 
 Folgende Änderungen sollen folgen:
 
 \begin{description}
-  \item[Anpassung der Berechnung:] Die aktuelle Berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Außerdem eröffnet das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
+  \item[Anpassung der Berechnung:] Die aktuelle Berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Au\ss{}erdem eröffnet das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
   \item[Schleichen:] Im normalen Spiel bietet das Schleichen die besondere Fähigkeit, an die Kante von Blöcken zu laufen und nicht herunterzufallen. Dieses Feature ist hier noch nicht umgesetzt. Es soll ermöglichen dem Spieler mehr Sicherheit zu geben.
   \item[Schwimmen:] Wasserblöcke im Basisspiel sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schwimmen kann und nicht in ihnen versinkt.
   \item[Slypperiness:] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von Oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
-  \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eigenschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
+  \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eigenschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einflie\ss{}en.
 \end{description}
 
 \subsubsection{Generierung von Strukturen}
@@ -586,8 +586,8 @@ Chunkgrenzen abgehackt. Daher soll der Strukturgenerierungscode um folgende
 Punkte erweitert werden:
 
 \begin{itemize}
-	\item Laden und halten des Aufbaus der Struktur
-	\item Generieren der Struktur, ggf. angepasst an das Terrain (z.B. Straßen,
+	\item Laden und halten des Aufbaus einer Struktur
+	\item Generieren der Struktur, ggf. angepasst an das Terrain (z.B. Stra\ss{}en,
 	die der Wölbung des Bodens folgen)
 	\item Logik implementieren für ''Puzzle'' Strukturen, bei der mehrere Teile
 	ineinander passen
