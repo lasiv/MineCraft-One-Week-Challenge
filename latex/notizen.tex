@@ -442,9 +442,17 @@ Der einzige Zustand, den unser Spiel momentant kennt ist der PlayState. Er enth�
 
 \subsubsection*{Player}
 
+Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren. Sie handhabt Tastatureingaben zum bewegen in der Welt als auch Mausbewegungen, um sich umschauen zu können oder auch mit der Welt zu interagieren. Diese Interaktionen beinhalten zum Beispiel das Abbauen und Platzieren von Blöcken in der Welt. An den Spieler ist auch die Kamera befestigt, durch welche der Benutzer die Welt sehen kann.
+
 \subsubsection*{World}
 
+Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt sind. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. Die Welt initiiert auch das Rendern der Chunks. 
+
 \subsubsection*{Generation}
+
+Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
+
+Die Biomkarte und Höhenkarte werden durch eine Rauchfunktion erstellt, welches eine organisch aussehende Welt mit Hügeln, Bergen und Ozeanen erstellen lässt. Die Vegetation wird durch einfache pseudo-zufällige Zahlengenerierung platziert.
 
 \subsubsection*{Rendering}
 
