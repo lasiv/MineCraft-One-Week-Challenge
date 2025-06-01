@@ -4,28 +4,25 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
-      <y>432</y>
-      <w>184</w>
-      <h>88</h>
+      <x>416</x>
+      <y>456</y>
+      <w>72</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>World
---
-isRunning: std::atomic&lt;bool&gt;
-playerSpawnPoint: vec3</panel_attributes>
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>552</x>
-      <y>576</y>
-      <w>112</w>
-      <h>48</h>
+      <x>544</x>
+      <y>568</y>
+      <w>80</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>Chunk
---
-isLoaded: bool
+
 
 </panel_attributes>
     <additional_attributes/>
@@ -33,22 +30,22 @@ isLoaded: bool
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>368</x>
+      <x>440</x>
       <y>480</y>
-      <w>200</w>
-      <h>144</h>
+      <w>120</w>
+      <h>128</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 r1=pWorld
 m2=*</panel_attributes>
-    <additional_attributes>10.0;20.0;100.0;20.0;100.0;150.0;230.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0;130.0;130.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>552</x>
-      <y>448</y>
+      <x>528</x>
+      <y>456</y>
       <w>104</w>
       <h>32</h>
     </coordinates>
@@ -59,111 +56,82 @@ m2=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>368</x>
-      <y>448</y>
-      <w>200</w>
-      <h>40</h>
+      <x>440</x>
+      <y>376</y>
+      <w>240</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1
 r2=chunkManager
 r1=world</panel_attributes>
-    <additional_attributes>10.0;20.0;230.0;20.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0;180.0;10.0;180.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>472</y>
+      <x>576</x>
+      <y>480</y>
       <w>64</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=chunks
 m2=*
 m1=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>216</y>
+      <x>776</x>
+      <y>256</y>
       <w>176</w>
-      <h>40</h>
+      <h>32</h>
     </coordinates>
     <panel_attributes>StructureBuilder
---
-blocks: Block[]
+
 
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>192</x>
-      <y>536</y>
-      <w>80</w>
-      <h>192</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;enum&gt;&gt;
-BlockID
-{Block_t}
---
-Air
-Grass
-Dirt
-Stone
-OakBark
-OakLeaf
-Sand
-Water
-Cactus
-Rose
-TallGrass
-DeadShrub</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>248</y>
+      <x>856</x>
+      <y>280</y>
       <w>56</w>
-      <h>72</h>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;uses&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>648</x>
-      <y>448</y>
-      <w>216</w>
+      <x>624</x>
+      <y>456</y>
+      <w>176</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=terrainGenerator
 m2=1
 m1=*</panel_attributes>
-    <additional_attributes>10.0;20.0;250.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;200.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>848</x>
-      <y>448</y>
+      <x>784</x>
+      <y>456</y>
       <w>160</w>
-      <h>80</h>
+      <h>32</h>
     </coordinates>
     <panel_attributes>ClassicOverworldGenerator
---
-heightMap: int[256]
-biomeMap: int[289]
+
 
 </panel_attributes>
     <additional_attributes/>
@@ -171,15 +139,13 @@ biomeMap: int[289]
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>304</y>
-      <w>176</w>
-      <h>56</h>
+      <x>816</x>
+      <y>352</y>
+      <w>88</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>Biome
---
-treeFreq: int
-plantFreq: int
+
 
 
 </panel_attributes>
@@ -188,76 +154,56 @@ plantFreq: int
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1152</x>
-      <y>440</y>
-      <w>200</w>
-      <h>56</h>
+      <x>808</x>
+      <y>568</y>
+      <w>120</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>NoiseGenerator
---
-seed: int
-noiseParameters: NoiseParameters
+
 
 </panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1144</x>
-      <y>520</y>
-      <w>112</w>
-      <h>104</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;struct&gt;&gt;
-NoiseParameters
---
-octaves: int
-amplitude: int
-smoothness: int
-heightOffset: int
-roughness: double</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
-      <y>448</y>
-      <w>168</w>
-      <h>40</h>
+      <x>856</x>
+      <y>480</y>
+      <w>104</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=biomeNoiseGen
 m2=1
 m1=1</panel_attributes>
-    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>352</y>
+      <x>856</x>
+      <y>376</y>
       <w>32</w>
-      <h>112</h>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=5
 m1=*</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1008</x>
-      <y>320</y>
-      <w>352</w>
-      <h>136</h>
+      <x>896</x>
+      <y>360</y>
+      <w>160</w>
+      <h>248</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=heightGenerator
 m2=1
 m1=1</panel_attributes>
-    <additional_attributes>10.0;10.0;310.0;10.0;310.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0;180.0;280.0;40.0;280.0</additional_attributes>
   </element>
 </diagram>
