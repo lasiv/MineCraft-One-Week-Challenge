@@ -513,11 +513,11 @@ Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im La
 \umlcompo[name=Relation9,geometry=--,anchor1=-136,anchor2=136.0,mult1=1,mult2={*}]{UMLClass6}{UMLClass8}
 \end{gfx}
 
-Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt.
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlcih nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt. Abbildung \ref{gfx:render} zeigt den groben Aufbau von Modell und Mesh in einem Chunk, ist in dieser Forma aber nicht im Gesamtmodell mit drin.
 
 \subsubsection*{Input}
 
-
+Der Input erfoglt wie nächste Section beschrieben über die externe Bibliothek \texttt{SFML}. Wie werden zwie Klassen definiert, die an verschiedenen Stellen im Projekt verwendet werden. Einmal eine \texttt{Keyboard} Klasse, die alle zur Zeit gedrückten Tasten als Boolean werte speichert. Eine weitere Klasse \texttt{ToggleKey}, die eine bestimmte Taste softwareseitig entprellt, um sie als Schalter nutzen zu können.
 
 \subsubsection*{Dependencies}
 
