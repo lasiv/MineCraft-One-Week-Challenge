@@ -432,13 +432,24 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 \subsubsection*{Application}
 
+\begin{gfx}{States}{states}{ht}
+\umlsimpleclass[x=0,y=-0.5,alias=UMLClass0]{Application}
+\umlsimpleclass[x=0,y=-3.00,alias=UMLClass1]{StateBase}
+\umlsimpleclass[x=0,y=-5,alias=UMLClass2]{PlayState}
+\umlsimpleclass[x=-2,y=-8,alias=UMLClass3]{Player}
+\umlsimpleclass[x=2,y=-8,alias=UMLClass4]{World}
+\umlcompo[name=Relation0,geometry=--,mult1={1},pos1=0.2,mult2={*},arg2={states},pos2=0.8]{UMLClass0}{UMLClass1}
+\umlinherit[name=Relation1,geometry=--,]{UMLClass2}{UMLClass1}
+\umlcompo[name=Relation2,geometry=|-|,anchor1=-130.0,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=2.8]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation3,geometry=|-|,anchor1=-50.0,mult1={*},pos1=0.2,mult2={1},arg2={world},pos2=2.8]{UMLClass2}{UMLClass4}
+\umlassoc[name=Relation4,geometry=--,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass4}{UMLClass3}
+\end{gfx}
+
 Die Klasse Application ist der Einstiegspunkt in de Software. Sie enthält alle wichtigen Komponenten, wie den Kontext des Fensters, die Kamera, die Oberklasse für das Rendern sowie die ganzen States der Software.
 
 Gängiges Verhalten, ist eine Software in mehrer Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
 
 Der einzige Zustand, den unser Spiel momentant kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
-
-
 
 \subsubsection*{Player}
 
@@ -448,9 +459,9 @@ Der einzige Zustand, den unser Spiel momentant kennt ist der PlayState. Er enth�
 
 \subsubsection*{Rendering}
 
-Das Rendering des Spiels ist eine komplexe Angelegenheit, und wir von uns im Laufe unserer Änderungen nicht verändert und als gegeben angesehen. Aufgruind der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
+Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im Laufe unseres Projekts nicht verändert. Aufgrund der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
 
-Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen Aufrfen wollen. 
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Die Application ruft dabei eine Render Funktion im PlayState auf, dieser wiederum in der Welt, in diese wiederum im Chunk. 
 
 \subsubsection*{Input}
 
