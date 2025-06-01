@@ -471,13 +471,35 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
     \umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
   \end{tikzpicture}
   \label{fig:player_design}
-  \caption{Designmodell: Player}  
+  \caption{Designmodellteil: Player}  
 \end{figure}
 
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Er anthält eine Bounding Box (\texttt{AABB}) im Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegun und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \subsubsection*{World}
 
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \umlsimpleclass[x=14.40,y=-13.80,alias=UMLClass0]{Player}
+    \umlsimpleclass[x=17.90,y=-10.80,alias=UMLClass1]{World}
+    \umlsimpleclass[x=14.40,y=-10.80,alias=UMLClass2]{PlayerDigEvent}
+    \umlsimpleclass[x=14.40,y=-8.60,alias=UMLClass3,type={interface}]{IWorldEvent}
+    \umlsimpleclass[x=22.30,y=-8.60,alias=UMLClass4]{ChunkManager}
+    \umlsimpleclass[x=22.40,y=-10.80,alias=UMLClass5]{Chunk}
+    \umlsimpleclass[x=22.50,y=-13.80,alias=UMLClass6]{ChunkSection}
+    \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.8]{UMLClass1}{UMLClass3}
+    \umlinherit[name=Relation1,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass2}{UMLClass3}
+    \umluniassoc[name=Relation2,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={*},arg1={pPLayer},pos1=0.2,mult2={1},pos2=0.8]{UMLClass2}{UMLClass0}
+    \umlassoc[name=Relation3,geometry=|-,anchor1=-150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass1}{UMLClass0}
+    \umluniassoc[name=Relation4,geometry=--,anchor1=180.0,anchor2=0.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=0.8]{UMLClass5}{UMLClass1}
+    \umlcompo[name=Relation5,geometry=|-,anchor1=29.7,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass1}{UMLClass4}
+    \umlassoc[name=Relation6,geometry=|-,anchor1=-29.7,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},arg2={chunkUpdates},pos2=1.8]{UMLClass1}{UMLClass6}
+    \umluniassoc[name=Relation7,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass4}{UMLClass5}
+    \umlcompo[name=Relation8,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass5}{UMLClass6}
+  \end{tikzpicture}
+  \label{fig:worl_design}
+  \caption{Designmodellteil: World}
+\end{figure}
 Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
 
 \subsubsection*{Generation}
