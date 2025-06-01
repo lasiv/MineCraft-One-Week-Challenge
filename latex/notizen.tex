@@ -482,13 +482,13 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
   \umlsimpleclass[x=22.30,y=-8.60,alias=UMLClass4]{ChunkManager}
   \umlsimpleclass[x=22.40,y=-10.80,alias=UMLClass5]{Chunk}
   \umlsimpleclass[x=22.50,y=-13.80,alias=UMLClass6]{ChunkSection}
-  \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.8]{UMLClass1}{UMLClass3}
+  \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.6]{UMLClass1}{UMLClass3}
   \umlinherit[name=Relation1,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass2}{UMLClass3}
   \umluniassoc[name=Relation2,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={*},arg1={pPLayer},pos1=0.2,mult2={1},pos2=0.8]{UMLClass2}{UMLClass0}
   \umlassoc[name=Relation3,geometry=|-,anchor1=-150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass1}{UMLClass0}
   \umluniassoc[name=Relation4,geometry=--,anchor1=180.0,anchor2=0.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=0.8]{UMLClass5}{UMLClass1}
-  \umlcompo[name=Relation5,geometry=|-,anchor1=29.7,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass1}{UMLClass4}
-  \umlassoc[name=Relation6,geometry=|-,anchor1=-29.7,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},arg2={chunkUpdates},pos2=1.8]{UMLClass1}{UMLClass6}
+  \umlcompo[name=Relation5,geometry=|-,anchor1=29.7,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.5]{UMLClass1}{UMLClass4}
+  \umlassoc[name=Relation6,geometry=|-,anchor1=-29.7,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},arg2={chunkUpdates},pos2=1.55]{UMLClass1}{UMLClass6}
   \umluniassoc[name=Relation7,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass4}{UMLClass5}
   \umlcompo[name=Relation8,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass5}{UMLClass6}
 \end{gfx}
@@ -497,26 +497,24 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blö
 
 \subsubsection*{Generierung}
 
-\begin{figure}[h]
-  \begin{tikzpicture}
-    \umlsimpleclass[x=11.30,y=-11.80,alias=UMLClass0]{World}
-    \umlsimpleclass[x=14.60,y=-14.60,alias=UMLClass1]{Chunk}
-    \umlsimpleclass[x=14.50,y=-11.80,alias=UMLClass2]{ChunkManager}
-    \umlsimpleclass[x=21.60,y=-6.80,alias=UMLClass3]{StructureBuilder}
-    \umlsimpleclass[x=21.60,y=-11.80,alias=UMLClass4]{ClassicOverworldGenerator}
-    \umlsimpleclass[x=21.50,y=-9.20,alias=UMLClass5]{Biome}
-    \umlsimpleclass[x=21.70,y=-14.60,alias=UMLClass6]{NoiseGenerator}
-    \umluniassoc[name=Relation0,geometry=-|,anchor1=180.0,anchor2=-104.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
-    \umlcompo[name=Relation1,geometry=--,anchor1=104.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
-    \umluniassoc[name=Relation2,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass2}{UMLClass1}
-    \umldep[name=Relation3,geometry=--,anchor1=76.0,anchor2=-90.0]{UMLClass5}{UMLClass3}
-    \node[above] at (Relation3-1) {\textless{}\textless{}uses\textgreater{}\textgreater{}};
-    \umlcompo[name=Relation4,geometry=--,anchor1=0.0,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=0.8]{UMLClass2}{UMLClass4}
-    \umlcompo[name=Relation5,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass4}{UMLClass6}
-    \umlcompo[name=Relation6,geometry=--,anchor1=90.0,anchor2=-76.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass4}{UMLClass5}
-    \umlcompo[name=Relation7,geometry=-|-,anchor1=0.0,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=2.8]{UMLClass5}{UMLClass6}
-  \end{tikzpicture}
-\end{figure}
+\begin{gfx}{Generation der Welt}{genreation}{ht}
+\umlsimpleclass[x=5.90,y=-1.80,alias=UMLClass0]{World}
+\umlsimpleclass[x=9.20,y=-7.40,alias=UMLClass1]{Chunk}
+\umlsimpleclass[x=9.10,y=-4.40,alias=UMLClass2]{ChunkManager}
+\umlsimpleclass[x=6.80,y=-9.60,alias=UMLClass3]{StructureBuilder}
+\umlsimpleclass[x=13.20,y=-8.20,alias=UMLClass4]{ClassicOverworldGenerator}
+\umlsimpleclass[x=7,y=-12.80,alias=UMLClass5]{Biome}
+\umlsimpleclass[x=14.05,y=-12.80,alias=UMLClass6]{NoiseGenerator}
+\umluniassoc[name=Relation0,geometry=-|,anchor1=180.0,anchor2=-104.0,mult1={1},arg1={pWorld},pos1=0.3,mult2={*},pos2=1.9]{UMLClass1}{UMLClass0}
+\umlcompo[name=Relation1,geometry=-|,anchor1=0.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass0}{UMLClass2}
+\umluniassoc[name=Relation2,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass2}{UMLClass1}
+\umldep[name=Relation3,geometry=-|,anchor1=180.0,anchor2=-116.6]{UMLClass5}{UMLClass3}
+\node[left] at (Relation3-3) {$\ll$uses$\gg$};
+\umlcompo[name=Relation4,geometry=-|,anchor1=0.0,anchor2=90.0,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=1.8]{UMLClass2}{UMLClass4}
+\umlcompo[name=Relation5,geometry=--,anchor1=-26.6,anchor2=104.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass4}{UMLClass6}
+\umlcompo[name=Relation6,geometry=|-|,anchor1=-153.4,anchor2=45.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass4}{UMLClass5}
+\umlcompo[name=Relation7,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=0.7]{UMLClass5}{UMLClass6}
+\end{gfx}
 
 Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
 
