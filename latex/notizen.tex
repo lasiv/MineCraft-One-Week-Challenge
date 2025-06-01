@@ -19,6 +19,7 @@
 \DeclareSIUnit\liter{l}
 \usepackage{enumitem}
 \usepackage{minted}
+\usepackage{placeins}
 
 \usepackage{tikz-uml}
 
@@ -447,13 +448,11 @@ Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unter
 \umlassoc[name=Relation4,geometry=--,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass4}{UMLClass3}
 \end{gfx}
 
-Die Klasse Application ist der Einstiegspunkt in de Software. Sie enthält alle wichtigen Komponenten, wie den Kontext des Fensters, die Kamera, die Oberklasse für das Rendern sowie die ganzen States der Software.
+Die Klasse \texttt{Application} ist die Einstiegspunkt in die Software. Sie enthält alle wichtigen Komponenten, wie den Kontext des Fensters, die Kamera, die Oberklasse für das Rendern sowie die ganzen States der Software.
 
-Gängiges Verhalten, ist eine Software in mehrere Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
+Gängiges Vorgehen bei Spielen, ist sie in mehrere Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
 
 Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
-
-
 
 \subsubsection*{Player}
 \begin{gfx}{Player}{player-design}{ht}
@@ -472,6 +471,7 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
+\FloatBarrier
 \subsubsection*{World}
 
 \begin{gfx}{World}{world}{ht}
@@ -495,6 +495,7 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
 
 Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
 
+\FloatBarrier
 \subsubsection*{Generierung}
 
 \begin{gfx}{Generation der Welt}{genreation}{ht}
@@ -516,10 +517,11 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blö
 \umlcompo[name=Relation7,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=0.7]{UMLClass5}{UMLClass6}
 \end{gfx}
 
-Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
+Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerator} Klasse. Von der gibt es zwei Unterklassen, wovon jedoch nur eine benutzt wird, und zwar die \texttt{ClassicOverworldGenerator} Klasse. Sie ist verantwortlich für das Erstellen der ''Biomkarte'' um die Welt in verschiedene Biome zu unterteilen, die Generierung der ''Höhenkarte'' um die Oberfläche der Welt zu definieren, und für das platzieren von Vegetation wie kleine Pflanzen, Bäume und Kakteen.
 
 Die Biomkarte und Höhenkarte werden durch eine Rauchfunktion erstellt, welches eine organisch aussehende Welt mit Hügeln, Bergen und Ozeanen erstellen lässt. Die Vegetation wird durch einfache pseudo-zufällige Zahlengenerierung platziert.
 
+\FloatBarrier
 \subsubsection*{Rendering}
 
 Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im Laufe unseres Projekts nicht verändert. Aufgrund der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
@@ -549,6 +551,7 @@ Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im La
 
 Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlich nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt. Abbildung \ref{gfx:render} zeigt den groben Aufbau von Modell und Mesh in einem Chunk, ist in dieser Form aber nicht im Gesamtmodell mit drin.
 
+\FloatBarrier
 \subsubsection*{Input}
 
 Der Input erfolgt wie im nächstem Abschnitt beschrieben über die externe Bibliothek \texttt{SFML}. Es werden zwei Klassen definiert, die an verschiedenen Stellen im Projekt verwendet werden. Einmal eine \texttt{Keyboard} Klasse, die alle zur Zeit gedrückten Tasten als Boolean werte speichert. Eine weitere Klasse \texttt{ToggleKey}, die eine bestimmte Taste softwareseitig entprellt, um sie als Schalter nutzen zu können.
