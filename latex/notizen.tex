@@ -152,7 +152,7 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 \subsection{Informelle Beschreibung} \label{subsec:inf}
 
-Die ausgewählte Software ist ein Projekt eines Youtubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
+Die ausgewählte Software ist ein Projekt eines YouTubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
 
 Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Größen, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
 
@@ -162,7 +162,7 @@ In dieser Kopie des Spiels sind einige Haupt Eigenschaften noch nicht umgesetzt.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
-Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handlet sich hier um ein Spiel, dass alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
+Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sich hier um ein Spiel, dass alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
 
 \begin{gfx}{UseCase Diagramm}{usecase}{ht}
   % Systemgrenze
@@ -356,11 +356,11 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \subsubsection*{Spiel Verlassen}
 
-Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen verden, als das Programm zu beenden. Dies geschieht durch das Schließen des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
+Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schließen des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
-Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde besierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Außen hin sichtbar sind, mit denen interagiert wird. 
+Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde basierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Außen hin sichtbar sind, mit denen interagiert wird. 
 
 \begin{gfx}{Domänenmodell}{domain}{ht}
 \umlclass[x=11.2,y=-14.0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
@@ -434,9 +434,9 @@ In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projekt
 
 Die Klasse Application ist der Einstiegspunkt in de Software. Sie enthält alle wichtigen Komponenten, wie den Kontext des Fensters, die Kamera, die Oberklasse für das Rendern sowie die ganzen States der Software.
 
-Gängiges Verhalten, ist eine Software in mehrer Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
+Gängiges Verhalten, ist eine Software in mehrere Zustände zu unterteilen, und diese auf einem Stapel abzulegen. Wird nun z.B. das Pause-Menü geöffnet, wird der Zustand dieses Menüs auf den Stapel gepackt. Wenn das Menü wieder geschlossen wird, wird der darunterliegende Zustand des Spiels einfach weiter geführt. Dies ist hier auch implementiert, jedoch gibt es momentan nur einen Zustand.
 
-Der einzige Zustand, den unser Spiel momentant kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
+Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
 
 
 
@@ -456,9 +456,9 @@ Die Biomkarte und Höhenkarte werden durch eine Rauchfunktion erstellt, welches 
 
 \subsubsection*{Rendering}
 
-Das Rendering des Spiels ist eine komplexe Angelegenheit, und wir von uns im Laufe unserer Änderungen nicht verändert und als gegeben angesehen. Aufgruind der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
+Das Rendering des Spiels ist eine komplexe Angelegenheit, und wir von uns im Laufe unserer Änderungen nicht verändert und als gegeben angesehen. Aufgrund der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
 
-Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen Aufrfen wollen. 
+Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen aufrufen wollen. 
 
 \subsubsection*{Input}
 
@@ -466,25 +466,25 @@ Die Application hat eine Referenz zum sog. RenderMaster, die von der Application
 
 \subsubsection*{Dependencies}
 
-Unser Projekt benutzt verschiedene Bobliotheken, die oft in solchen \texttt{C++} Projekten vorkommen. Für komplexere Rechnungen zieht der Programmierer hier \texttt{GLM} heran. Davon benutzt das Programm unterschiedlichen Vektoren, Materialien und Matrizen oder wird für z.B. Strahlenrechnung benutzt.
+Unser Projekt benutzt verschiedene Bibliotheken, die oft in solchen \texttt{C++} Projekten vorkommen. Für komplexere Rechnungen zieht der Programmierer hier \texttt{GLM} heran. Davon benutzt das Programm unterschiedlichen Vektoren, Materialien und Matrizen oder wird für z.B. Strahlenrechnung benutzt.
 
 Die Bibliothek \texttt{SFML} ermöglicht die Erstellung von Fenstern in denen das Spiel angezeigt wird, unterstützt Eingabeerkennung z.B. für die Klassen Keyboard und ToggleKey und kann später für UI Elemente genutzt werden.
 
-\texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfer des Meshes und Modelle und den Shadern das Spiel darzustellen.
+\texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfe des Meshes und Modelle und den Shadern das Spiel darzustellen.
 
 \subsection{Zustandsmodell} \label{subsec:statemodel}
 
-In unserem Projekt bietet sich nicht an, Zustandsdiagramme zu ertellen. Viele Prozesse laufen sehr statisch ab und würden in zu simplen Zustandsdiagrammen resultieren.
+In unserem Projekt bietet sich nicht an, Zustandsdiagramme zu erstellen. Viele Prozesse laufen sehr statisch ab und würden in zu simplen Zustandsdiagrammen resultieren.
 
 \subsection{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
 
 Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äußern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
 
-Bei den Hauptthemen der Änderungen geht es vorallem um einen grafische Benutzeroberfläche, die Änderung von Bewegungsabläufen und der Physik und die Generierung von Strukturen.
+Bei den Hauptthemen der Änderungen geht es vor allem um einen grafische Benutzeroberfläche, die Änderung von Bewegungsabläufen und der Physik und die Generierung von Strukturen.
 
 \subsubsection{Code}
 
-Neben den tatsächlichen Änderungen, steht eine Aufgabe an erster stelle. Der Programmierer diese Projekts hat einige Funktionen, die letztenendes doch nicht benutzt werden, im Code stehen lassen. Deswegen versuchen wir zuerst unbenutzte Klassen und Codebereiche "aufzuräumen" bevor wir mit unseren Änderungen anfangen.
+Neben den tatsächlichen Änderungen, steht eine Aufgabe an erster stelle. Der Programmierer diese Projekts hat einige Funktionen, die letztenendes doch nicht benutzt werden, im Code stehen lassen. Deswegen versuchen wir zuerst unbenutzte Klassen und Codebereiche ''aufzuräumen'' bevor wir mit unseren Änderungen anfangen.
 
 \subsubsection{GUI \& Logik}
 
@@ -495,7 +495,7 @@ Genau Verändern soll sich folgendes:
 \begin{description}
   \item[Inventarsystem:] Das Inventar wird ersichtlich. Durch eine Schnellzugriffsleiste und zusätzliches Inventar durch drücken einer Taste wird das Verwalten von Gegenständen im Inventar stark vereinfacht.
   \item[Fadenkreuz:] Das Fadenkreuz dient dem Spieler dazu genau zu sehen, welches Objekt gerade exakt anvisiert wird. Dies erleichtert dem Spieler die Kontrolle über die Veränderung der Spielwelt.
-  \item[Lebensanzeige:] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. Im zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmene kann.
+  \item[Lebensanzeige:] Die Lebensanzeige zeigt dem Spieler an, wann die Spielfigur einen Reset (Tod) erleben wird. Im Zuge dessen wird auch die Eigenschaft entstehen, dass die Spielfigur schaden in Form von Fallschaden nehmen kann.
   \item[Kompass:] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
 \end{description}
 
@@ -507,16 +507,16 @@ Schleimblöcke
 blöcke slipperyness werte
 schwimmen
 
-Der minecraft Klin bietet bereits ein grundlegendes Bewegungssystem des Spielers. Es fehlen jedoch noch einige weiteren Features, die im Basisspiel enthalten sind und auch einige zusätzliche Spielereien, um das Erlebnis etwas spannender zu machen. Auch soll die existierende Berechnung der Position etwas angepasst werden, da sich die Steuerung mit aktueller Bewegung nicht intuitiv anfühlt
+Der Minecraft Klon bietet bereits ein grundlegendes Bewegungssystem des Spielers. Es fehlen jedoch noch einige weiteren Features, die im Basisspiel enthalten sind und auch einige zusätzliche Spielereien, um das Erlebnis etwas spannender zu machen. Auch soll die existierende Berechnung der Position etwas angepasst werden, da sich die Steuerung mit aktueller Bewegung nicht intuitiv anfühlt
 
 Folgende Änderungen sollen folgen:
 
 \begin{description}
-  \item[Anpassung der Berechnung:] Die aktuelle berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Außerdem eröffnt das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
+  \item[Anpassung der Berechnung:] Die aktuelle Berechnung ist recht rudimentär und kann noch etwas Finetuning vertragen, damit sich die Bewegung flüssiger anfühlt. Außerdem eröffnet das Möglichkeiten die Bewegung besser mit anderen Features zu Kombinieren.
   \item[Schleichen:] Im normalen Spiel bietet das Schleichen die besondere Fähigkeit, an die Kante von Blöcken zu laufen und nicht herunterzufallen. Dieses Feature ist hier noch nicht umgesetzt. Es soll ermöglichen dem Spieler mehr Sicherheit zu geben.
-  \item[Schwimmen:] Wasserblöcke im Basisspeil sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schimmen kann und nicht in ihnen versinkt.
-  \item[Slypperiness:] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
-  \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eiganschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
+  \item[Schwimmen:] Wasserblöcke im Basisspiel sind recht kompliziert, wie sie sich ausbreiten können. In diesem Spiel gibt es aufgrund der einfachen Generierung ein festes Wasserlevel. Wenn man dieses unterschreitet und sich im Wasser befindet, läuft man aber einfach normal unter der Wasseroberfläche weiter. Das soll sich ändern, damit man über die Seen der Welt hinweg schwimmen kann und nicht in ihnen versinkt.
+  \item[Slypperiness:] Verschiedene Blöcke können im Basisspiel verschiedene Beschaffenheiten haben. So beginnt man auf Eis zu rutschen und in bestimmten Sandarten stecken zu bleiben, bzw langsamer voranzukommen. Dies kann mithilfe von Oberflächenbeschaffenheit in die neue Berechnung mit einbezogen werden.
+  \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eigenschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einfließen.
 \end{description}
 
 \subsubsection{Generierung von Strukturen}
@@ -541,13 +541,13 @@ Punkte erweitert werden:
 
 \subsubsection{Speichersystem}
 
-Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen and den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
+Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen und den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
 
 Folgende Änderungen können hier getätigt werden:
 
 \begin{description}
-  \item[Speichern bei Laufzeit:] Die erste Funktion wäre herauszufinden, wie die Änderungen platzeffizient gespeichert werden könnten, und wie man sie dann während des Spiels speichern und laden kann
-  \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte welt wieder geöffnet werden kann. Dies bracuht dann einige zusätzliche Features der Bedienung.
+  \item[Speichern bei Laufzeit:] Die erste Funktion wäre herauszufinden, wie die Änderungen platz-effizient gespeichert werden könnten, und wie man sie dann während des Spiels speichern und laden kann
+  \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte Welt wieder geöffnet werden kann. Dies braucht dann einige zusätzliche Features der Bedienung.
   \item[Weltauswahl:] Eine Möglichkeit wäre, im Zuge der Änderungen an UI eine Art Auswahl-Menü zu bauen, in der Welten generiert und gestartet werden können.
 \end{description}
 
