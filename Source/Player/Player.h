@@ -173,7 +173,7 @@ class Player : public Entity {
       return (x < 0.0f) ? x * -1.0f : x;
     }
 
-    static constexpr float DEFAULT_SLIPPERINESS       = 0.6f;
+    static constexpr float DEFAULT_SLIPPERINESS       = 1.0f;
 
     static constexpr float MOVE_MULT_SPRINT           = 1.3f;
     static constexpr float MOVE_MULT_WALK             = 1.0f;

@@ -136,15 +136,11 @@ void Player::update(float dt, World &world)
     if (m_isOnGround && !m_isFlying && m_input.y == 1) {
         m_isJumping = true;
         m_isOnGround = false;
-        velocity.y = 20.f * JUMP_INIT;
-    }
-    // set velocity to 0 when on ground
-    else if (m_isOnGround) {
-        velocity.y = 0.f;
+        velocity.y = JUMP_INIT;
     }
     // normally calculate gravity
     else {
-        velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG * 20.f;
+        velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG;
     }
     
     // moving
@@ -164,18 +160,11 @@ void Player::update(float dt, World &world)
 
     float Ft_sin = glm::sin(glm::radians(rotation.y));
     float Ft_cos = glm::cos(glm::radians(rotation.y));
-    float forward = m_input.x;
-    float strafe  = m_input.z;
+    float Dt_sin  = Ft_sin * m_input.x + Ft_cos * m_input.z;
+    float Dt_cos  = Ft_sin * m_input.z - Ft_cos * m_input.x;
 
-    float yawRad  = glm::radians(rotation.y);
-    float sy      = glm::sin(yawRad);
-    float cy      = glm::cos(yawRad);
-
-    float Dt_sin  = sy * forward + cy * strafe;
-    float Dt_cos  = sy * strafe - cy * forward;
-
-    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + 20.f * accel * mov * mov_mult * cube(.6f/slip) * Dt_sin + boost * Ft_sin;
-    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + 20.f * accel * mov * mov_mult * cube(.6f/slip) * Dt_cos + boost * Ft_cos;
+    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + accel * mov * mov_mult /** cube(.6f/slip)*/ * Dt_sin /*+ boost * (-Ft_sin)*/;
+    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + accel * mov * mov_mult /** cube(.6f/slip)*/ * Dt_cos /*+ boost * (-Ft_cos)*/;
 
 
 
@@ -195,13 +184,13 @@ void Player::update(float dt, World &world)
         position.y = RESPAWN_HEIGHT;
     }
 
-    position.x += velocity.x * dt;
+    position.x += 20 * velocity.x * dt;
     collide(world, {velocity.x, 0, 0}, dt);
 
-    position.y += velocity.y * dt;
+    position.y += 20 * velocity.y * dt;
     collide(world, {0, velocity.y, 0}, dt);
 
-    position.z += velocity.z * dt;
+    position.z += 20 * velocity.z * dt;
     collide(world, {0, 0, velocity.z}, dt);
 
     box.update(position);
