@@ -41,3 +41,11 @@ class_diagram/
 CMakeFiles/
 
 models/scripts/out/
+
+*.ninja
+*.cmake
+compile_commands.json
+vcpkg-manifest-install.log
+deps/*.cmake
+deps/glad/*.cmake
+CMakeCache.txt
