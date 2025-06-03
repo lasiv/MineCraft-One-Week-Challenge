@@ -22,7 +22,6 @@ Player::Player()
     , m_num3(sf::Keyboard::Num3)
     , m_num4(sf::Keyboard::Num4)
     , m_num5(sf::Keyboard::Num5)
-    , m_slow(sf::Keyboard::LShift)
     , m_acceleration(glm::vec3(0.f))
 
 {
@@ -105,10 +104,6 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     if (m_num5.isKeyPressed()) {
         m_heldItem = 4;
     }
-    if (m_slow.isKeyPressed())
-    {
-        m_isSneak = !m_isSneak;
-    }
 }
 
 /**
@@ -119,25 +114,85 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 
 void Player::update(float dt, World &world)
 {
-    velocity += m_acceleration;
+    static float slip = DEFAULT_SLIPPERINESS;
+
     // debug print accelleration and velocity
-    std::cout << "\033[2K\r" // Clear current line and return cursor to start
-    << std::fixed << std::setprecision(3)
-    << "acc: (" << m_acceleration.x << ", " << m_acceleration.y << ", " << m_acceleration.z << ")  "
-    << "vel: (" << velocity.x << ", " << velocity.y << ", " << velocity.z << ")"
-    << std::flush;
+    // std::cout << "\033[2K\r" // Clear current line and return cursor to start
+    // << std::fixed << std::setprecision(3)
+    // << "acc: (" << m_acceleration.x << ", " << m_acceleration.y << ", " << m_acceleration.z << ")  "
+    // << "vel: (" << velocity.x << ", " << velocity.y << ", " << velocity.z << ")"
+    // << std::flush;
 
-    m_acceleration = {0, 0, 0};
+    // touch the ground while flying stops the flying
+    if (m_isOnGround && m_isFlying) m_isFlying = false;
 
-    if (!m_isFlying) {
-        if (!m_isOnGround) {
-            velocity.y -= 40 * dt;
-        }
+    // jumping
+
+    // disable jumping when touching beginning to fly
+    if (m_isJumping && m_isFlying) m_isJumping = false;
+    // disable jumping when touching the ground
+    if (m_isJumping && m_isOnGround && m_input.y != 1) m_isJumping = false;
+    // enable jumping when on the ground, not flying and y input is up
+    if (m_isOnGround && !m_isFlying && m_input.y == 1) {
+        m_isJumping = true;
         m_isOnGround = false;
+        velocity.y = 20.f * JUMP_INIT;
     }
+    // set velocity to 0 when on ground
+    else if (m_isOnGround) {
+        velocity.y = 0.f;
+    }
+    // normally calculate gravity
+    else {
+        velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG * 20.f;
+    }
+    
+    // moving
+
+    float last_slip = slip;
+    slip = DEFAULT_SLIPPERINESS; // put current block slipperiness here
+    float accel = m_isJumping ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
+    float mov = MOVE_MULT_WALK;
+    if (m_isSprinting) mov = MOVE_MULT_SPRINT;
+    else if (m_isSneaking) mov = MOVE_MULT_SNEAK;
+    float mov_mult = DIR_MULT_DEFAULT;
+    if (m_input.x && m_input.z) {
+        if (m_isSneaking) mov_mult = DIR_MULT_SNEAK_45;
+        else mov_mult = DIR_MULT_STRAFE_45;
+    }
+    float boost = (m_isSprinting && m_isJumping) ? JUMP_SPRINT_BOOST : 0.f;
+
+    float Ft_sin = glm::sin(glm::radians(rotation.y));
+    float Ft_cos = glm::cos(glm::radians(rotation.y));
+    float forward = m_input.x;
+    float strafe  = m_input.z;
+
+    float yawRad  = glm::radians(rotation.y);
+    float sy      = glm::sin(yawRad);
+    float cy      = glm::cos(yawRad);
+
+    float Dt_sin  = sy * forward + cy * strafe;
+    float Dt_cos  = sy * strafe - cy * forward;
+
+    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + 20.f * accel * mov * mov_mult * cube(.6f/slip) * Dt_sin + boost * Ft_sin;
+    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + 20.f * accel * mov * mov_mult * cube(.6f/slip) * Dt_cos + boost * Ft_cos;
+
+
+
+
+
+    // velocity += m_acceleration;
+    // m_acceleration = {0, 0, 0};
+
+    // if (!m_isFlying) {
+        // if (!m_isOnGround) {
+            // velocity.y -= 40 * dt;
+        // }
+        // m_isOnGround = false;
+    // }
 
     if (position.y <= 0 && !m_isFlying) {
-        position.y = 300;
+        position.y = RESPAWN_HEIGHT;
     }
 
     position.x += velocity.x * dt;
@@ -150,11 +205,6 @@ void Player::update(float dt, World &world)
     collide(world, {0, 0, velocity.z}, dt);
 
     box.update(position);
-    velocity.x *= 0.95f;
-    velocity.z *= 0.95f;
-    if (m_isFlying) {
-        velocity.y *= 0.95f;
-    }
 }
 
 void Player::collide(World &world, const glm::vec3 &vel, float dt)
@@ -194,42 +244,22 @@ void Player::collide(World &world, const glm::vec3 &vel, float dt)
             }
 }
 
-/// @todo Move this (comment by hopson)
-float speed = 0.2f;
-float accelleration = 1.f;
-
 /// @todo add movement keys to config
 void Player::keyboardInput(Keyboard &keyboard)
-{
-    if (keyboard.isKeyDown(sf::Keyboard::W)) {
-        float s = speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-            s *= 5;
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-            s *= 0.35;
-        m_acceleration.x += -glm::cos(glm::radians(rotation.y + 90)) * s * accelleration;
-        m_acceleration.z += -glm::sin(glm::radians(rotation.y + 90)) * s * accelleration;
-    }
-    if (keyboard.isKeyDown(sf::Keyboard::S)) {
-        m_acceleration.x += glm::cos(glm::radians(rotation.y + 90)) * speed * accelleration;
-        m_acceleration.z += glm::sin(glm::radians(rotation.y + 90)) * speed * accelleration;
-    }
-    if (keyboard.isKeyDown(sf::Keyboard::A)) {
-        m_acceleration.x += -glm::cos(glm::radians(rotation.y)) * speed * accelleration;
-        m_acceleration.z += -glm::sin(glm::radians(rotation.y)) * speed * accelleration;
-    }
-    if (keyboard.isKeyDown(sf::Keyboard::D)) {
-        m_acceleration.x += glm::cos(glm::radians(rotation.y)) * speed * accelleration;
-        m_acceleration.z += glm::sin(glm::radians(rotation.y)) * speed * accelleration;
-    }
+{   bool w = keyboard.isKeyDown(sf::Keyboard::W);
+    bool a = keyboard.isKeyDown(sf::Keyboard::A);
+    bool s = keyboard.isKeyDown(sf::Keyboard::S);
+    bool d = keyboard.isKeyDown(sf::Keyboard::D);
+    bool space = keyboard.isKeyDown(sf::Keyboard::Space);
+    bool shift = keyboard.isKeyDown(sf::Keyboard::LShift);
+    bool ctrl = keyboard.isKeyDown(sf::Keyboard::LControl);
 
-    if (keyboard.isKeyDown(sf::Keyboard::Space)) {
-        jump();
-    }
-    else if (keyboard.isKeyDown(sf::Keyboard::LShift) && m_isFlying) {
-        m_acceleration.y -= speed * 3;
-    }
+    m_input.x = w - s;
+    m_input.y = (m_isOnGround ? space : false) - (m_isFlying ? shift : false);
+    m_input.z = d - a;
+
+    m_isSneaking = shift;
+    m_isSprinting = ctrl && !shift ;
 }
 
 /// @todo add sensitivity and mouselock key to config
@@ -293,16 +323,16 @@ void Player::draw(RenderMaster &master)
     m_posPrint.setString(stream.str());
 }
 
-void Player::jump()
-{
-    if (!m_isFlying) {
-        if (m_isOnGround) {
+// void Player::jump()
+// {
+//     if (!m_isFlying) {
+//         if (m_isOnGround) {
 
-            m_isOnGround = false;
-            m_acceleration.y += speed * 50;
-        }
-    }
-    else {
-        m_acceleration.y += speed * 3;
-    }
-}
+//             m_isOnGround = false;
+//             m_acceleration.y += speed * 50;
+//         }
+//     }
+//     else {
+//         m_acceleration.y += speed * 3;
+//     }
+// }

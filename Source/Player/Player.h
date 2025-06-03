@@ -137,7 +137,10 @@ class Player : public Entity {
     void mouseInput(const sf::Window &window);
     bool m_isOnGround = false;
     bool m_isFlying = false;
-    bool m_isSneak = false;
+    bool m_isSneaking = false;
+    bool m_isSprinting = false;
+    bool m_isJumping = false;
+    bool m_canSprint = true;
 
     std::vector<ItemStack> m_items;
     std::vector<sf::Text> m_itemText;
@@ -154,9 +157,53 @@ class Player : public Entity {
     ToggleKey m_num4;
     ToggleKey m_num5;
 
-    ToggleKey m_slow;
-
     glm::vec3 m_acceleration;
+
+    struct input{
+      int x;
+      int y;
+      int z;
+    } m_input;
+
+    inline float cube(float x) const {
+      return x * x * x;
+    }
+
+    inline float abs(float x) const {
+      return (x < 0.0f) ? x * -1.0f : x;
+    }
+
+    static constexpr float DEFAULT_SLIPPERINESS       = 0.6f;
+
+    static constexpr float MOVE_MULT_SPRINT           = 1.3f;
+    static constexpr float MOVE_MULT_WALK             = 1.0f;
+    static constexpr float MOVE_MULT_SNEAK            = 0.3f;
+    static constexpr float MOVE_MULT_STOP             = 0.0f;
+
+    static constexpr float DIR_MULT_DEFAULT           = 0.98f;
+    static constexpr float DIR_MULT_STRAFE_45         = 1.00f;
+    static constexpr float DIR_MULT_SNEAK_45          = 0.98f * 1.4142135623730951f;
+
+    static constexpr float FRICTION_FACTOR            = 0.91f;
+
+    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD = 0.005f;
+
+    static constexpr float GROUND_ACCEL_BASE          = 0.1f;
+    static constexpr float AIR_ACCEL_BASE             = 0.02f;
+    static constexpr float JUMP_SPRINT_BOOST          = 0.2f;
+
+    static constexpr float JUMP_INIT                  = 0.42f;
+    static constexpr float GRAVITY_ACCEL              = 0.08f;
+    static constexpr float FALLING_DRAG               = 0.98f;
+
+
+
+
+    // Flying vertical acceleration (when in creative‐fly mode)
+    static constexpr float FLY_VERTICAL_ACCEL         = 0.4f;
+
+    // Respawn height if the player falls below y ≤ 0
+    static constexpr float RESPAWN_HEIGHT             = 300.0f;
 };
 
 #endif // PLAYER_H_INCLUDED
