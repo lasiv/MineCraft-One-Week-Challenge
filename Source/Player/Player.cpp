@@ -125,7 +125,8 @@ void Player::update(float dt, World &world)
 void Player::calculate(World &world) 
 {
     static float slip = DEFAULT_SLIPPERINESS;
-
+    static bool jump;
+    jump = false;
     // debug print accelleration and velocity
     // std::cout << "\033[2K\r" // Clear current line and return cursor to start
     // << std::fixed << std::setprecision(3)
@@ -144,6 +145,7 @@ void Player::calculate(World &world)
     if (m_isJumping && m_isOnGround && m_input.y != 1) m_isJumping = false;
     // enable jumping when on the ground, not flying and y input is up
     if (m_isOnGround && !m_isFlying && m_input.y == 1) {
+        jump = true;
         m_isJumping = true;
         m_isOnGround = false;
         velocity.y = JUMP_INIT;
@@ -157,6 +159,9 @@ void Player::calculate(World &world)
 
     float last_slip = slip;
     slip = DEFAULT_SLIPPERINESS; // put current block slipperiness here
+    if (!m_isOnGround) slip = AIR_SLIPPERINESS;
+    float cube_slip = cube(.6f/slip);
+    if (!m_isOnGround) cube_slip = 1.f;
     float accel = m_isJumping ? AIR_ACCEL_BASE : GROUND_ACCEL_BASE;
     float mov = MOVE_MULT_WALK;
     if (m_isSprinting) mov = MOVE_MULT_SPRINT;
@@ -166,15 +171,28 @@ void Player::calculate(World &world)
         if (m_isSneaking) mov_mult = DIR_MULT_SNEAK_45;
         else mov_mult = DIR_MULT_STRAFE_45;
     }
-    float boost = (m_isSprinting && m_isJumping) ? JUMP_SPRINT_BOOST : 0.f;
+    float boost = (m_isSprinting && jump) ? JUMP_SPRINT_BOOST : 0.f;
 
     float Ft_sin = glm::sin(glm::radians(rotation.y));
     float Ft_cos = glm::cos(glm::radians(rotation.y));
     float Dt_sin  = Ft_sin * m_input.x + Ft_cos * m_input.z;
     float Dt_cos  = Ft_sin * m_input.z - Ft_cos * m_input.x;
 
-    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + accel * mov * mov_mult * cube(.6f/slip) * Dt_sin /*+ boost * (-Ft_sin)*/;
-    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + accel * mov * mov_mult * cube(.6f/slip) * Dt_cos /*+ boost * (-Ft_cos)*/;
+    
+    float momentumx = velocity.x * last_slip * FRICTION_FACTOR;
+    if (abs(momentumx) < MOV_FILTER) momentumx = 0.f;
+    float momentumz = velocity.z * last_slip * FRICTION_FACTOR;
+    if (abs(momentumz) < MOV_FILTER) momentumz = 0.f;
+
+    float accellx = accel * mov * mov_mult * cube_slip * Dt_sin;
+    float accellz = accel * mov * mov_mult * cube_slip * Dt_cos;
+    
+    float boostx = boost * Ft_sin;
+    float boostz = boost * (-Ft_cos);
+    
+    
+    velocity.x = momentumx + accellx + boostx;
+    velocity.z = momentumz + accellz + boostz;
 
 
 

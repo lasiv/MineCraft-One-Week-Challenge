@@ -186,7 +186,8 @@ class Player : public Entity {
 
     static constexpr float TICK                       = 0.05f;
 
-    static constexpr float DEFAULT_SLIPPERINESS       = 1.0f;
+    static constexpr float DEFAULT_SLIPPERINESS       = 0.6f;
+    static constexpr float AIR_SLIPPERINESS           = 1.0f;
 
     static constexpr float MOVE_MULT_SPRINT           = 1.3f;
     static constexpr float MOVE_MULT_WALK             = 1.0f;
@@ -209,7 +210,7 @@ class Player : public Entity {
     static constexpr float GRAVITY_ACCEL              = 0.08f;
     static constexpr float FALLING_DRAG               = 0.98f;
 
-
+    static constexpr float MOV_FILTER                 = 0.005f;
 
 
     // Flying vertical acceleration (when in creative‐fly mode)
