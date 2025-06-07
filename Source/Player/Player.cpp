@@ -112,114 +112,97 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
  *       check accelleration based on different cases like falling and on ground etc
  */
 
-void Player::update(float dt, World &world)
-{
-    static float acc = 0;
-    acc += dt;
-    for (; acc > TICK; acc -= TICK ) {
+void Player::update(float dt, World &world) {
+    static float accumulator = 0.0f;
+    accumulator += dt;
+    while (accumulator > TICK) {
         calculate(world);
+        accumulator -= TICK;
     }
     box.update(position);
 }
 
-void Player::calculate(World &world) 
-{
-    static float slip = DEFAULT_SLIPPERINESS;
-    static bool jump;
-    jump = false;
-    // debug print accelleration and velocity
-    // std::cout << "\033[2K\r" // Clear current line and return cursor to start
-    // << std::fixed << std::setprecision(3)
-    // << "acc: (" << m_acceleration.x << ", " << m_acceleration.y << ", " << m_acceleration.z << ")  "
-    // << "vel: (" << velocity.x << ", " << velocity.y << ", " << velocity.z << ")"
-    // << std::flush;
+void Player::calculate(World &world) {
+    // --- Jump/Fly state transitions ---
+    bool justJumped = false;
 
-    // touch the ground while flying stops the flying
-    if (m_isOnGround && m_isFlying) m_isFlying = false;
-
-    // jumping
-
-    // disable jumping when touching beginning to fly
-    if (m_isJumping && m_isFlying) m_isJumping = false;
-    // disable jumping when touching the ground
-    if (m_isJumping && m_isOnGround && m_input.y != 1) m_isJumping = false;
-    // enable jumping when on the ground, not flying and y input is up
-    if (m_isOnGround && !m_isFlying && m_input.y == 1) {
-        jump = true;
-        m_isJumping = true;
-        m_isOnGround = false;
-        velocity.y = JUMP_INIT;
+    // Flying cancels when touching ground
+    if (m_isOnGround && m_isFlying) {
+        m_isFlying = false;
     }
-    // normally calculate gravity
-    else if (!m_isFlying){
+
+    // Cancel jump if we start flying or release jump input mid-air
+    if (m_isJumping && (m_isFlying || (m_isOnGround && m_input.y != 1))) {
+        m_isJumping = false;
+    }
+
+    // Initiate jump
+    if (m_isOnGround && !m_isFlying && m_input.y == 1) {
+        m_isJumping  = true;
+        m_isOnGround = false;
+        justJumped   = true;
+        velocity.y   = JUMP_INIT;
+    }
+    // Apply gravity when not flying
+    else if (!m_isFlying) {
         velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG;
     }
-    
-    // moving
 
-    float last_slip = slip;
-    slip = DEFAULT_SLIPPERINESS; // put current block slipperiness here
-    if (!m_isOnGround) slip = AIR_SLIPPERINESS;
-    float cube_slip = cube(.6f/slip);
-    if (!m_isOnGround) cube_slip = 1.f;
-    float accel = m_isJumping ? AIR_ACCEL_BASE : GROUND_ACCEL_BASE;
-    float mov = MOVE_MULT_WALK;
-    if (m_isSprinting) mov = MOVE_MULT_SPRINT;
-    else if (m_isSneaking) mov = MOVE_MULT_SNEAK;
-    float mov_mult = DIR_MULT_DEFAULT;
-    if (m_input.x && m_input.z) {
-        if (m_isSneaking) mov_mult = DIR_MULT_SNEAK_45;
-        else mov_mult = DIR_MULT_STRAFE_45;
-    }
-    float boost = (m_isSprinting && jump) ? JUMP_SPRINT_BOOST : 0.f;
+    // --- Horizontal movement parameters ---
+    const bool onGround = m_isOnGround;
+    const float slip       = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
+    const float friction   = slip * FRICTION_FACTOR;
+    const float accelBase  = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
 
-    float Ft_sin = glm::sin(glm::radians(rotation.y));
-    float Ft_cos = glm::cos(glm::radians(rotation.y));
-    float Dt_sin  = Ft_sin * m_input.x + Ft_cos * m_input.z;
-    float Dt_cos  = Ft_sin * m_input.z - Ft_cos * m_input.x;
+    // Movement multipliers
+    const float mov       = m_isSprinting ? MOVE_MULT_SPRINT
+                                : m_isSneaking ? MOVE_MULT_SNEAK
+                                               : MOVE_MULT_WALK;
+    const float movMult   = (m_input.x && m_input.z)
+                                ? (m_isSneaking ? DIR_MULT_SNEAK_45
+                                               : DIR_MULT_STRAFE_45)
+                                : DIR_MULT_DEFAULT;
+    const float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
 
-    
-    float momentumx = velocity.x * last_slip * FRICTION_FACTOR;
-    if (abs(momentumx) < MOV_FILTER) momentumx = 0.f;
-    float momentumz = velocity.z * last_slip * FRICTION_FACTOR;
-    if (abs(momentumz) < MOV_FILTER) momentumz = 0.f;
+    // Facing/input directions
+    const float yawRad  = glm::radians(rotation.y);
+    const float sinYaw  = glm::sin(yawRad);
+    const float cosYaw  = glm::cos(yawRad);
+    const float dtSin   = sinYaw * m_input.x + cosYaw * m_input.z;
+    const float dtCos   = sinYaw * m_input.z - cosYaw * m_input.x;
 
-    float accellx = accel * mov * mov_mult * cube_slip * Dt_sin;
-    float accellz = accel * mov * mov_mult * cube_slip * Dt_cos;
-    
-    float boostx = boost * Ft_sin;
-    float boostz = boost * (-Ft_cos);
-    
-    
-    velocity.x = momentumx + accellx + boostx;
-    velocity.z = momentumz + accellz + boostz;
+    // One-time sprint-jump boost
+    const float boostX  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * sinYaw : 0.0f;
+    const float boostZ  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * -cosYaw : 0.0f;
 
+    // Apply friction (momentum)
+    float momentumX = velocity.x * friction;
+    float momentumZ = velocity.z * friction;
+    if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
+    if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
 
+    // Compute acceleration contribution
+    const float accelFactor = accelBase * mov * movMult * slipCube;
+    const float accX        = accelFactor * dtSin;
+    const float accZ        = accelFactor * dtCos;
 
+    // Final horizontal velocity
+    velocity.x = momentumX + accX + boostX;
+    velocity.z = momentumZ + accZ + boostZ;
 
-
-    // velocity += m_acceleration;
-    // m_acceleration = {0, 0, 0};
-
-    // if (!m_isFlying) {
-        // if (!m_isOnGround) {
-            // velocity.y -= 40 * dt;
-        // }
-        // m_isOnGround = false;
-    // }
-
-    if (position.y <= 0 && !m_isFlying) {
+    // --- Position update and collision ---
+    if (position.y <= 0.0f && !m_isFlying) {
         position.y = RESPAWN_HEIGHT;
     }
 
     position.x += velocity.x;
-    collide(world, {velocity.x, 0, 0}, TICK);
+    collide(world, { velocity.x, 0.0f, 0.0f }, TICK);
 
     position.y += velocity.y;
-    collide(world, {0, velocity.y, 0}, TICK);
+    collide(world, { 0.0f, velocity.y, 0.0f }, TICK);
 
     position.z += velocity.z;
-    collide(world, {0, 0, velocity.z}, TICK);
+    collide(world, { 0.0f, 0.0f, velocity.z }, TICK);
 
     box.update(position);
 }
