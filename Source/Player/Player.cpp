@@ -113,16 +113,6 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
  */
 
 void Player::update(float dt, World &world) {
-    static float accumulator = 0.0f;
-    accumulator += dt;
-    while (accumulator > TICK) {
-        calculate(world);
-        accumulator -= TICK;
-    }
-    box.update(position);
-}
-
-void Player::calculate(World &world) {
     // --- Jump/Fly state transitions ---
     bool justJumped = false;
 
@@ -144,68 +134,70 @@ void Player::calculate(World &world) {
         velocity.y   = JUMP_INIT;
     }
     // Apply gravity when not flying
-    else if (!m_isFlying) {
-        velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG;
+    if (!m_isFlying) {
+        // per-tick constants
+        constexpr float a_v = FALLING_DRAG;            // 0.98
+        constexpr float b_v = -GRAVITY_ACCEL * FALLING_DRAG; // -0.08*0.98
+        // effective coefficients for dt
+        float d     = dt / TICK;
+        float a_eff = std::pow(a_v, d);
+        float b_eff = (b_v / (1 - a_v)) * (1 - a_eff);
+        velocity.y  = a_eff * velocity.y + b_eff;
     }
 
-    // --- Horizontal movement parameters ---
-    const bool onGround = m_isOnGround;
-    const float slip       = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
-    const float friction   = slip * FRICTION_FACTOR;
-    const float accelBase  = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
-
-    // Movement multipliers
-    const float mov       = m_isSprinting ? MOVE_MULT_SPRINT
-                                : m_isSneaking ? MOVE_MULT_SNEAK
-                                               : MOVE_MULT_WALK;
-    const float movMult   = (m_input.x && m_input.z)
-                                ? (m_isSneaking ? DIR_MULT_SNEAK_45
-                                               : DIR_MULT_STRAFE_45)
-                                : DIR_MULT_DEFAULT;
-    const float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
-
-    // Facing/input directions
-    const float yawRad  = glm::radians(rotation.y);
-    const float sinYaw  = glm::sin(yawRad);
-    const float cosYaw  = glm::cos(yawRad);
-    const float dtSin   = sinYaw * m_input.x + cosYaw * m_input.z;
-    const float dtCos   = sinYaw * m_input.z - cosYaw * m_input.x;
-
-    // One-time sprint-jump boost
-    const float boostX  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * sinYaw : 0.0f;
-    const float boostZ  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * -cosYaw : 0.0f;
-
-    // Apply friction (momentum)
-    float momentumX = velocity.x * friction;
-    float momentumZ = velocity.z * friction;
-    if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
-    if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
-
-    // Compute acceleration contribution
-    const float accelFactor = accelBase * mov * movMult * slipCube;
-    const float accX        = accelFactor * dtSin;
-    const float accZ        = accelFactor * dtCos;
-
-    // Final horizontal velocity
-    velocity.x = momentumX + accX + boostX;
-    velocity.z = momentumZ + accZ + boostZ;
-
-    // --- Position update and collision ---
-    if (position.y <= 0.0f && !m_isFlying) {
-        position.y = RESPAWN_HEIGHT;
+    // --- Horizontal parameters ---
+    bool onGround = m_isOnGround;
+    // friction multiplier a_h and accel per tick b_h depend on ground vs air
+    float slip = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
+    float a_h  = (onGround ? slip * FRICTION_FACTOR : FRICTION_FACTOR);
+    // total per-tick acceleration (b_h) along input
+    float accelBase = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
+    float mov       = m_isSprinting ? MOVE_MULT_SPRINT : m_isSneaking ? MOVE_MULT_SNEAK : MOVE_MULT_WALK;
+    float movMult   = (m_input.x && m_input.z)
+                        ? (m_isSneaking ? DIR_MULT_SNEAK_45 : DIR_MULT_STRAFE_45)
+                        : DIR_MULT_DEFAULT;
+    float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
+    // facing direction
+    float yawRad = glm::radians(rotation.y);
+    float sinYaw = glm::sin(yawRad), cosYaw = glm::cos(yawRad);
+    float dtSin  = sinYaw * m_input.x + cosYaw * m_input.z;
+    float dtCos  = sinYaw * m_input.z - cosYaw * m_input.x;
+    // per-tick horizontal acceleration vector
+    glm::vec2 b_tick( accelBase * mov * movMult * slipCube * dtSin,
+                      accelBase * mov * movMult * slipCube * dtCos );
+    // one-time jump boost (only if just pressed on this frame)
+    static bool wasJump = false;
+    bool justJumped = (!wasJump && m_input.y == 1 && onGround);
+    wasJump = m_input.y == 1 && onGround;
+    glm::vec2 boost(0.0f);
+    if (justJumped && m_isSprinting) {
+        boost = glm::vec2( JUMP_SPRINT_BOOST * sinYaw,
+                          JUMP_SPRINT_BOOST * -cosYaw );
+        velocity.y = JUMP_INIT; m_isOnGround = false; m_isJumping = true;
     }
+    
+    // effective horizontal coefficients for dt
+    float d_h    = dt / TICK;
+    float a_h_eff= std::pow(a_h, d_h);
+    float b_h_eff= (1 - a_h_eff) / (1 - a_h);
 
-    position.x += velocity.x;
-    collide(world, { velocity.x, 0.0f, 0.0f }, TICK);
+    // update horizontal velocity
+    glm::vec2 vel_xz{velocity.x, velocity.z};
+    vel_xz = a_h_eff * vel_xz + b_tick * b_h_eff + boost;
+    velocity.x = vel_xz.x;
+    velocity.z = vel_xz.y;
 
-    position.y += velocity.y;
-    collide(world, { 0.0f, velocity.y, 0.0f }, TICK);
-
-    position.z += velocity.z;
-    collide(world, { 0.0f, 0.0f, velocity.z }, TICK);
-
+    // --- Position update & collision ---
+    if (position.y <= 0.0f && !m_isFlying) position.y = RESPAWN_HEIGHT;
+    position.x += velocity.x * dt;
+    collide(world, {velocity.x * dt, 0, 0}, dt);
+    position.y += velocity.y * dt;
+    collide(world, {0, velocity.y * dt, 0}, dt);
+    position.z += velocity.z * dt;
+    collide(world, {0, 0, velocity.z * dt}, dt);
     box.update(position);
 }
+
 
 void Player::collide(World &world, const glm::vec3 &vel, float dt)
 {
