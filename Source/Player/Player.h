@@ -54,6 +54,17 @@ class Player : public Entity {
     void update(float dt, World &wolrd);
 
     /**
+     * @brief is called by update for tickbased movement
+     * 
+     * @param world The world object the player is in
+     * 
+     * @details
+     * This method is called once for every Tick length the accumulated delta 
+     * time in player update function is greater
+     */
+    void calculate(World &wolrd);
+
+    /**
      * @brief Handles collision detection and response with the world.
      * 
      * @param world The World object representing the game world.
@@ -172,6 +183,8 @@ class Player : public Entity {
     inline float abs(float x) const {
       return (x < 0.0f) ? x * -1.0f : x;
     }
+
+    static constexpr float TICK                       = 0.05f;
 
     static constexpr float DEFAULT_SLIPPERINESS       = 1.0f;
 

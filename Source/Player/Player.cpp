@@ -114,6 +114,16 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 
 void Player::update(float dt, World &world)
 {
+    static float acc = 0;
+    acc += dt;
+    for (; acc > TICK; acc -= TICK ) {
+        calculate(world);
+    }
+    box.update(position);
+}
+
+void Player::calculate(World &world) 
+{
     static float slip = DEFAULT_SLIPPERINESS;
 
     // debug print accelleration and velocity
@@ -163,8 +173,8 @@ void Player::update(float dt, World &world)
     float Dt_sin  = Ft_sin * m_input.x + Ft_cos * m_input.z;
     float Dt_cos  = Ft_sin * m_input.z - Ft_cos * m_input.x;
 
-    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + accel * mov * mov_mult /** cube(.6f/slip)*/ * Dt_sin /*+ boost * (-Ft_sin)*/;
-    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + accel * mov * mov_mult /** cube(.6f/slip)*/ * Dt_cos /*+ boost * (-Ft_cos)*/;
+    velocity.x = velocity.x * last_slip * FRICTION_FACTOR + accel * mov * mov_mult * cube(.6f/slip) * Dt_sin /*+ boost * (-Ft_sin)*/;
+    velocity.z = velocity.z * last_slip * FRICTION_FACTOR + accel * mov * mov_mult * cube(.6f/slip) * Dt_cos /*+ boost * (-Ft_cos)*/;
 
 
 
@@ -184,14 +194,14 @@ void Player::update(float dt, World &world)
         position.y = RESPAWN_HEIGHT;
     }
 
-    position.x += 20 * velocity.x * dt;
-    collide(world, {velocity.x, 0, 0}, dt);
+    position.x += velocity.x;
+    collide(world, {velocity.x, 0, 0}, TICK);
 
-    position.y += 20 * velocity.y * dt;
-    collide(world, {0, velocity.y, 0}, dt);
+    position.y += velocity.y;
+    collide(world, {0, velocity.y, 0}, TICK);
 
-    position.z += 20 * velocity.z * dt;
-    collide(world, {0, 0, velocity.z}, dt);
+    position.z += velocity.z;
+    collide(world, {0, 0, velocity.z}, TICK);
 
     box.update(position);
 }
