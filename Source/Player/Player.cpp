@@ -157,7 +157,7 @@ void Player::calculate(World &world)
 
     float last_slip = slip;
     slip = DEFAULT_SLIPPERINESS; // put current block slipperiness here
-    float accel = m_isJumping ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
+    float accel = m_isJumping ? AIR_ACCEL_BASE : GROUND_ACCEL_BASE;
     float mov = MOVE_MULT_WALK;
     if (m_isSprinting) mov = MOVE_MULT_SPRINT;
     else if (m_isSneaking) mov = MOVE_MULT_SNEAK;
