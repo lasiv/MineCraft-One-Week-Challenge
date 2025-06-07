@@ -151,7 +151,7 @@ void Player::calculate(World &world)
         velocity.y = JUMP_INIT;
     }
     // normally calculate gravity
-    else {
+    else if (!m_isFlying){
         velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG;
     }
     
