@@ -8,6 +8,7 @@
 #include "../Entity.h"
 #include "../Input/ToggleKey.h"
 #include "../Item/ItemStack.h"
+#include "../Inventory/inventory.h"
 
 class Keyboard;
 class World;
@@ -140,7 +141,7 @@ class Player : public Entity {
     bool m_isSneak = false;
 
     std::vector<ItemStack> m_items; // chnage to inventory
-    // Inventory m_inventory;
+    Inventory m_inventory;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
     int m_heldItem = 0;
