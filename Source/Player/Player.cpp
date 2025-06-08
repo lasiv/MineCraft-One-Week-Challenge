@@ -112,6 +112,22 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     if (m_num5.isKeyPressed()) {
         m_heldItem = 4;
     }
+    if (m_num6.isKeyPressed()) {
+        m_heldItem = 5;
+    }
+    if (m_num7.isKeyPressed()) {
+        m_heldItem = 6;
+    }
+    if (m_num8.isKeyPressed()) {
+        m_heldItem = 7;
+    }
+    if (m_num9.isKeyPressed()) {
+        m_heldItem = 8;
+    }
+
+    if (m_inv.isKeyPressed()) {
+        m_inventory.toggleVisibility();
+    }
 
     if (m_slow.isKeyPressed())
     {
