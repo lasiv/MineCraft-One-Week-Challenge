@@ -108,12 +108,6 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 }
 
-/**
- * @todo fix accelleration feeling floaty
- *       multiply damping and m_acceleration by accelleration constant to keep max speed
- *       check accelleration based on different cases like falling and on ground etc
- */
-
 void Player::update(float dt, World &world) {
     static float alpha = 0.0f;
     float last_alpha = alpha;
