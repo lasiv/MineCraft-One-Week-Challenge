@@ -67,7 +67,7 @@ void Player::addItem(const Material &material)
         }
     }
 
-    // inventory.addItem(material) with check if stack has size of 64 (limit)
+    // inventory.addItem(material)
 }
 
 ItemStack &Player::getHeldItems()
