@@ -1,38 +1,39 @@
 #ifndef INVENTORY_H_INCLUDED
 #define INVENTORY_H_INCLUDED
 
+#define MAX_INV_SLOTS 27
+
 #include <SFML/Graphics.hpp>
+#include <Item/ItemStack.h>
 #include <vector>
 
 class RenderMaster;
 
-class InvMainWindow
+class Inventory
 {
     public:
 
-        InvMainWindow();
+        Inventory();
 
-        ~InvMainWindow();
+        ~Inventory();
 
         void draw(RenderMaster &renderer);
 
     private:
-        u_int m_height;
-        u_int m_width;
-        u_int m_posx;
-        u_int m_posy;
 
-        std::vector<InvFrame> m_frames;
+        std::vector<InvSlot> m_slots;
+        u_int8_t m_maxslots = MAX_INV_SLOTS;
+
+        bool m_showInventory = false;
 };
 
-class InvFrame
+class InvSlot
 {
+    public:
 
-};
-
-class InvItem
-{
-
+    private:
+    
+        ItemStack m_items;
 };
 
 #endif // INVENTORY_H_INCLUDED
