@@ -23,31 +23,16 @@ class Inventory
 
         void mouseInput();
 
+        void addItem();
+
         void toggleVisibility();
 
     private:
 
-        std::vector<InvSlot> m_slots;
+        std::vector<ItemStack> m_slots;
         u_int8_t m_maxslots = MAX_INV_SLOTS;
 
         bool m_showInventory = false;
-};
-
-class InvSlot
-{
-    public:
-
-        InvSlot();
-
-        /* ~InvSlot(); */
-
-        void addItem(const Material &material);
-
-        void removeItem();
-
-    private:
-
-        ItemStack m_items;
 };
 
 #endif // INVENTORY_H_INCLUDED
