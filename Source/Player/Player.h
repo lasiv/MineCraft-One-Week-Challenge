@@ -77,7 +77,7 @@ class Player : public Entity {
      * If the item already exists, it increments the quantity.
      * If the inventory is full, it does nothing.
      */
-    void addItem(const Material &material);
+    void addItem(const Material &material); // should be handled in Inventory class
 
     /**
      * @brief Draws the player and its items to the screen.
@@ -139,10 +139,12 @@ class Player : public Entity {
     bool m_isFlying = false;
     bool m_isSneak = false;
 
-    std::vector<ItemStack> m_items;
+    std::vector<ItemStack> m_items; // chnage to inventory
+    // Inventory m_inventory;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
-    int m_heldItem = 0;
+    int m_heldItem = 0; // change to currentslot
+    //int m_itemSlot = 0;
 
     ToggleKey m_itemDown;
     ToggleKey m_itemUp;
@@ -153,6 +155,10 @@ class Player : public Entity {
     ToggleKey m_num3;
     ToggleKey m_num4;
     ToggleKey m_num5;
+    ToggleKey m_num6;
+    ToggleKey m_num7;
+    ToggleKey m_num8;
+    ToggleKey m_num9;
 
     ToggleKey m_slow;
 

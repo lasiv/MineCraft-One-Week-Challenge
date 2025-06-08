@@ -22,6 +22,10 @@ Player::Player()
     , m_num3(sf::Keyboard::Num3)
     , m_num4(sf::Keyboard::Num4)
     , m_num5(sf::Keyboard::Num5)
+    , m_num6(sf::Keyboard::Num6)
+    , m_num7(sf::Keyboard::Num7)
+    , m_num8(sf::Keyboard::Num8)
+    , m_num9(sf::Keyboard::Num9)
     , m_slow(sf::Keyboard::LShift)
     , m_acceleration(glm::vec3(0.f))
 
@@ -105,6 +109,7 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     if (m_num5.isKeyPressed()) {
         m_heldItem = 4;
     }
+
     if (m_slow.isKeyPressed())
     {
         m_isSneak = !m_isSneak;
