@@ -43,6 +43,8 @@ Player::Player()
     m_posPrint.setOutlineColor(sf::Color::Black);
     m_posPrint.setCharacterSize(25);
     m_posPrint.setPosition(20.0f, 20.0f * 6.0f + 100.0f);
+
+    m_nextPosition = position;
 }
 
 void Player::addItem(const Material &material)
@@ -113,6 +115,23 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
  */
 
 void Player::update(float dt, World &world) {
+    static float alpha = 0.0f;
+    float last_alpha = alpha;
+    alpha += dt / TICK;
+
+    for (; alpha > 1.f; alpha--) {
+        last_alpha = 0.f;
+        calculate(world);
+    }
+
+    float k = (alpha - last_alpha)/(1.f - last_alpha);
+
+    position += (m_nextPosition - position) * k;
+
+    box.update(position);
+}
+
+void Player::calculate(World &world) {
     // --- Jump/Fly state transitions ---
     bool justJumped = false;
 
@@ -121,116 +140,121 @@ void Player::update(float dt, World &world) {
         m_isFlying = false;
     }
 
-    // Cancel jump if we start flying or release jump input mid-air
-    if (m_isJumping && (m_isFlying || (m_isOnGround && m_input.y != 1))) {
-        m_isJumping = false;
+    if (m_isFlying) {
+        velocity.y = velocity.y * DEFAULT_SLIPPERINESS * FRICTION_FACTOR + m_input.y * GROUND_ACCEL_BASE;
+    }
+    else {
+        // Initiate jump
+        if (m_isOnGround && m_input.y == 1) {
+            m_isOnGround = false;
+            justJumped   = true;
+            velocity.y   = JUMP_INIT;
+        }
+        // Apply gravity when not flying
+        else {
+            velocity.y = (velocity.y - GRAVITY_ACCEL) * FALLING_DRAG;
+        }
     }
 
-    // Initiate jump
-    if (m_isOnGround && !m_isFlying && m_input.y == 1) {
-        m_isJumping  = true;
-        m_isOnGround = false;
-        justJumped   = true;
-        velocity.y   = JUMP_INIT;
-    }
-    // Apply gravity when not flying
-    if (!m_isFlying) {
-        // per-tick constants
-        constexpr float a_v = FALLING_DRAG;            // 0.98
-        constexpr float b_v = -GRAVITY_ACCEL * FALLING_DRAG; // -0.08*0.98
-        // effective coefficients for dt
-        float d     = dt / TICK;
-        float a_eff = std::pow(a_v, d);
-        float b_eff = (b_v / (1 - a_v)) * (1 - a_eff);
-        velocity.y  = a_eff * velocity.y + b_eff;
+    // --- Horizontal movement parameters ---
+    const bool onGround = m_isOnGround;
+    const float slip       = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
+    const float friction   = slip * FRICTION_FACTOR;
+    const float accelBase  = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
+
+    // Movement multipliers
+    const float mov       = m_isSprinting ? MOVE_MULT_SPRINT
+                                : m_isSneaking ? MOVE_MULT_SNEAK
+                                               : MOVE_MULT_WALK;
+    const float movMult   = (m_input.x && m_input.z)
+                                ? (m_isSneaking ? DIR_MULT_SNEAK_45
+                                               : DIR_MULT_STRAFE_45)
+                                : DIR_MULT_DEFAULT;
+    const float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
+
+    // Facing/input directions
+    const float yawRad  = glm::radians(rotation.y);
+    const float sinYaw  = glm::sin(yawRad);
+    const float cosYaw  = glm::cos(yawRad);
+    const float dtSin   = sinYaw * m_input.x + cosYaw * m_input.z;
+    const float dtCos   = sinYaw * m_input.z - cosYaw * m_input.x;
+
+    // One-time sprint-jump boost
+    const float boostX  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * sinYaw : 0.0f;
+    const float boostZ  = (justJumped && m_isSprinting) ? JUMP_SPRINT_BOOST * -cosYaw : 0.0f;
+
+    // Apply friction (momentum)
+    float momentumX = velocity.x * friction;
+    float momentumZ = velocity.z * friction;
+    if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
+    if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
+
+    // Compute acceleration contribution
+    const float accelFactor = accelBase * mov * movMult * slipCube;
+    const float accX        = accelFactor * dtSin;
+    const float accZ        = accelFactor * dtCos;
+
+    // Final horizontal velocity
+    velocity.x = momentumX + accX + boostX;
+    velocity.z = momentumZ + accZ + boostZ;
+
+    // --- Position update and collision ---
+    if (m_nextPosition.y <= 0.0f && !m_isFlying) {
+        m_nextPosition.y = RESPAWN_HEIGHT;
     }
 
-    // --- Horizontal parameters ---
-    bool onGround = m_isOnGround;
-    // friction multiplier a_h and accel per tick b_h depend on ground vs air
-    float slip = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
-    float a_h  = (onGround ? slip * FRICTION_FACTOR : FRICTION_FACTOR);
-    // total per-tick acceleration (b_h) along input
-    float accelBase = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
-    float mov       = m_isSprinting ? MOVE_MULT_SPRINT : m_isSneaking ? MOVE_MULT_SNEAK : MOVE_MULT_WALK;
-    float movMult   = (m_input.x && m_input.z)
-                        ? (m_isSneaking ? DIR_MULT_SNEAK_45 : DIR_MULT_STRAFE_45)
-                        : DIR_MULT_DEFAULT;
-    float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
-    // facing direction
-    float yawRad = glm::radians(rotation.y);
-    float sinYaw = glm::sin(yawRad), cosYaw = glm::cos(yawRad);
-    float dtSin  = sinYaw * m_input.x + cosYaw * m_input.z;
-    float dtCos  = sinYaw * m_input.z - cosYaw * m_input.x;
-    // per-tick horizontal acceleration vector
-    glm::vec2 b_tick( accelBase * mov * movMult * slipCube * dtSin,
-                      accelBase * mov * movMult * slipCube * dtCos );
-    // one-time jump boost (only if just pressed on this frame)
-    static bool wasJump = false;
-    bool justJumped = (!wasJump && m_input.y == 1 && onGround);
-    wasJump = m_input.y == 1 && onGround;
-    glm::vec2 boost(0.0f);
-    if (justJumped && m_isSprinting) {
-        boost = glm::vec2( JUMP_SPRINT_BOOST * sinYaw,
-                          JUMP_SPRINT_BOOST * -cosYaw );
-        velocity.y = JUMP_INIT; m_isOnGround = false; m_isJumping = true;
-    }
-    
-    // effective horizontal coefficients for dt
-    float d_h    = dt / TICK;
-    float a_h_eff= std::pow(a_h, d_h);
-    float b_h_eff= (1 - a_h_eff) / (1 - a_h);
+    m_isOnGround = false;
 
-    // update horizontal velocity
-    glm::vec2 vel_xz{velocity.x, velocity.z};
-    vel_xz = a_h_eff * vel_xz + b_tick * b_h_eff + boost;
-    velocity.x = vel_xz.x;
-    velocity.z = vel_xz.y;
+    m_nextPosition.x += velocity.x;
+    collide(world, { velocity.x, 0.0f, 0.0f }, TICK);
 
-    // --- Position update & collision ---
-    if (position.y <= 0.0f && !m_isFlying) position.y = RESPAWN_HEIGHT;
-    position.x += velocity.x * dt;
-    collide(world, {velocity.x * dt, 0, 0}, dt);
-    position.y += velocity.y * dt;
-    collide(world, {0, velocity.y * dt, 0}, dt);
-    position.z += velocity.z * dt;
-    collide(world, {0, 0, velocity.z * dt}, dt);
-    box.update(position);
+    m_nextPosition.y += velocity.y;
+    collide(world, { 0.0f, velocity.y, 0.0f }, TICK);
+
+    m_nextPosition.z += velocity.z;
+    collide(world, { 0.0f, 0.0f, velocity.z }, TICK);
+
+    // float horizontalSpeed = glm::length(glm::vec2(velocity.x, velocity.z));
+    // std::cout << "[Debug] Horizontal speed = "
+    //       << horizontalSpeed / TICK
+    //       << " units/s\n"
+    //       << std::flush;
 }
-
 
 void Player::collide(World &world, const glm::vec3 &vel, float dt)
 {
-    for (int x = position.x - box.dimensions.x;
-         x < position.x + box.dimensions.x; x++)
-        for (int y = position.y - box.dimensions.y; y < position.y + 0.7; y++)
-            for (int z = position.z - box.dimensions.z;
-                 z < position.z + box.dimensions.z; z++) {
+    for (int x = m_nextPosition.x - box.dimensions.x; x < m_nextPosition.x + box.dimensions.x; x++)
+        for (int y = m_nextPosition.y - box.dimensions.y; y < m_nextPosition.y + 0.7; y++)
+            for (int z = m_nextPosition.z - box.dimensions.z; z < m_nextPosition.z + box.dimensions.z; z++) {
                 auto block = world.getBlock(x, y, z);
 
                 if (block != 0 && block.getData().isCollidable) {
                     if (vel.y > 0) {
-                        position.y = y - box.dimensions.y;
+                        m_nextPosition.y = y - box.dimensions.y;
                         velocity.y = 0;
                     }
                     else if (vel.y < 0) {
                         m_isOnGround = true;
-                        position.y = y + box.dimensions.y + 1;
+                        m_nextPosition.y = y + box.dimensions.y + 1;
                         velocity.y = 0;
                     }
 
                     if (vel.x > 0) {
-                        position.x = x - box.dimensions.x;
+                        m_nextPosition.x = x - box.dimensions.x;
+                        velocity.x = 0;
                     }
                     else if (vel.x < 0) {
-                        position.x = x + box.dimensions.x + 1;
+                        m_nextPosition.x = x + box.dimensions.x + 1;
+                        velocity.x = 0;
                     }
 
                     if (vel.z > 0) {
-                        position.z = z - box.dimensions.z;
+                        m_nextPosition.z = z - box.dimensions.z;
+                        velocity.z = 0;
                     }
                     else if (vel.z < 0) {
-                        position.z = z + box.dimensions.z + 1;
+                        m_nextPosition.z = z + box.dimensions.z + 1;
+                        velocity.z = 0;
                     }
                 }
             }
@@ -247,11 +271,11 @@ void Player::keyboardInput(Keyboard &keyboard)
     bool ctrl = keyboard.isKeyDown(sf::Keyboard::LControl);
 
     m_input.x = w - s;
-    m_input.y = (m_isOnGround ? space : false) - (m_isFlying ? shift : false);
+    m_input.y = space - shift;
     m_input.z = d - a;
 
-    m_isSneaking = shift;
-    m_isSprinting = ctrl && !shift ;
+    m_isSneaking = !m_isFlying && shift;
+    m_isSprinting = ctrl && !m_isSneaking ;
 }
 
 /// @todo add sensitivity and mouselock key to config
@@ -314,17 +338,3 @@ void Player::draw(RenderMaster &master)
 
     m_posPrint.setString(stream.str());
 }
-
-// void Player::jump()
-// {
-//     if (!m_isFlying) {
-//         if (m_isOnGround) {
-
-//             m_isOnGround = false;
-//             m_acceleration.y += speed * 50;
-//         }
-//     }
-//     else {
-//         m_acceleration.y += speed * 3;
-//     }
-// }

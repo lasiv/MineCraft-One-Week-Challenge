@@ -53,16 +53,7 @@ class Player : public Entity {
      */
     void update(float dt, World &wolrd);
 
-    /**
-     * @brief is called by update for tickbased movement
-     * 
-     * @param world The world object the player is in
-     * 
-     * @details
-     * This method is called once for every Tick length the accumulated delta 
-     * time in player update function is greater
-     */
-    void calculate(World &wolrd);
+    
 
     /**
      * @brief Handles collision detection and response with the world.
@@ -116,13 +107,15 @@ class Player : public Entity {
   private:
 
     /**
-     * @brief Handles player jumping.
+     * @brief is called by update for tickbased movement
+     * 
+     * @param world The world object the player is in
      * 
      * @details
-     * Initiates a jump action for the player.
-     * This method is called when the jump key is pressed.
+     * This method is called once for every Tick length the accumulated delta 
+     * time in player update function is greater
      */
-    void jump();
+    void calculate(World &wolrd);
 
     /**
      * @brief Handles keyboard input for player movement and actions.
@@ -146,11 +139,13 @@ class Player : public Entity {
      * The mouse input is only processed if the useMouse flag is set to true.
      */
     void mouseInput(const sf::Window &window);
+
+    glm::vec3 m_nextPosition;
+
     bool m_isOnGround = false;
     bool m_isFlying = false;
     bool m_isSneaking = false;
     bool m_isSprinting = false;
-    bool m_isJumping = false;
     bool m_canSprint = true;
 
     std::vector<ItemStack> m_items;
