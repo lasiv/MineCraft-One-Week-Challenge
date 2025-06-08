@@ -1,6 +1,8 @@
 #ifndef ITEMSTACK_H_INCLUDED
 #define ITEMSTACK_H_INCLUDED
 
+#define MAX_STACK_SIZE 64
+
 #include "Material.h"
 
 /**
