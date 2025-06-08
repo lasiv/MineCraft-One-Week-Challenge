@@ -8,7 +8,7 @@
 #include "../Entity.h"
 #include "../Input/ToggleKey.h"
 #include "../Item/ItemStack.h"
-#include "../Inventory/inventory.h"
+#include "../Inventory/Inventory.h"
 
 class Keyboard;
 class World;
