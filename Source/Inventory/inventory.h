@@ -2,7 +2,6 @@
 #define INVENTORY_H_INCLUDED
 
 #define MAX_INV_SLOTS 36
-#define MAX_STACK_SIZE 64
 
 #include <SFML/Graphics.hpp>
 #include <Item/ItemStack.h>
@@ -16,11 +15,15 @@ class Inventory
 
         Inventory();
 
-        ~Inventory();
+        /* ~Inventory(); */
 
         void draw(RenderMaster &renderer);
 
-        void changeVisibility();
+        void update();
+
+        void mouseInput();
+
+        void toggleVisibility();
 
     private:
 
@@ -36,15 +39,15 @@ class InvSlot
 
         InvSlot();
 
-        ~InvSlot();
+        /* ~InvSlot(); */
 
         void addItem(const Material &material);
+
+        void removeItem();
 
     private:
 
         ItemStack m_items;
-
-        u_int m_maxStack = MAX_STACK_SIZE;
 };
 
 #endif // INVENTORY_H_INCLUDED
