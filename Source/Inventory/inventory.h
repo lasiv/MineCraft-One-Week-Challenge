@@ -1,7 +1,7 @@
 #ifndef INVENTORY_H_INCLUDED
 #define INVENTORY_H_INCLUDED
 
-#define MAX_INV_SLOTS 27
+#define MAX_INV_SLOTS 36
 
 #include <SFML/Graphics.hpp>
 #include <Item/ItemStack.h>
@@ -32,7 +32,7 @@ class InvSlot
     public:
 
     private:
-    
+
         ItemStack m_items;
 };
 
