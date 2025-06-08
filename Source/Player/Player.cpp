@@ -26,6 +26,7 @@ Player::Player()
     , m_num7(sf::Keyboard::Num7)
     , m_num8(sf::Keyboard::Num8)
     , m_num9(sf::Keyboard::Num9)
+    , m_inv(sf::Keyboard::I)
     , m_slow(sf::Keyboard::LShift)
     , m_acceleration(glm::vec3(0.f))
 
@@ -34,7 +35,7 @@ Player::Player()
 
     for (int i = 0; i < 5; i++) {
         m_items.emplace_back(Material::NOTHING, 0);
-    }
+    } // should just create an inventory object
 
     for (float i = 0; i < 5; i++) {
         sf::Text t;

@@ -143,8 +143,7 @@ class Player : public Entity {
     // Inventory m_inventory;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
-    int m_heldItem = 0; // change to currentslot
-    //int m_itemSlot = 0;
+    int m_heldItem = 0;
 
     ToggleKey m_itemDown;
     ToggleKey m_itemUp;
@@ -159,6 +158,8 @@ class Player : public Entity {
     ToggleKey m_num7;
     ToggleKey m_num8;
     ToggleKey m_num9;
+
+    ToggleKey m_inv;
 
     ToggleKey m_slow;
 
