@@ -29,6 +29,8 @@ class Inventory
 
         ItemStack &getItemOfSlot(int slotNum);
 
+        ItemStack &getFirstFreeSlot();
+
     private:
 
         std::vector<ItemStack> m_slots;

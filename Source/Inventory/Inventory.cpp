@@ -2,8 +2,6 @@
 
 #include "../Item/Material.h"
 
-// implementations for Inventory class
-
 Inventory::Inventory()
 {
     for (unsigned int i = 0; i < MAX_INV_SLOTS; i++)
@@ -11,11 +9,6 @@ Inventory::Inventory()
         m_slots[i] = ItemStack(Material::NOTHING, 1);
     }
 }
-
-/* Inventory::~Inventory()
-{
-
-} */
 
 void Inventory::draw(RenderMaster &renderer)
 {
@@ -35,19 +28,29 @@ void Inventory::mouseInput()
 void Inventory::addItem(const Material &material)
 {
     Material::ID id = material.id;
+    int leftOver;
 
-    for (unsigned i = 0; i < m_slots.size(); i++) 
+    for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
     {
         if (m_slots[i].getMaterial().id == id) 
         {
-            /*int leftOver =*/m_slots[i].add(1);
-
-            return;
+            leftOver = m_slots[i].add(1);
         }
-        else if (m_slots[i].getMaterial().id == Material::ID::Nothing) 
+        if (leftOver)
         {
-            m_slots[i] = {material, 1};
-            return;
+            getFirstFreeSlot() = {material, 1};
+        }
+        return;
+    }
+}
+
+ItemStack &Inventory::getFirstFreeSlot()
+{
+    for (unsigned i = 0; i < MAX_INV_SLOTS; i++)
+    {
+        if (m_slots[i].getMaterial().id == Material::ID::Nothing)
+        {
+            return m_slots[i];
         }
     }
 }
