@@ -197,16 +197,29 @@ void Player::calculate(World &world) {
         m_nextPosition.y = RESPAWN_HEIGHT;
     }
 
+    bool wasOnGround = m_isOnGround;
     m_isOnGround = false;
 
-    m_nextPosition.x += velocity.x;
-    collide(world, { velocity.x, 0.0f, 0.0f }, TICK);
-
+    auto testPosition = position;
+    testPosition.x += velocity.x;
+    testPosition.y -= 0.5f;
+    bool stopx = isFalling(world, testPosition, {0.f, velocity.y, 0.f}) && m_isSneaking && wasOnGround != m_isOnGround;
+    if (stopx) std::cout << "stopx" << std::flush;
+    
+    testPosition = position;
+    testPosition.z += velocity.z;
+    testPosition.y -= 0.5f;
+    bool stopz = isFalling(world, testPosition, {0.f, velocity.y, 0.f}) && m_isSneaking && wasOnGround != m_isOnGround;
+    if (stopz) std::cout << "stopz" << std::flush;
+    
+    if (!stopx) m_nextPosition.x += velocity.x;
+    collide(world, { velocity.x, 0.0f, 0.0f });
+    
+    if (!stopz) m_nextPosition.z += velocity.z;
+    collide(world, { 0.0f, 0.0f, velocity.z });
+    
     m_nextPosition.y += velocity.y;
-    collide(world, { 0.0f, velocity.y, 0.0f }, TICK);
-
-    m_nextPosition.z += velocity.z;
-    collide(world, { 0.0f, 0.0f, velocity.z }, TICK);
+    collide(world, { 0.0f, velocity.y, 0.0f });
 
     // float horizontalSpeed = glm::length(glm::vec2(velocity.x, velocity.z));
     // std::cout << "[Debug] Horizontal speed = "
@@ -215,41 +228,72 @@ void Player::calculate(World &world) {
     //       << std::flush;
 }
 
-void Player::collide(World &world, const glm::vec3 &vel, float dt)
+bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::vec3 &vel) const {
+    // 1) If we’re not moving downward, we’re not falling
+    if (vel.y >= 0.0f)
+        return false;
+
+    // 2) Which block‐row would we hit first when falling?
+    int faceY = int(std::floor(testPosition.y - box.dimensions.y));
+
+    // 3) Compute X/Z span of the player’s feet at testPosition
+    int minX = int(std::floor(testPosition.x - box.dimensions.x));
+    int maxX = int(std::floor(testPosition.x + box.dimensions.x));
+    int minZ = int(std::floor(testPosition.z - box.dimensions.z));
+    int maxZ = int(std::floor(testPosition.z + box.dimensions.z));
+
+    // 4) If any block directly under foot is solid, we’re supported → not falling
+    for (int x = minX; x <= maxX; ++x) {
+        for (int z = minZ; z <= maxZ; ++z) {
+            auto block = world.getBlock(x, faceY, z);
+            if (block != 0 && block.getData().isCollidable) {
+                return false;  // found support
+            }
+        }
+    }
+
+    // 5) No support found → we are falling
+    return true;
+}
+
+
+
+void Player::collide(World &world, const glm::vec3 &vel)
 {
+    if (glm::abs(vel.x) == 0.0f && glm::abs(vel.z) == 0.0f && std::abs(vel.y) == 0.0f) return;
     for (int x = m_nextPosition.x - box.dimensions.x; x < m_nextPosition.x + box.dimensions.x; x++)
         for (int y = m_nextPosition.y - box.dimensions.y; y < m_nextPosition.y + 0.7; y++)
             for (int z = m_nextPosition.z - box.dimensions.z; z < m_nextPosition.z + box.dimensions.z; z++) {
                 auto block = world.getBlock(x, y, z);
 
-                if (block != 0 && block.getData().isCollidable) {
-                    if (vel.y > 0) {
-                        m_nextPosition.y = y - box.dimensions.y;
-                        velocity.y = 0;
-                    }
-                    else if (vel.y < 0) {
-                        m_isOnGround = true;
-                        m_nextPosition.y = y + box.dimensions.y + 1;
-                        velocity.y = 0;
-                    }
+                if (block == 0 || !block.getData().isCollidable) continue;
 
-                    if (vel.x > 0) {
-                        m_nextPosition.x = x - box.dimensions.x;
-                        velocity.x = 0;
-                    }
-                    else if (vel.x < 0) {
-                        m_nextPosition.x = x + box.dimensions.x + 1;
-                        velocity.x = 0;
-                    }
+                if (vel.y > 0) {
+                    m_nextPosition.y = y - box.dimensions.y;
+                    velocity.y = 0;
+                }
+                else if (vel.y < 0) {
+                    m_isOnGround = true;
+                    m_nextPosition.y = y + box.dimensions.y + 1;
+                    velocity.y = 0;
+                }
 
-                    if (vel.z > 0) {
-                        m_nextPosition.z = z - box.dimensions.z;
-                        velocity.z = 0;
-                    }
-                    else if (vel.z < 0) {
-                        m_nextPosition.z = z + box.dimensions.z + 1;
-                        velocity.z = 0;
-                    }
+                if (vel.x > 0) {
+                    m_nextPosition.x = x - box.dimensions.x;
+                    velocity.x = 0;
+                }
+                else if (vel.x < 0) {
+                    m_nextPosition.x = x + box.dimensions.x + 1;
+                    velocity.x = 0;
+                }
+
+                if (vel.z > 0) {
+                    m_nextPosition.z = z - box.dimensions.z;
+                    velocity.z = 0;
+                }
+                else if (vel.z < 0) {
+                    m_nextPosition.z = z + box.dimensions.z + 1;
+                    velocity.z = 0;
                 }
             }
 }
@@ -265,7 +309,7 @@ void Player::keyboardInput(Keyboard &keyboard)
     bool ctrl = keyboard.isKeyDown(sf::Keyboard::LControl);
 
     m_input.x = w - s;
-    m_input.y = space - shift;
+    m_input.y = space - (m_isFlying && shift);
     m_input.z = d - a;
 
     m_isSneaking = !m_isFlying && shift;

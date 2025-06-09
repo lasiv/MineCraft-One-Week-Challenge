@@ -67,7 +67,7 @@ class Player : public Entity {
      * This method is called during the update phase to ensure the player does not pass through blocks.
      * It also handles the player's flying state.
      */
-    void collide(World &world, const glm::vec3 &vel, float dt);
+    void collide(World &world, const glm::vec3 &vel);
 
     /**
      * @brief Adds an item to the player's inventory.
@@ -116,6 +116,8 @@ class Player : public Entity {
      * time in player update function is greater
      */
     void calculate(World &wolrd);
+
+    bool isFalling(World& world, const glm::vec3& testPosition, const glm::vec3& vel) const;
 
     /**
      * @brief Handles keyboard input for player movement and actions.
@@ -175,10 +177,6 @@ class Player : public Entity {
       return x * x * x;
     }
 
-    inline float abs(float x) const {
-      return (x < 0.0f) ? x * -1.0f : x;
-    }
-
     static constexpr float TICK                       = 0.05f;
 
     static constexpr float DEFAULT_SLIPPERINESS       = 0.6f;
@@ -204,8 +202,6 @@ class Player : public Entity {
     static constexpr float JUMP_INIT                  = 0.42f;
     static constexpr float GRAVITY_ACCEL              = 0.08f;
     static constexpr float FALLING_DRAG               = 0.98f;
-
-    static constexpr float MOV_FILTER                 = 0.005f;
 
 
     // Flying vertical acceleration (when in creative‐fly mode)
