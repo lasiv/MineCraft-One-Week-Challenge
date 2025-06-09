@@ -53,20 +53,6 @@ Player::Player()
 
 void Player::addItem(const Material &material)
 {
-    /* Material::ID id = material.id;
-
-    for (unsigned i = 0; i < m_items.size(); i++) {
-        if (m_items[i].getMaterial().id == id) {
-            m_items[i].add(1);
-
-            return;
-        }
-        else if (m_items[i].getMaterial().id == Material::ID::Nothing) {
-            m_items[i] = {material, 1};
-            return;
-        }
-    } */
-
     m_inventory.addItem(material);
 }
 
