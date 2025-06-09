@@ -23,14 +23,15 @@ class Inventory
 
         void mouseInput();
 
-        void addItem();
+        void addItem(const Material &material_id);
 
         void toggleVisibility();
+
+        ItemStack &getItemOfSlot(int slotNum);
 
     private:
 
         std::vector<ItemStack> m_slots;
-        u_int8_t m_maxslots = MAX_INV_SLOTS;
 
         bool m_showInventory = false;
 };

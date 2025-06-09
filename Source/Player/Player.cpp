@@ -53,11 +53,11 @@ Player::Player()
 
 void Player::addItem(const Material &material)
 {
-    Material::ID id = material.id;
+    /* Material::ID id = material.id;
 
     for (unsigned i = 0; i < m_items.size(); i++) {
         if (m_items[i].getMaterial().id == id) {
-            /*int leftOver =*/m_items[i].add(1);
+            m_items[i].add(1);
 
             return;
         }
@@ -65,14 +65,14 @@ void Player::addItem(const Material &material)
             m_items[i] = {material, 1};
             return;
         }
-    }
+    } */
 
-    // inventory.addItem(material)
+    m_inventory.addItem(material);
 }
 
 ItemStack &Player::getHeldItems()
 {
-    return m_items[m_heldItem];
+    return m_inventory.getItemOfSlot(m_heldItem);
 }
 
 void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
