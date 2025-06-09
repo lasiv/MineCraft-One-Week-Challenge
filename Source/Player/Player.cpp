@@ -180,8 +180,8 @@ void Player::calculate(World &world) {
     // Apply friction (momentum)
     float momentumX = velocity.x * friction;
     float momentumZ = velocity.z * friction;
-    if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
-    if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
+    // if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
+    // if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
 
     // Compute acceleration contribution
     const float accelFactor = accelBase * mov * movMult * slipCube;
