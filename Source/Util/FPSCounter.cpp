@@ -41,7 +41,10 @@ void FPSCounter::update()
     }
 }
 
-void FPSCounter::draw(RenderMaster &renderer)
+void FPSCounter::draw(sf::RenderWindow &window)
 {
     m_text.setString("FPS: " + std::to_string(m_fps));
+    window.pushGLStates();
+    window.draw(m_text);
+    window.popGLStates();
 }
