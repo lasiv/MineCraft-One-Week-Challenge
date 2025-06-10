@@ -85,8 +85,8 @@ void StatePlay::render(RenderMaster &renderer)
     }
 
     if (drawGUI) {
-        m_fpsCounter.draw(renderer);
-        m_player.draw(renderer);
+        m_fpsCounter.draw(m_pApplication->getWindow());
+        //m_player.draw(renderer);
     }
 
     m_world.renderWorld(renderer, m_pApplication->getCamera());
