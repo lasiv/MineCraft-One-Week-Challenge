@@ -4,10 +4,7 @@
 
 Inventory::Inventory()
 {
-    for (unsigned i = 0; i < MAX_INV_SLOTS; i++)
-    {
-        m_slots[i] = ItemStack(Material::NOTHING, 0);
-    }
+    m_slots = std::vector<ItemStack>(MAX_INV_SLOTS, ItemStack(Material::NOTHING, 0));
 }
 
 void Inventory::draw(RenderMaster &renderer)
@@ -28,7 +25,7 @@ void Inventory::mouseInput()
 void Inventory::addItem(const Material &material)
 {
     Material::ID id = material.id;
-    int leftOver;
+    int leftOver = 0;
 
     for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
     {
@@ -36,33 +33,37 @@ void Inventory::addItem(const Material &material)
         {
             leftOver = m_slots[i].add(1);
         }
-        if (leftOver)
+        if (leftOver && getFirstFreeSlotNum() != -1)
         {
-            getFirstFreeSlot() = {material, 1};
+            m_slots[getFirstFreeSlotNum()] = {material, 1};
         }
         return;
     }
 }
 
-ItemStack &Inventory::getFirstFreeSlot()
+int Inventory::getFirstFreeSlotNum()
 {
     for (unsigned i = 0; i < MAX_INV_SLOTS; i++)
     {
         if (m_slots[i].getMaterial().id == Material::ID::Nothing)
         {
-            return m_slots[i];
+            return i;
         }
     }
+    return -1;
 }
 
-std::vector<ItemStack> &Inventory::getSlots()
+std::vector<ItemStack>& Inventory::getSlots()
 {
     return m_slots;
 }
 
-ItemStack &Inventory::getItemOfSlot(int slotNum)
+ItemStack& Inventory::getItemOfSlot(int slotNum)
 {
-    return m_slots[slotNum];
+    if (slotNum >= 0 && slotNum < MAX_INV_SLOTS)
+    {
+        return m_slots[slotNum];
+    }
 }
 
 void Inventory::toggleVisibility()

@@ -58,7 +58,10 @@ void Player::addItem(const Material &material)
 
 ItemStack &Player::getHeldItems()
 {
-    return m_inventory.getItemOfSlot(m_heldItem);
+    if (m_heldItem >= 0 && m_heldItem < MAX_HOTBAR_SLOTS)
+    {
+        return m_inventory.getItemOfSlot(m_heldItem);
+    }
 }
 
 void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
@@ -283,7 +286,7 @@ void Player::mouseInput(const sf::Window &window)
 
 void Player::draw(RenderMaster &master)
 {
-    for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
+    for (unsigned i = 0; i < m_inventory.getSlots().size(); i++) 
     {
         sf::Text &t = m_itemText[i];
         if (i == (unsigned)m_heldItem) 

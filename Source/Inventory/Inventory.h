@@ -48,11 +48,11 @@ class Inventory
 
         void toggleVisibility();
 
-        ItemStack &getItemOfSlot(int slotNum);
+        ItemStack& getItemOfSlot(int slotNum);
 
-        ItemStack &getFirstFreeSlot();
+        int getFirstFreeSlotNum();
 
-        std::vector<ItemStack> &getSlots();
+        std::vector<ItemStack>& getSlots();
 
     private:
 
