@@ -33,9 +33,9 @@ Player::Player()
 {
     f.loadFromFile("Res/Fonts/rs.ttf");
 
-    for (int i = 0; i < 5; i++) {
+    /* for (int i = 0; i < 5; i++) {
         m_items.emplace_back(Material::NOTHING, 0);
-    } // should just create an inventory object
+    }  */// should just create an inventory object
 
     for (float i = 0; i < 5; i++) {
         sf::Text t;
@@ -68,14 +68,14 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 
     if (m_itemDown.isKeyPressed()) {
         m_heldItem++;
-        if (m_heldItem == (int)m_items.size()) {
+        if (m_heldItem == (int)MAX_HOTBAR_SLOTS) {
             m_heldItem = 0;
         }
     }
     else if (m_itemUp.isKeyPressed()) {
         m_heldItem--;
         if (m_heldItem == -1) {
-            m_heldItem = m_items.size() - 1;
+            m_heldItem = MAX_HOTBAR_SLOTS - 1;
         }
     }
 
@@ -283,16 +283,19 @@ void Player::mouseInput(const sf::Window &window)
 
 void Player::draw(RenderMaster &master)
 {
-    for (unsigned i = 0; i < m_items.size(); i++) {
+    for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
+    {
         sf::Text &t = m_itemText[i];
-        if (i == (unsigned)m_heldItem) {
+        if (i == (unsigned)m_heldItem) 
+        {
             t.setFillColor(sf::Color::Red);
         }
-        else {
+        else 
+        {
             t.setFillColor(sf::Color::White);
         }
-        t.setString((m_items[i].getMaterial().name) + " " +
-                    std::to_string(m_items[i].getNumInStack()) + " ");
+        t.setString((m_inventory.getItemOfSlot(i).getMaterial().name) + " " +
+                    std::to_string(m_inventory.getItemOfSlot(i).getNumInStack()) + " ");
         // master.drawSFML(t);
     }
     std::ostringstream stream;

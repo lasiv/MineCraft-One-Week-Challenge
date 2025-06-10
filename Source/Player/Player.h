@@ -140,7 +140,7 @@ class Player : public Entity {
     bool m_isFlying = false;
     bool m_isSneak = false;
 
-    std::vector<ItemStack> m_items; // chnage to inventory
+    // std::vector<ItemStack> m_items;
     Inventory m_inventory;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
