@@ -56,7 +56,7 @@ void Player::addItem(const Material &material)
     m_inventory.addItem(material);
 }
 
-ItemStack &Player::getHeldItems()
+ItemStack& Player::getHeldItems()
 {
     if (m_heldItem >= 0 && m_heldItem < MAX_HOTBAR_SLOTS)
     {

@@ -101,7 +101,7 @@ class Player : public Entity {
      * This method provides access to the item that the player is currently holding.
      * It can be used to interact with the world or perform actions.
      */
-    ItemStack &getHeldItems();
+    ItemStack& getHeldItems();
 
   private:
 
