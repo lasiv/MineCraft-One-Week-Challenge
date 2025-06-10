@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Window/Window.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Config.h"
 
@@ -23,5 +24,6 @@ struct Context {
      */
     Context(const Config &config);
 
-    sf::Window window;
+    //sf::Window window;
+    sf::RenderWindow window;
 };
