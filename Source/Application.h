@@ -89,7 +89,7 @@ class Application {
     /**
      * @brief Returns the context window object.
      */
-    const sf::Window &getWindow() const
+    sf::RenderWindow &getWindow()
     {
         return m_context.window;
     }
