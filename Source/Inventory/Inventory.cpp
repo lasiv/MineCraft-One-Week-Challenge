@@ -4,9 +4,9 @@
 
 Inventory::Inventory()
 {
-    for (unsigned int i = 0; i < MAX_INV_SLOTS; i++)
+    for (unsigned i = 0; i < MAX_INV_SLOTS; i++)
     {
-        m_slots[i] = ItemStack(Material::NOTHING, 1);
+        m_slots[i] = ItemStack(Material::NOTHING, 0);
     }
 }
 
@@ -53,6 +53,11 @@ ItemStack &Inventory::getFirstFreeSlot()
             return m_slots[i];
         }
     }
+}
+
+std::vector<ItemStack> &Inventory::getSlots()
+{
+    return m_slots;
 }
 
 ItemStack &Inventory::getItemOfSlot(int slotNum)
