@@ -4,7 +4,7 @@
 #define MAX_INV_SLOTS 36
 
 #include <SFML/Graphics.hpp>
-#include <Item/ItemStack.h>
+#include "../Item/ItemStack.h"
 #include <vector>
 
 class RenderMaster;

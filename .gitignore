@@ -39,5 +39,7 @@ config.txt
 class_diagram/
 
 CMakeFiles/
+CMakeLists.txt
+CMakeCache.txt
 
 models/scripts/out/
