@@ -22,7 +22,6 @@ Player::Player()
     , m_num3(sf::Keyboard::Num3)
     , m_num4(sf::Keyboard::Num4)
     , m_num5(sf::Keyboard::Num5)
-    , m_acceleration(glm::vec3(0.f))
 
 {
     f.loadFromFile("Res/Fonts/rs.ttf");
@@ -43,8 +42,6 @@ Player::Player()
     m_posPrint.setOutlineColor(sf::Color::Black);
     m_posPrint.setCharacterSize(25);
     m_posPrint.setPosition(20.0f, 20.0f * 6.0f + 100.0f);
-
-    m_nextPosition = position;
 }
 
 void Player::addItem(const Material &material)
@@ -67,6 +64,11 @@ void Player::addItem(const Material &material)
 ItemStack &Player::getHeldItems()
 {
     return m_items[m_heldItem];
+}
+
+void Player::setPosition(glm::vec3 pos) {
+    position = pos;
+    m_nextPosition = pos;
 }
 
 void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
@@ -180,8 +182,6 @@ void Player::calculate(World &world) {
     // Apply friction (momentum)
     float momentumX = velocity.x * friction;
     float momentumZ = velocity.z * friction;
-    // if (std::abs(momentumX) < MOV_FILTER) momentumX = 0.0f;
-    // if (std::abs(momentumZ) < MOV_FILTER) momentumZ = 0.0f;
 
     // Compute acceleration contribution
     const float accelFactor = accelBase * mov * movMult * slipCube;
@@ -221,14 +221,38 @@ void Player::calculate(World &world) {
     m_nextPosition.y += velocity.y;
     collide(world, { 0.0f, velocity.y, 0.0f });
 
-    // float horizontalSpeed = glm::length(glm::vec2(velocity.x, velocity.z));
-    // std::cout << "[Debug] Horizontal speed = "
-    //       << horizontalSpeed / TICK
-    //       << " units/s\n"
-    //       << std::flush;
+    printdebug();
 }
 
-bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::vec3 &vel) const {
+void Player::printdebug() const
+{
+    // compute horizontal speed and clamp to 2 decimals
+    float hSpeed = glm::length(glm::vec2(velocity.x, velocity.z)) / TICK;
+
+    // "\033[2K" = ANSI “erase entire line”, then '\r' returns to start
+    std::cout << "\033[2K\r"
+                << std::fixed << std::setprecision(2)
+                << "Pos(" 
+                << position.x << ", "
+                << position.y << ", "
+                << position.z << ")  "
+                << "Rot("
+                << rotation.x << ", "
+                << rotation.y << ", "
+                << rotation.z << ")  "
+                << "Vel("
+                << velocity.x << ", "
+                << velocity.y << ", "
+                << velocity.z << ")  "
+                << "HS=" << hSpeed << "  "
+                << "In("
+                << m_input.x << ", "
+                << m_input.y << ", "
+                << m_input.z << ")"
+                << std::flush;
+}
+
+bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::vec3 &vel) const{
     // 1) If we’re not moving downward, we’re not falling
     if (vel.y >= 0.0f)
         return false;
@@ -256,7 +280,13 @@ bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::v
     return true;
 }
 
+bool Player::nextBlockAir(World &world, const glm::vec3 &vel) {
+    
+    int y = (int) (position.y - box.dimensions.x);
 
+    //
+    return true;
+}
 
 void Player::collide(World &world, const glm::vec3 &vel)
 {

@@ -15,7 +15,7 @@ World::World(const Camera &camera, const Config &config, Player &player)
     , m_renderDistance(config.renderDistance)
 {
     setSpawnPoint();
-    player.position = m_playerSpawnPoint;
+    player.setPosition(m_playerSpawnPoint);
 
     for (int i = 0; i < 1; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));

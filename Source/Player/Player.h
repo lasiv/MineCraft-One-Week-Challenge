@@ -9,6 +9,8 @@
 #include "../Input/ToggleKey.h"
 #include "../Item/ItemStack.h"
 
+#include <iostream>
+
 class Keyboard;
 class World;
 class RenderMaster;
@@ -53,19 +55,19 @@ class Player : public Entity {
      */
     void update(float dt, World &wolrd);
 
-    
+    bool nextBlockAir(World& world, const glm::vec3& vel);
 
     /**
      * @brief Handles collision detection and response with the world.
-     * 
+     *
      * @param world The World object representing the game world.
      * @param vel The velocity vector of the player.
      * @param dt The time elapsed since the last update (in seconds).
-     * 
+     *
      * @details
      * Checks for collisions with blocks in the world and adjusts the player's position accordingly.
-     * This method is called during the update phase to ensure the player does not pass through blocks.
-     * It also handles the player's flying state.
+     * This method is called during the update phase to ensure the player does not pass through
+     * blocks. It also handles the player's flying state.
      */
     void collide(World &world, const glm::vec3 &vel);
 
@@ -104,7 +106,13 @@ class Player : public Entity {
      */
     ItemStack &getHeldItems();
 
+    void setPosition(glm::vec3 pos);
+
   private:
+
+    // in Player.cpp
+    void printdebug() const;
+
 
     /**
      * @brief is called by update for tickbased movement
@@ -150,6 +158,9 @@ class Player : public Entity {
     bool m_isSprinting = false;
     bool m_canSprint = true;
 
+    bool m_isBlockingx = false;
+    bool m_isBlockingy = false;
+
     std::vector<ItemStack> m_items;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
@@ -164,8 +175,6 @@ class Player : public Entity {
     ToggleKey m_num3;
     ToggleKey m_num4;
     ToggleKey m_num5;
-
-    glm::vec3 m_acceleration;
 
     struct input{
       int x;
@@ -197,7 +206,7 @@ class Player : public Entity {
 
     static constexpr float GROUND_ACCEL_BASE          = 0.1f;
     static constexpr float AIR_ACCEL_BASE             = 0.02f;
-    static constexpr float JUMP_SPRINT_BOOST          = 0.2f;
+    static constexpr float JUMP_SPRINT_BOOST          = 0.064f; // originally .2, but this feels right
 
     static constexpr float JUMP_INIT                  = 0.42f;
     static constexpr float GRAVITY_ACCEL              = 0.08f;
