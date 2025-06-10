@@ -59,7 +59,7 @@ void RenderMaster::drawSky()
  * This method clears the screen, enables depth testing and face culling,
  * and renders the chunk, water, flora, and skybox (if applicable).
  */
-void RenderMaster::finishRender(sf::Window &window, const Camera &camera)
+void RenderMaster::finishRender(sf::RenderWindow &window, const Camera &camera)
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
