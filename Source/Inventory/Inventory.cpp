@@ -32,12 +32,16 @@ void Inventory::addItem(const Material &material)
         if (m_slots[i].getMaterial().id == id) 
         {
             leftOver = m_slots[i].add(1);
+            if (leftOver == 0)
+            {
+                return;
+            }
         }
-        if (leftOver && getFirstFreeSlotNum() != -1)
-        {
-            m_slots[getFirstFreeSlotNum()] = {material, 1};
-        }
-        return;
+    }
+    int firstFree = getFirstFreeSlotNum();
+    if (leftOver && firstFree != -1)
+    {
+        m_slots[firstFree] = {material, 1};
     }
 }
 
