@@ -27,7 +27,7 @@ void Inventory::addItem(const Material &material)
     Material::ID id = material.id;
     int leftOver = 0;
 
-    for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
+    for (unsigned i = 0; i < getSlots().size(); i++) 
     {
         if (m_slots[i].getMaterial().id == id) 
         {
