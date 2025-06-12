@@ -76,5 +76,12 @@ void RenderMaster::finishRender(sf::RenderWindow &window, const Camera &camera)
         m_drawBox = false;
     }
 
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+
+    window.pushGLStates();
     window.display();
+    window.popGLStates();
 }
