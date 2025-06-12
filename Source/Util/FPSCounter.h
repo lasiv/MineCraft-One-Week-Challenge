@@ -45,7 +45,7 @@ class FPSCounter {
     void draw(sf::RenderWindow &window);
 
   private:
-    bool enabled = false;
+    bool enabled = true;
     bool debugging;
 
     sf::Text m_text;

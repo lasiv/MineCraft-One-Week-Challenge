@@ -10,12 +10,16 @@ FPSCounter::FPSCounter()
     enabled = true;
     debugging = false;
 
-    // m_text.setPosition(sf::Vector2f(10.f,10.f));
+    m_text.setPosition(sf::Vector2f(10.f,10.f));
     m_text.move(10, 10);
     m_text.setOutlineColor(sf::Color::Black);
     m_text.setOutlineThickness(2);
 
-    m_font.loadFromFile("Res/Fonts/rs.ttf");
+    if (!m_font.loadFromFile("Res/Fonts/rs.ttf")) 
+    {
+        std::cerr << "FEHLER: Font konnte nicht geladen werden!\n";
+    }
+
     m_text.setFont(m_font);
     m_text.setCharacterSize(25);
 }
@@ -43,8 +47,10 @@ void FPSCounter::update()
 
 void FPSCounter::draw(sf::RenderWindow &window)
 {
-    m_text.setString("FPS: " + std::to_string(m_fps));
+    std::cout << "FPSCounter::draw called, fps: " << m_fps << "\n";
+    m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
     window.pushGLStates();
+    window.resetGLStates();
     window.draw(m_text);
     window.popGLStates();
 }

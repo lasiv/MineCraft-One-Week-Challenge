@@ -82,14 +82,15 @@ void StatePlay::render(RenderMaster &renderer)
 
     if (drawKey.isKeyPressed()) {
         drawGUI = !drawGUI;
+        std::cout << "drawGUI toggled: " << drawGUI << "\n";
     }
+
+    m_world.renderWorld(renderer, m_pApplication->getCamera());
 
     if (drawGUI) {
         m_fpsCounter.draw(m_pApplication->getWindow());
         //m_player.draw(renderer);
     }
-
-    m_world.renderWorld(renderer, m_pApplication->getCamera());
 }
 
 void StatePlay::onOpen()
