@@ -155,11 +155,11 @@ Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die �
 
 Die ausgewählte Software ist ein Projekt eines YouTubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
 
-Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, und zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Grö\ss{}en, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Da dieses simple Projekt noch keine Benutzeroberfläche, wie z.B. ein Pause-Menü bietet, werden weiter Funktionen implementiert, um die Eingaben der Maus im Spiel zu Blockieren.
+Eben diese Eigenschaften wurden aufgegriffen und in einer einfachen C++ Umgebung mithilfe von OpenGL nachgeahmt. Der Spieler wird auch hier in eine generierte offene Welt gesetzt und kann sich darin frei bewegen und erkunden. Dem Spieler ist es dabei möglich, in alle Richtungen zu laufen, über Hindernisse zu springen, zu sprinten und zu schleichen. Die Welt in der sich der Spieler bewegt, generiert auch einige Gewässer verschiedener Grö\ss{}en, in dieser Instanz des Spiels ist es dem Spieler aber nicht möglich darin zu schwimmen. Nun kann der Spieler diese Welt auch nach belieben verändern. Weniger komplex als im Basis Spiel, kann der Spieler ohne Bedingungen jeden Block aufnehmen und woanders wieder platzieren. Es wurden zusätzliche Funktionen implementiert, z.B. den Mauszeiger zu eizufangen und freizugeben, da das Projekt keine Benutzeroberfläche implementiert.
 
-Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller einer Art Value-Noise. Damit soll die Generierung des Geländes natürlicher wirken. Zudem gibt es verschiedene Biome in der Welt, die ebenso zufällig verstreut sind und mit sich verschiedene Strukturen von Vegetation und unterschiedliche Arten von Blöcken mitbringen. So gibt es zum Beispiel Wüsten, in denen Kakteen wachsen oder Wälder in denen Bäume stehen.
+Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller einer Art Value-Noise. Damit soll die Generierung des Geländes natürlicher wirken. Zudem gibt es verschiedene Biome in der Welt, die ebenso zufällig verstreut sind und verschiedene Strukturen von Vegetation und unterschiedliche Arten von Blöcken generieren. So gibt es zum Beispiel Wüsten, in denen Kakteen wachsen oder Wälder, in denen Bäume stehen.
 
-In dieser Kopie des Spiels sind einige Haupt Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten wie die Monster und Tiere im Basis Spiel. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
+In dieser Kopie des Spiels sind einige Haupt-Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten in dem Klon, wie die Monster und Tiere die es im Basis Spiel gibt. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
@@ -190,12 +190,12 @@ Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sic
 
 \newpage
 
-\subsubsection*{Physikalische Rahmenbedingungen der Spielfigur}
+\subsubsection*{Physikalische Rahmenbedingungen der Spielfigur} (ändern)
 
 Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das zwischen horizontaler und vertikaler Bewegung sowie zwischen Flug- und Bodenmodus unterscheidet. Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf Basis folgender Prinzipien berechnet:
 
 \begin{itemize}
-  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewandt, die die Geschwindigkeit über die Zeit exponentiell reduziert.
+  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten (W/A/S/D) erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewandt, die die Geschwindigkeit über die Zeit exponentiell reduziert.
 
   \item \textbf{Vertikale Bewegung:}  Diese unterscheidet sich je nach Modus: im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
 
@@ -226,11 +226,11 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[1.] Spieler drückt Bewegungstaste (W/A/S/D)
   \item[1a.] Spieler tätigt keine Eingabe
   \item[1a.1.] Wiederhole Schritt 1
-  \item[1\opt b.] Spieler drückt zusätzlich Sprinttaste (Strg)
+  \item[1\opt b.] Spieler drückt zusätzlich Sprinttaste (Strg):
   \item[1\opt b.1.] Spiel erhöht Geschwindigkeit der Spielfigur
-  \item[1\opt c.] Spieler drückt zusätzlich Schleichtaste (Shift)
-  \item[1\opt c.1.] Spiel verringert Geschwindigkeit der Spielfigur
-  \item[1\opt c.1a.] Spielfigur ist im Flugmodus
+  \item[1\opt c.] Spieler drückt zusätzlich Schleichtaste (Shift):
+  \item[1\opt c.1.] Spiel verringert horizontale Geschwindigkeit der Spielfigur
+  \item[1\opt c.1a.] Spielfigur ist im Flugmodus:
   \item[1\opt c.1a.1.] Spielfigur bekommt Geschwindigkeit nach unten
   \item[2.] Spiel berechnet neue Position der Spielfigur
   \item[3.] Spiel aktualisiert Position der Spielfigur
@@ -254,11 +254,12 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spieler drückt Sprungtaste (Leertaste)
   \item[2.] Spiel validiert, dass Spieler springen kann
-  \item[2a.] Spielfigur hat keinen Bodenkontakt
+  
+  \item[2a.] Spielfigur hat keinen Bodenkontakt:
   \item[2a.1.] UseCase endet erfolglos
-  \item[2b.] Spielfigur ist im Flugmodus
-  \item[2b.1.] Solange Springtaste gedrückt ist, erhält die Spielfigur Bewegung nach oben
-  \item[2b.2.] Der Use Case endet erfolgreich, sobald die Taste losgelassen wird
+  \item[2a.1.\opt a.] Spielfigur ist im Flugmodus:
+  \item[2a.1.\opt a.1.] Solange Springtaste gedrückt ist, erhält die Spielfigur Bewegung nach oben
+  \item[2a.1.\opt a.2.] Der Use Case endet erfolgreich, sobald die Taste losgelassen wird
   \item[3.] Spiel löst Sprungbewegung der Spielfigur aus
   \item[4.] UseCase endet erfolgreich
 \end{description}
@@ -285,11 +286,11 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
 
 \newpage
 
-\subsubsection*{UC04 – Maussteuerung deaktivieren}
+\subsubsection*{UC04 – Maussteuerung umschalten}
 
-\textbf{Name:} Maussteuerung deaktivieren \\
+\textbf{Name:} Maussteuerung umschalten \\
 \textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) \\
+\textbf{Ziel:} Spielsteuerung temporär deaktivieren (z.B. für Fensterwechsel) oder wieder aktivieren\\
 \textbf{Vorbedingungen:} Spielsteuerung ist aktiv \\
 \textbf{Nachbedingungen:} Mauszeiger ist sichtbar, Steuerung pausiert \\
 \textbf{Beschreibung:} Mit einer Taste kann der Spieler zwischen Maussteuerung und normaler Cursorbewegung wechseln.
@@ -300,9 +301,9 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[2.] Spiel schaltet Mauszeiger frei
   \item[2a.] Mauszeiger ist bereits freigeschaltet
   \item[2a.1.] Spiel fängt den Mauszeiger ein
-  \item[2a.2.] Spiel aktiviert Kamerasteuerung
-  \item[2a.3.] UseCase endet erfolglos
-  \item[3.] Spiel deaktiviert Kamerasteuerung
+  \item[2a.2.] Spiel aktiviert Mausbewegung zur  Kamerasteuerung
+  \item[2a.3.] UseCase endet erfolgreich
+  \item[3.] Spiel deaktiviert Mausbewegung zur Kamerasteuerung
   \item[4.] UseCase endet erfolgreich
 \end{description}
 
@@ -327,7 +328,7 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[4.] Spiel fügt den Block dem Inventar der Spielfigur hinzu
   \item[4a.] Das Inventar der Spielfigur ist voll
   \item[4a.1.] Spiel fügt den Block nicht dem inventar der Spielfigur hinzu
-  \item[4a.2.] UseCase endet erfolglos 
+  \item[4a.2.] UseCase endet erfolgreich 
   \item[5.] UseCase endet erfolgreich
 \end{description}
 
@@ -348,11 +349,12 @@ Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das
   \item[2.] Spiel validiert, dass der Block platziert werden kann
   \item[2a.] Es ist keine valide Oberfläche im Sichtfeld
   \item[2a.1.] UseCase endet erfolglos
-  \item[3.] Spiel platziert Block an ausgewählter Stelle
+  \item[3.] Spiel validiert, dass Spielfigur einen Block im Inventar hat
   \item[3a.] Spielerfigur hat keinen platzierbaren Block im Inventar
   \item[3a.1.] UseCase endet erfolglos
-  \item[4.] Spiel entfernt Block aus dem Inventar
-  \item[5.] UseCase endet erfolgreich
+  \item[4.] Spiel platziert Block an ausgewählter Stelle
+  \item[5.] Spiel entfernt Block aus dem Inventar
+  \item[6.] UseCase endet erfolgreich
 \end{description}
 
 \subsubsection*{Spiel Verlassen}
@@ -427,7 +429,7 @@ Es ist zu sehen, wie sich die Spielfigur in einer Welt aus Blöcken befindet und
 
 \section{Meilenstein 2} \label{sec:ms2}
 
-In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projektes zu Beschreiben. Hier ebenfalls wieder in Modell- und Textform. 
+In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projektes zu beschreiben. Hier ebenfalls wieder in Modell- und Textform. 
 
 \subsection{Designmodell} \label{subsec:design}
 
@@ -465,11 +467,11 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 \umlinherit[name=Relation0,geometry=--,anchor1=71.6,anchor2=-90.0]{UMLClass0}{UMLClass1}
 \umlcompo[name=Relation1,geometry=--,anchor1=-4.1,anchor2=-175.9]{UMLClass1}{UMLClass2}
 \umlcompo[name=Relation2,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass0}{UMLClass3}
-\umlcompo[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
-\umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
+\umlassoc[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
+\umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={1},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
 \end{gfx}
 
-Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil mit der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
+Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \FloatBarrier
 \subsubsection*{World}

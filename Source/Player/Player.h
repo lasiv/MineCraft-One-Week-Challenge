@@ -8,6 +8,7 @@
 #include "../Entity.h"
 #include "../Input/ToggleKey.h"
 #include "../Item/ItemStack.h"
+#include "../World/World.h"
 
 #include <iostream>
 
@@ -71,6 +72,8 @@ class Player : public Entity {
      */
     void collide(World &world, const glm::vec3 &vel);
 
+    void new_collide(World &world, const glm::vec3 &vel);
+
     /**
      * @brief Adds an item to the player's inventory.
      * 
@@ -110,8 +113,10 @@ class Player : public Entity {
 
   private:
 
+    struct LocalAABB;
+
     // in Player.cpp
-    void printdebug() const;
+    void printdebug(World &world) const;
 
 
     /**
@@ -123,7 +128,7 @@ class Player : public Entity {
      * This method is called once for every Tick length the accumulated delta 
      * time in player update function is greater
      */
-    void calculate(World &wolrd);
+    void calculate(World &world);
 
     bool isFalling(World& world, const glm::vec3& testPosition, const glm::vec3& vel) const;
 
@@ -152,6 +157,115 @@ class Player : public Entity {
 
     glm::vec3 m_nextPosition;
 
+    struct LocalAABB {
+        glm::vec3 min;
+        glm::vec3 max;
+        glm::vec3 center;
+        ChunkBlock blocks[2][4][2] = {0};
+        glm::ivec3 coords[2][4][2];
+
+        LocalAABB(const glm::vec3 &position, const AABB box) {
+            center = position;
+            min = center - box.dimensions;
+            max = center + box.dimensions;
+        }
+
+        void move(const glm::vec3 &delta) {
+            center += delta;
+            min += delta;
+            max += delta;
+        }
+
+        void movex(const float delta) {
+            move({delta,0.f,0.f});
+        }
+
+        void movey(const float delta) {
+            move({0.f,delta,0.f});
+        }
+
+        void movez(const float delta) {
+            move({0.f,0.f,delta});
+        }
+
+        void set(const glm::vec3 &location) {
+            move(location - center);
+        }
+
+        void setx(const float location) {
+            movex(location - center.x);
+        }
+
+        void sety(const float location) {
+            movey(location - center.y);
+        }
+
+        void setz(const float location) {
+            movez(location - center.z);
+        }
+
+        void setMin(const glm::vec3 &location) {
+            move(location - min);
+        }
+
+        void setMax(const glm::vec3 &location) {
+            move(location - max);
+        }
+
+        void setMinX(float x) { 
+            movex(x - min.x); 
+        }
+        void setMinY(float y) { 
+            movey(y - min.y); 
+        }
+        void setMinZ(float z) { 
+            movez(z - min.z); 
+        }
+
+        void setMaxX(float x) { 
+            movex(x - max.x); 
+        }
+        void setMaxY(float y) { 
+            movey(y - max.y); 
+        }
+        void setMaxZ(float z) { 
+            movez(z - max.z); 
+        }
+
+        void getBlocks(World &world) {
+            int xs[2] = {
+                int(std::floor(min.x)),
+                int(std::floor(max.x))
+            };
+
+            int ys[4] = {
+                int(std::floor(min.y)) - 1,
+                int(std::floor(min.y)),
+                int(std::floor(min.y)) + 1,
+                int(std::floor(max.y))
+            };
+
+            int zs[2] = {
+                int(std::floor(min.z)),
+                int(std::floor(max.z))
+            };
+
+            for (int xi = 0; xi < 2; ++xi) {
+                for (int yi = 0; yi < 4; ++yi) {
+                    for (int zi = 0; zi < 2; ++zi) {
+                        int bx = xs[xi];
+                        int by = ys[yi];
+                        int bz = zs[zi];
+
+                        blocks[xi][yi][zi] = world.getBlock(bx, by, bz);
+                        coords[xi][yi][zi] = glm::ivec3(bx, by, bz);
+                    }
+                }
+            }
+        }
+    
+    };
+
     bool m_isOnGround = false;
     bool m_isFlying = false;
     bool m_isSneaking = false;
@@ -160,6 +274,8 @@ class Player : public Entity {
 
     bool m_isBlockingx = false;
     bool m_isBlockingy = false;
+
+    bool m_debugBlock = false;
 
     std::vector<ItemStack> m_items;
     std::vector<sf::Text> m_itemText;
@@ -208,8 +324,8 @@ class Player : public Entity {
     static constexpr float AIR_ACCEL_BASE             = 0.02f;
     static constexpr float JUMP_SPRINT_BOOST          = 0.064f; // originally .2, but this feels right
 
-    static constexpr float JUMP_INIT                  = 0.42f;
-    static constexpr float GRAVITY_ACCEL              = 0.08f;
+    static constexpr float JUMP_INIT                  = 0.5f;
+    static constexpr float GRAVITY_ACCEL              = 0.1f;
     static constexpr float FALLING_DRAG               = 0.98f;
 
 

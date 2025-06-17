@@ -13,7 +13,7 @@
 sf::Font f;
 
 Player::Player()
-    : Entity({2500, 125, 2500}, {0.f, 0.f, 0.f}, {0.3f, 1.f, 0.3f})
+    : Entity({2500, 125, 2500}, {0.f, 0.f, 0.f}, {0.3f, 0.9f, 0.3f}) // collision will break when aabb box vertical dimension bigger 1.f
     , m_itemDown(sf::Keyboard::Down)
     , m_itemUp(sf::Keyboard::Up)
     , m_flyKey(sf::Keyboard::F)
@@ -66,6 +66,48 @@ ItemStack &Player::getHeldItems()
     return m_items[m_heldItem];
 }
 
+void Player::printdebug(World &world) const
+{
+    // compute horizontal speed and clamp to 2 decimals
+    float hSpeed = glm::length(glm::vec2(velocity.x, velocity.z)) / TICK;
+
+    // "\033[2K" = ANSI “erase entire line”, then '\r' returns to start
+    std::cout << "\033[2K\r"
+                << std::fixed << std::setprecision(2)
+                << "Pos(" 
+                << position.x << ", "
+                << position.y << ", "
+                << position.z << ")  "
+                << "Rot("
+                << rotation.x << ", "
+                << rotation.y << ", "
+                << rotation.z << ")  "
+                << "Vel("
+                << velocity.x << ", "
+                << velocity.y << ", "
+                << velocity.z << ")  "
+                << "HS=" << hSpeed << "  "
+                << "In("
+                << m_input.x << ", "
+                << m_input.y << ", "
+                << m_input.z << ")"
+                << std::flush;
+    
+    // 2) sample the block at the player's feet
+    int bx = int(std::floor(position.x - .5f)) + 1 ;
+    int by = int(std::floor(position.y + box.dimensions.y)); 
+    int bz = int(std::floor(position.z - .5f));
+
+    // world.updateChunk(bx, by, bz);
+    // world.setBlock(bx, by, bz, 7);
+
+    // auto block = world.getBlock(bx, by, bz);
+    // int blockID = block.id;  // your ChunkBlock.id member
+
+    // std::cout << "BlockID=" << blockID
+    //           << std::flush;
+}
+
 void Player::setPosition(glm::vec3 pos) {
     position = pos;
     m_nextPosition = pos;
@@ -94,7 +136,7 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 
     if (m_num1.isKeyPressed()) {
-        m_heldItem = 0;
+        m_debugBlock = true;
     }
     if (m_num2.isKeyPressed()) {
         m_heldItem = 1;
@@ -110,7 +152,42 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 }
 
+// known problems: linear interpolation between ticks makes sudden changes feel floaty, might change by using past changes to blend the changes better.
 void Player::update(float dt, World &world) {
+
+    if (m_debugBlock) {
+
+        int xs[2] = {
+            int(std::floor(position.x - box.dimensions.x)),
+            int(std::floor(position.x + box.dimensions.x))
+        };
+
+        int ys[4] = {                                           // assuming aabb is max 2 blocks as intended
+            int(std::floor(position.y - box.dimensions.y)) - 1, // below-aabb‐level block (outside AABB)
+            int(std::floor(position.y - box.dimensions.y)),     // block at the feet (inside AABB)
+            int(std::floor(position.y - box.dimensions.y)) + 1, // filler block if box overlaps three layers (inside AABB)
+            int(std::floor(position.y + box.dimensions.y))      // block at the head (inside AABB)
+        };
+
+        int zs[2] = {
+            int(std::floor(position.z - box.dimensions.z)),
+            int(std::floor(position.z + box.dimensions.z))
+        };
+
+        for (int xi = 0; xi < 2; ++xi) {
+            for (int yi = 0; yi < 4; ++yi) {
+                for (int zi = 0; zi < 2; ++zi) {
+                    int bx = xs[xi];
+                    int by = ys[yi];
+                    int bz = zs[zi];
+                    world.updateChunk(bx, by, bz);
+                    world.setBlock(bx, by, bz, 7);
+                }
+            }
+        }
+        m_debugBlock = false;
+    }
+
     static float alpha = 0.0f;
     float last_alpha = alpha;
     alpha += dt / TICK;
@@ -197,60 +274,26 @@ void Player::calculate(World &world) {
         m_nextPosition.y = RESPAWN_HEIGHT;
     }
 
-    bool wasOnGround = m_isOnGround;
-    m_isOnGround = false;
+    if (false) {
+        bool wasOnGround = m_isOnGround;
+        m_isOnGround = false;
 
-    auto testPosition = position;
-    testPosition.x += velocity.x;
-    testPosition.y -= 0.5f;
-    bool stopx = isFalling(world, testPosition, {0.f, velocity.y, 0.f}) && m_isSneaking && wasOnGround != m_isOnGround;
-    if (stopx) std::cout << "stopx" << std::flush;
-    
-    testPosition = position;
-    testPosition.z += velocity.z;
-    testPosition.y -= 0.5f;
-    bool stopz = isFalling(world, testPosition, {0.f, velocity.y, 0.f}) && m_isSneaking && wasOnGround != m_isOnGround;
-    if (stopz) std::cout << "stopz" << std::flush;
-    
-    if (!stopx) m_nextPosition.x += velocity.x;
-    collide(world, { velocity.x, 0.0f, 0.0f });
-    
-    if (!stopz) m_nextPosition.z += velocity.z;
-    collide(world, { 0.0f, 0.0f, velocity.z });
-    
-    m_nextPosition.y += velocity.y;
-    collide(world, { 0.0f, velocity.y, 0.0f });
+        m_nextPosition.x += velocity.x;
+        collide(world, { velocity.x, 0.0f, 0.0f });
 
-    printdebug();
+        m_nextPosition.z += velocity.z;
+        collide(world, { 0.0f, 0.0f, velocity.z });
+
+        m_nextPosition.y += velocity.y;
+        collide(world, { 0.0f, velocity.y, 0.0f });
+    }
+    else {
+        new_collide(world, velocity);
+    }
+    // printdebug(world);
 }
 
-void Player::printdebug() const
-{
-    // compute horizontal speed and clamp to 2 decimals
-    float hSpeed = glm::length(glm::vec2(velocity.x, velocity.z)) / TICK;
 
-    // "\033[2K" = ANSI “erase entire line”, then '\r' returns to start
-    std::cout << "\033[2K\r"
-                << std::fixed << std::setprecision(2)
-                << "Pos(" 
-                << position.x << ", "
-                << position.y << ", "
-                << position.z << ")  "
-                << "Rot("
-                << rotation.x << ", "
-                << rotation.y << ", "
-                << rotation.z << ")  "
-                << "Vel("
-                << velocity.x << ", "
-                << velocity.y << ", "
-                << velocity.z << ")  "
-                << "HS=" << hSpeed << "  "
-                << "In("
-                << m_input.x << ", "
-                << m_input.y << ", "
-                << m_input.z << ")"
-                << std::flush;
-}
 
 bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::vec3 &vel) const{
     // 1) If we’re not moving downward, we’re not falling
@@ -280,9 +323,109 @@ bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::v
     return true;
 }
 
-bool Player::nextBlockAir(World &world, const glm::vec3 &vel) {
+// sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
+// using engine conventions: +x is east, +z ist south
+void Player::new_collide(World &world, const glm::vec3 &vel) {
     
-    int y = (int) (position.y - box.dimensions.x);
+    LocalAABB localbox = LocalAABB(position, box);
+    
+    localbox.movey(vel.y);
+    localbox.getBlocks(world);
+    bool movDown = (vel.y < 0);
+    
+    for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { // loop horizontal slice at level y
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        if (block != 0 && block.getData().isCollidable) {
+
+            m_isOnGround = movDown;
+
+            velocity.y = 0;
+            
+            int blocky = (*(&localbox.coords[0][0][0] + i)).y;
+
+            if (movDown) localbox.setMinY((float)blocky + 1.f);
+            else localbox.setMaxY((float)blocky);
+
+            break;
+        }
+    }
+    
+
+    // test sneaking x direction for empty blocks and block movement when exceeding solid blocks
+
+    // do collision detection x direction, move the player
+
+    localbox.movex(vel.x);
+    localbox.getBlocks(world);
+
+    bool movEast = (vel.x > 0);
+    bool collide = false;
+    
+
+    for (int i = 0;;) {
+        break;
+    }
+
+    for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        if (block != 0 && block.getData().isCollidable) {
+
+            velocity.x = 0;
+
+            int blockx = (*(&localbox.coords[0][0][0] + i)).x;
+
+            if (movEast) localbox.setMaxX((float)blockx - 0.001f);
+            else localbox.setMinX((float)blockx + 1.f);
+
+            break;
+        }
+    }
+
+
+    // get new block data
+    // repeat sneaking z direction
+    // do the collision detection z direation, move the player
+    localbox.movez(vel.z);
+    localbox.getBlocks(world);
+
+    bool movSouth = (vel.z > 0);
+
+
+
+    for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 6) ? 2 : 0 ) ) {
+        std::cout << i << std::flush;
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        if (block != 0 && block.getData().isCollidable) {
+
+            velocity.z = 0;
+
+            int blockz = (*(&localbox.coords[0][0][0] + i)).z;
+
+            if (movSouth) localbox.setMaxZ((float)blockz - 0.001f);
+            else localbox.setMinZ((float)blockz + 1.f);
+
+            break;
+        }
+    }
+
+    m_nextPosition = localbox.center;
+}
+
+bool Player::nextBlockAir(World &world, const glm::vec3 &vel) {
+
+    auto testPosition = position + vel;
+
+    bool stopx = false;
+    bool stopz = false;
+    
+    int y = (int)(position.y - box.dimensions.y) - 1;
+
+    // steps
+    // get all blocks beneith the player
+    // for each active z and x direction check if the pair of blocks are both air 
+    // if that is true, check if the next step would get all blocks to be air beneith the player
+    // if all blocks are air after set the respective boolean to true. 
+    // check how this would overlap with collision function and reset the velocity and the next position accordingly
 
     //
     return true;
