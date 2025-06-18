@@ -290,7 +290,7 @@ void Player::calculate(World &world) {
     else {
         new_collide(world, velocity);
     }
-    // printdebug(world);
+    printdebug(world);
 }
 
 
@@ -390,10 +390,9 @@ void Player::new_collide(World &world, const glm::vec3 &vel) {
 
     bool movSouth = (vel.z > 0);
 
+    
 
-
-    for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 6) ? 2 : 0 ) ) {
-        std::cout << i << std::flush;
+    for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         if (block != 0 && block.getData().isCollidable) {
 
