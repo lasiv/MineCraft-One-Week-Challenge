@@ -328,7 +328,6 @@ class Player : public Entity {
     static constexpr float GRAVITY_ACCEL              = 0.1f;
     static constexpr float FALLING_DRAG               = 0.98f;
 
-
     // Flying vertical acceleration (when in creative‐fly mode)
     static constexpr float FLY_VERTICAL_ACCEL         = 0.4f;
 

@@ -274,22 +274,8 @@ void Player::calculate(World &world) {
         m_nextPosition.y = RESPAWN_HEIGHT;
     }
 
-    if (false) {
-        bool wasOnGround = m_isOnGround;
-        m_isOnGround = false;
+    collide(world, velocity); // theoretically move and collide
 
-        m_nextPosition.x += velocity.x;
-        collide(world, { velocity.x, 0.0f, 0.0f });
-
-        m_nextPosition.z += velocity.z;
-        collide(world, { 0.0f, 0.0f, velocity.z });
-
-        m_nextPosition.y += velocity.y;
-        collide(world, { 0.0f, velocity.y, 0.0f });
-    }
-    else {
-        new_collide(world, velocity);
-    }
     printdebug(world);
 }
 
@@ -325,7 +311,9 @@ bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::v
 
 // sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
 // using engine conventions: +x is east, +z ist south
-void Player::new_collide(World &world, const glm::vec3 &vel) {
+// has some small inconsistancy in some edge cases i cant figure out
+// could be more optimized with 0 velocity checks and no collision when edge sneak was detected etc
+void Player::collide(World &world, const glm::vec3 &vel) {
     
     LocalAABB localbox = LocalAABB(position, box);
     
@@ -361,10 +349,22 @@ void Player::new_collide(World &world, const glm::vec3 &vel) {
     bool movEast = (vel.x > 0);
     bool collide = false;
     
-
-    for (int i = 0;;) {
-        break;
+    if (m_isSneaking && m_isOnGround) {
+        bool ground = false;
+        for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+            ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+            if (block != 0 && block.getData().isCollidable) {
+                ground = true;
+                break;
+            }
+        }
+        if (!ground) {
+            velocity.y = 0;
+            if (movEast) localbox.setMinX(std::floor(localbox.min.x - 0.001f) - 0.001f);
+            else localbox.setMaxX(std::floor(localbox.max.x + 0.001f) + 1.001f);
+        }
     }
+    
 
     for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
@@ -390,7 +390,21 @@ void Player::new_collide(World &world, const glm::vec3 &vel) {
 
     bool movSouth = (vel.z > 0);
 
-    
+    if (m_isSneaking && m_isOnGround) {
+        bool ground = false;
+        for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+            ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+            if (block != 0 && block.getData().isCollidable) {
+                ground = true;
+                break;
+            }
+        }
+        if (!ground) {
+            velocity.y = 0;
+            if (movSouth) localbox.setMinZ(std::floor(localbox.min.z - 0.001f) - 0.001f);
+            else localbox.setMaxZ(std::floor(localbox.max.z + 0.001f) + 1.001f);
+        }
+    }
 
     for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
@@ -428,46 +442,6 @@ bool Player::nextBlockAir(World &world, const glm::vec3 &vel) {
 
     //
     return true;
-}
-
-void Player::collide(World &world, const glm::vec3 &vel)
-{
-    if (glm::abs(vel.x) == 0.0f && glm::abs(vel.z) == 0.0f && std::abs(vel.y) == 0.0f) return;
-    for (int x = m_nextPosition.x - box.dimensions.x; x < m_nextPosition.x + box.dimensions.x; x++)
-        for (int y = m_nextPosition.y - box.dimensions.y; y < m_nextPosition.y + 0.7; y++)
-            for (int z = m_nextPosition.z - box.dimensions.z; z < m_nextPosition.z + box.dimensions.z; z++) {
-                auto block = world.getBlock(x, y, z);
-
-                if (block == 0 || !block.getData().isCollidable) continue;
-
-                if (vel.y > 0) {
-                    m_nextPosition.y = y - box.dimensions.y;
-                    velocity.y = 0;
-                }
-                else if (vel.y < 0) {
-                    m_isOnGround = true;
-                    m_nextPosition.y = y + box.dimensions.y + 1;
-                    velocity.y = 0;
-                }
-
-                if (vel.x > 0) {
-                    m_nextPosition.x = x - box.dimensions.x;
-                    velocity.x = 0;
-                }
-                else if (vel.x < 0) {
-                    m_nextPosition.x = x + box.dimensions.x + 1;
-                    velocity.x = 0;
-                }
-
-                if (vel.z > 0) {
-                    m_nextPosition.z = z - box.dimensions.z;
-                    velocity.z = 0;
-                }
-                else if (vel.z < 0) {
-                    m_nextPosition.z = z + box.dimensions.z + 1;
-                    velocity.z = 0;
-                }
-            }
 }
 
 /// @todo add movement keys to config
