@@ -216,7 +216,10 @@ void Player::calculate(World &world) {
     }
 
     if (m_isFlying) {
-        velocity.y = velocity.y * DEFAULT_SLIPPERINESS * FRICTION_FACTOR + m_input.y * GROUND_ACCEL_BASE;
+        velocity.y = velocity.y * DEFAULT_SLIPPERINESS * BASE_FRICTION + m_input.y * GROUND_ACCEL_BASE;
+    }
+    else if (m_isInWater) {
+        velocity.y = (velocity.y - WATER_GRAVITY) * WATER_DRAG + m_input.y * WATER_ACCEL_BASE;
     }
     else {
         // Initiate jump
@@ -232,10 +235,9 @@ void Player::calculate(World &world) {
     }
 
     // --- Horizontal movement parameters ---
-    const bool onGround = m_isOnGround;
-    const float slip       = onGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
-    const float friction   = slip * FRICTION_FACTOR;
-    const float accelBase  = onGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
+    const float slip       = m_isOnGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
+    const float friction   = slip * (m_isInWater ? WATER_FRICTION : BASE_FRICTION);
+    const float accelBase  = m_isOnGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
 
     // Movement multipliers
     const float mov       = m_isSprinting ? MOVE_MULT_SPRINT
@@ -244,8 +246,9 @@ void Player::calculate(World &world) {
     const float movMult   = (m_input.x && m_input.z)
                                 ? (m_isSneaking ? DIR_MULT_SNEAK_45
                                                : DIR_MULT_STRAFE_45)
-                                : DIR_MULT_DEFAULT;
-    const float slipCube  = onGround ? cube(0.6f / slip) : 1.0f;
+                                : DIR_MULT_DEFAULT
+                            * (m_isFlying ? 2 : 1);
+    const float slipCube  = m_isOnGround ? cube(0.6f / slip) : 1.0f;
 
     // Facing/input directions
     const float yawRad  = glm::radians(rotation.y);
@@ -293,6 +296,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
     localbox.getBlocks(world);
     bool movDown = (vel.y < 0);
     
+    m_isOnGround = false;
     for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { // loop horizontal slice at level y
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         if (block != 0 && block.getData().isCollidable) {
@@ -391,6 +395,20 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
     // apply position
     m_nextPosition = localbox.center;
+
+    // check water
+    if (movDown) localbox.movey(0.5f);
+    localbox.getBlocks(world);
+    m_isInWater = false;
+    for (int i = 2; i < 16; i += 1 + ((i % 2) * 6)) {
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        if (block == 7) {
+            m_isInWater = true;
+            m_isOnGround = false;
+            break;
+        }
+    }
+
 }
 
 /// @todo add movement keys to config

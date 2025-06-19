@@ -232,7 +232,7 @@ class Player : public Entity {
             int ys[4] = {
                 int(std::floor(min.y)) - 1,
                 int(std::floor(min.y)),
-                int(std::floor(min.y)) + 1,
+                int(std::floor(center.y)),
                 int(std::floor(max.y))
             };
 
@@ -258,6 +258,7 @@ class Player : public Entity {
     };
 
     bool m_isOnGround = false;
+    bool m_isInWater = false;
     bool m_isFlying = false;
     bool m_isSneaking = false;
     bool m_isSprinting = false;
@@ -293,37 +294,42 @@ class Player : public Entity {
       return x * x * x;
     }
 
-    static constexpr float TICK                       = 0.05f;
+    static constexpr float TICK                         = 0.05f;
 
-    static constexpr float DEFAULT_SLIPPERINESS       = 0.6f;
-    static constexpr float AIR_SLIPPERINESS           = 1.0f;
+    static constexpr float DEFAULT_SLIPPERINESS         = 0.6f;
+    static constexpr float AIR_SLIPPERINESS             = 1.0f;
 
-    static constexpr float MOVE_MULT_SPRINT           = 1.3f;
-    static constexpr float MOVE_MULT_WALK             = 1.0f;
-    static constexpr float MOVE_MULT_SNEAK            = 0.3f;
-    static constexpr float MOVE_MULT_STOP             = 0.0f;
+    static constexpr float MOVE_MULT_SPRINT             = 1.3f;
+    static constexpr float MOVE_MULT_WALK               = 1.0f;
+    static constexpr float MOVE_MULT_SNEAK              = 0.3f;
+    static constexpr float MOVE_MULT_STOP               = 0.0f;
 
-    static constexpr float DIR_MULT_DEFAULT           = 0.98f;
-    static constexpr float DIR_MULT_STRAFE_45         = 1.00f;
-    static constexpr float DIR_MULT_SNEAK_45          = 0.98f * 1.4142135623730951f;
+    static constexpr float DIR_MULT_DEFAULT             = 0.98f;
+    static constexpr float DIR_MULT_STRAFE_45           = 1.00f;
+    static constexpr float DIR_MULT_SNEAK_45            = 0.98f * 1.4142135623730951f;
 
-    static constexpr float FRICTION_FACTOR            = 0.91f;
+    static constexpr float BASE_FRICTION                = 0.91f;
 
-    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD = 0.005f;
+    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD   = 0.005f;
 
-    static constexpr float GROUND_ACCEL_BASE          = 0.1f;
-    static constexpr float AIR_ACCEL_BASE             = 0.02f;
-    static constexpr float JUMP_SPRINT_BOOST          = 0.064f; // originally .2, but this feels right
+    static constexpr float GROUND_ACCEL_BASE            = 0.1f;
+    static constexpr float AIR_ACCEL_BASE               = 0.02f;
+    static constexpr float WATER_ACCEL_BASE             = 0.08f;
+    static constexpr float JUMP_SPRINT_BOOST            = 0.064f; // originally .2, but this feels right
 
-    static constexpr float JUMP_INIT                  = 0.5f;
-    static constexpr float GRAVITY_ACCEL              = 0.1f;
-    static constexpr float FALLING_DRAG               = 0.98f;
+    static constexpr float JUMP_INIT                    = 0.46f;
+    static constexpr float GRAVITY_ACCEL                = 0.08f;
+    static constexpr float FALLING_DRAG                 = 0.98f;
+
+    static constexpr float WATER_FRICTION               = 0.8f;
+    static constexpr float WATER_DRAG                   = 0.7f;
+    static constexpr float WATER_GRAVITY                = 0.05f;
 
     // Flying vertical acceleration (when in creative‐fly mode)
-    static constexpr float FLY_VERTICAL_ACCEL         = 0.4f;
+    static constexpr float FLY_VERTICAL_ACCEL           = 0.4f;
 
     // Respawn height if the player falls below y ≤ 0
-    static constexpr float RESPAWN_HEIGHT             = 300.0f;
+    static constexpr float RESPAWN_HEIGHT               = 300.0f;
 };
 
 #endif // PLAYER_H_INCLUDED
