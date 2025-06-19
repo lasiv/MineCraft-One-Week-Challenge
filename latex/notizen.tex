@@ -445,8 +445,8 @@ Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unter
 \umlsimpleclass[x=2,y=-8,alias=UMLClass4]{World}
 \umlcompo[name=Relation0,geometry=--,mult1={1},pos1=0.2,mult2={*},arg2={states},pos2=0.8]{UMLClass0}{UMLClass1}
 \umlinherit[name=Relation1,geometry=--,]{UMLClass2}{UMLClass1}
-\umlcompo[name=Relation2,geometry=|-|,anchor1=-130.0,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=2.8]{UMLClass2}{UMLClass3}
-\umlcompo[name=Relation3,geometry=|-|,anchor1=-50.0,mult1={*},pos1=0.2,mult2={1},arg2={world},pos2=2.8]{UMLClass2}{UMLClass4}
+\umlcompo[name=Relation2,geometry=|-|,anchor1=-130.0,mult1={1},pos1=0.2,mult2={1},arg2={player},pos2=2.8]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation3,geometry=|-|,anchor1=-50.0,mult1={1},pos1=0.2,mult2={1},arg2={world},pos2=2.8]{UMLClass2}{UMLClass4}
 \umlassoc[name=Relation4,geometry=--,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass4}{UMLClass3}
 \end{gfx}
 
@@ -484,15 +484,17 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
   \umlsimpleclass[x=22.30,y=-8.60,alias=UMLClass4]{ChunkManager}
   \umlsimpleclass[x=22.40,y=-10.80,alias=UMLClass5]{Chunk}
   \umlsimpleclass[x=22.50,y=-13.80,alias=UMLClass6]{ChunkSection}
+  \umlsimpleclass[x=22.50,y=-15.80,alias=UMLClass7]{ChunkBlock}
   \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.6]{UMLClass1}{UMLClass3}
   \umlinherit[name=Relation1,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass2}{UMLClass3}
   \umluniassoc[name=Relation2,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={*},arg1={pPLayer},pos1=0.2,mult2={1},pos2=0.8]{UMLClass2}{UMLClass0}
   \umlassoc[name=Relation3,geometry=|-,anchor1=-150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass1}{UMLClass0}
-  \umluniassoc[name=Relation4,geometry=--,anchor1=180.0,anchor2=0.0,mult1={*},arg2={pWorld},pos1=0.2,mult2={1},pos2=0.7]{UMLClass5}{UMLClass1}
+  \umluniassoc[name=Relation4,geometry=--,anchor1=180.0,anchor2=0.0,mult1={*},arg2={/pWorld},pos1=0.1,mult2={1},pos2=0.7]{UMLClass5}{UMLClass1}
   \umlcompo[name=Relation5,geometry=|-,anchor1=29.7,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.5]{UMLClass1}{UMLClass4}
   \umlassoc[name=Relation6,geometry=|-,anchor1=-29.7,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},arg2={chunkUpdates},pos2=1.55]{UMLClass1}{UMLClass6}
   \umluniassoc[name=Relation7,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass4}{UMLClass5}
   \umlcompo[name=Relation8,geometry=--,anchor1=-90.0,anchor2=104.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass5}{UMLClass6}
+  \umlaggreg[name=Relation9,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={blocks},pos2=0.8]{UMLClass6}{UMLClass7}
 \end{gfx}
 
 Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
