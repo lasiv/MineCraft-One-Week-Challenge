@@ -305,8 +305,8 @@ class Player : public Entity {
     static constexpr float MOVE_MULT_STOP               = 0.0f;
 
     static constexpr float DIR_MULT_DEFAULT             = 0.98f;
-    static constexpr float DIR_MULT_STRAFE_45           = 1.00f;
-    static constexpr float DIR_MULT_SNEAK_45            = 0.98f * 1.4142135623730951f;
+    static constexpr float DIR_MULT_STRAFE_45           = 1.00f / 1.4142135623730951f;
+    static constexpr float DIR_MULT_SNEAK_45            = 0.98f;
 
     static constexpr float BASE_FRICTION                = 0.91f;
 
@@ -315,7 +315,7 @@ class Player : public Entity {
     static constexpr float GROUND_ACCEL_BASE            = 0.1f;
     static constexpr float AIR_ACCEL_BASE               = 0.02f;
     static constexpr float WATER_ACCEL_BASE             = 0.08f;
-    static constexpr float JUMP_SPRINT_BOOST            = 0.064f; // originally .2, but this feels right
+    static constexpr float JUMP_SPRINT_BOOST            = 0.064f;
 
     static constexpr float JUMP_INIT                    = 0.46f;
     static constexpr float GRAVITY_ACCEL                = 0.08f;
