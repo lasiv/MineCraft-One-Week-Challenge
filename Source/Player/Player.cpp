@@ -195,6 +195,8 @@ void Player::update(float dt, World &world) {
     for (; alpha > 1.f; alpha--) {
         last_alpha = 0.f;
         calculate(world);
+        move(world, velocity);
+        printdebug(world);
     }
 
     float k = (alpha - last_alpha)/(1.f - last_alpha);
@@ -274,49 +276,19 @@ void Player::calculate(World &world) {
         m_nextPosition.y = RESPAWN_HEIGHT;
     }
 
-    collide(world, velocity); // theoretically move and collide
-
-    printdebug(world);
+    
 }
 
-
-
-bool Player::isFalling(World &world, const glm::vec3 &testPosition, const glm::vec3 &vel) const{
-    // 1) If we’re not moving downward, we’re not falling
-    if (vel.y >= 0.0f)
-        return false;
-
-    // 2) Which block‐row would we hit first when falling?
-    int faceY = int(std::floor(testPosition.y - box.dimensions.y));
-
-    // 3) Compute X/Z span of the player’s feet at testPosition
-    int minX = int(std::floor(testPosition.x - box.dimensions.x));
-    int maxX = int(std::floor(testPosition.x + box.dimensions.x));
-    int minZ = int(std::floor(testPosition.z - box.dimensions.z));
-    int maxZ = int(std::floor(testPosition.z + box.dimensions.z));
-
-    // 4) If any block directly under foot is solid, we’re supported → not falling
-    for (int x = minX; x <= maxX; ++x) {
-        for (int z = minZ; z <= maxZ; ++z) {
-            auto block = world.getBlock(x, faceY, z);
-            if (block != 0 && block.getData().isCollidable) {
-                return false;  // found support
-            }
-        }
-    }
-
-    // 5) No support found → we are falling
-    return true;
-}
-
+//
 // sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
 // using engine conventions: +x is east, +z ist south
 // has some small inconsistancy in some edge cases i cant figure out
 // could be more optimized with 0 velocity checks and no collision when edge sneak was detected etc
-void Player::collide(World &world, const glm::vec3 &vel) {
+void Player::move(World &world, const glm::vec3 &vel) {
     
     LocalAABB localbox = LocalAABB(position, box);
     
+    // check collision y level
     localbox.movey(vel.y);
     localbox.getBlocks(world);
     bool movDown = (vel.y < 0);
@@ -337,18 +309,15 @@ void Player::collide(World &world, const glm::vec3 &vel) {
             break;
         }
     }
-    
 
-    // test sneaking x direction for empty blocks and block movement when exceeding solid blocks
-
-    // do collision detection x direction, move the player
-
+    // check collision and sneaking edge x direction
     localbox.movex(vel.x);
     localbox.getBlocks(world);
 
     bool movEast = (vel.x > 0);
     bool collide = false;
     
+    // sneaking
     if (m_isSneaking && m_isOnGround) {
         bool ground = false;
         for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
@@ -365,7 +334,7 @@ void Player::collide(World &world, const glm::vec3 &vel) {
         }
     }
     
-
+    // collision
     for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         if (block != 0 && block.getData().isCollidable) {
@@ -381,15 +350,13 @@ void Player::collide(World &world, const glm::vec3 &vel) {
         }
     }
 
-
-    // get new block data
-    // repeat sneaking z direction
-    // do the collision detection z direation, move the player
+    // check collision and sneaking edge z direction
     localbox.movez(vel.z);
     localbox.getBlocks(world);
 
     bool movSouth = (vel.z > 0);
 
+    // sneaking
     if (m_isSneaking && m_isOnGround) {
         bool ground = false;
         for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
@@ -406,6 +373,7 @@ void Player::collide(World &world, const glm::vec3 &vel) {
         }
     }
 
+    // collision
     for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         if (block != 0 && block.getData().isCollidable) {
@@ -421,27 +389,8 @@ void Player::collide(World &world, const glm::vec3 &vel) {
         }
     }
 
+    // apply position
     m_nextPosition = localbox.center;
-}
-
-bool Player::nextBlockAir(World &world, const glm::vec3 &vel) {
-
-    auto testPosition = position + vel;
-
-    bool stopx = false;
-    bool stopz = false;
-    
-    int y = (int)(position.y - box.dimensions.y) - 1;
-
-    // steps
-    // get all blocks beneith the player
-    // for each active z and x direction check if the pair of blocks are both air 
-    // if that is true, check if the next step would get all blocks to be air beneith the player
-    // if all blocks are air after set the respective boolean to true. 
-    // check how this would overlap with collision function and reset the velocity and the next position accordingly
-
-    //
-    return true;
 }
 
 /// @todo add movement keys to config

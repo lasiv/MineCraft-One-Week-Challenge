@@ -56,24 +56,6 @@ class Player : public Entity {
      */
     void update(float dt, World &wolrd);
 
-    bool nextBlockAir(World& world, const glm::vec3& vel);
-
-    /**
-     * @brief Handles collision detection and response with the world.
-     *
-     * @param world The World object representing the game world.
-     * @param vel The velocity vector of the player.
-     * @param dt The time elapsed since the last update (in seconds).
-     *
-     * @details
-     * Checks for collisions with blocks in the world and adjusts the player's position accordingly.
-     * This method is called during the update phase to ensure the player does not pass through
-     * blocks. It also handles the player's flying state.
-     */
-    void collide(World &world, const glm::vec3 &vel);
-
-    void new_collide(World &world, const glm::vec3 &vel);
-
     /**
      * @brief Adds an item to the player's inventory.
      * 
@@ -125,12 +107,21 @@ class Player : public Entity {
      * @param world The world object the player is in
      * 
      * @details
-     * This method is called once for every Tick length the accumulated delta 
-     * time in player update function is greater
+     * Calculates the velocity to add on the current player position for the next time tick.
      */
     void calculate(World &world);
 
-    bool isFalling(World& world, const glm::vec3& testPosition, const glm::vec3& vel) const;
+    /**
+     * @brief Handles collision detection and response with the world.
+     *
+     * @param world The World object representing the game world.
+     * @param vel The velocity vector of the player.
+     * @param dt The time elapsed since the last update (in seconds).
+     *
+     * @details
+     * Moves the player to the calculated position, checks collision along the way and checks for edges while sneak walking.
+     */
+    void move(World &world, const glm::vec3 &vel);
 
     /**
      * @brief Handles keyboard input for player movement and actions.
