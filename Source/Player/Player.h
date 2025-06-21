@@ -93,6 +93,8 @@ class Player : public Entity {
 
     void setPosition(glm::vec3 pos);
 
+    void setSpawn(glm::vec3 pos);
+
   private:
 
     struct LocalAABB;
@@ -262,12 +264,9 @@ class Player : public Entity {
     bool m_isFlying = false;
     bool m_isSneaking = false;
     bool m_isSprinting = false;
-    bool m_canSprint = true;
-
-    bool m_isBlockingx = false;
-    bool m_isBlockingy = false;
-
-    bool m_debugBlock = false;
+    
+    glm::vec3 m_spawnPoint;
+    
 
     std::vector<ItemStack> m_items;
     std::vector<sf::Text> m_itemText;
@@ -304,29 +303,28 @@ class Player : public Entity {
     static constexpr float MOVE_MULT_SNEAK              = 0.3f;
     static constexpr float MOVE_MULT_STOP               = 0.0f;
 
+    // normalization
     static constexpr float DIR_MULT_DEFAULT             = 0.98f;
     static constexpr float DIR_MULT_STRAFE_45           = 1.00f / 1.4142135623730951f;
     static constexpr float DIR_MULT_SNEAK_45            = 0.98f;
 
-    static constexpr float BASE_FRICTION                = 0.91f;
+    static constexpr float BASE_FRICTION                = 0.91f; // vertical anbd flying speed reduction factor
 
-    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD   = 0.005f;
+    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD   = 0.005f; // cut speed below threshold to 0, unused due to bugs
 
     static constexpr float GROUND_ACCEL_BASE            = 0.1f;
     static constexpr float AIR_ACCEL_BASE               = 0.02f;
     static constexpr float WATER_ACCEL_BASE             = 0.08f;
-    static constexpr float JUMP_SPRINT_BOOST            = 0.064f;
+    static constexpr float JUMP_SPRINT_BOOST            = 0.064f; 
 
     static constexpr float JUMP_INIT                    = 0.46f;
     static constexpr float GRAVITY_ACCEL                = 0.08f;
     static constexpr float FALLING_DRAG                 = 0.98f;
 
-    static constexpr float WATER_FRICTION               = 0.8f;
-    static constexpr float WATER_DRAG                   = 0.7f;
+    static constexpr float WATER_FRICTION               = 0.8f; // horizontal factor
+    static constexpr float WATER_DRAG                   = 0.7f; // vertical factor
     static constexpr float WATER_GRAVITY                = 0.05f;
-
-    // Flying vertical acceleration (when in creative‐fly mode)
-    static constexpr float FLY_VERTICAL_ACCEL           = 0.4f;
+    static constexpr float WATER_ENTRY_HEIGHT           = 0.5f; // 0 -> entry at feet, used to disable jitter at water surface
 
     // Respawn height if the player falls below y ≤ 0
     static constexpr float RESPAWN_HEIGHT               = 300.0f;

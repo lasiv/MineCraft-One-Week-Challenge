@@ -22,7 +22,7 @@ Player::Player()
     , m_num3(sf::Keyboard::Num3)
     , m_num4(sf::Keyboard::Num4)
     , m_num5(sf::Keyboard::Num5)
-
+    , m_spawnPoint({2500, 125, 2500})
 {
     f.loadFromFile("Res/Fonts/rs.ttf");
 
@@ -111,6 +111,10 @@ void Player::printdebug(World &world) const
 void Player::setPosition(glm::vec3 pos) {
     position = pos;
     m_nextPosition = pos;
+}
+
+void Player::setSpawn(glm::vec3 pos) {
+    m_spawnPoint = pos;
 }
 
 void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
@@ -256,6 +260,11 @@ void Player::move(World &world, const glm::vec3 &vel) {
     // using engine conventions: +x is east, +z ist south
     // has some small inconsistancy in some edge cases i cant figure out with sneaking
     // could be more optimized with 0 velocity checks and no collision when edge sneak was detected etc
+
+    if (position.y > RESPAWN_HEIGHT || position.y < 0.f) {
+        m_nextPosition = m_spawnPoint;
+        return;
+    }
     
     LocalAABB localbox = LocalAABB(position, box);
     
@@ -383,7 +392,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
     // check water
     // moves position to avoid jittering at surface swimming
-    if (movDown) localbox.movey(0.5f); 
+    if (movDown) localbox.movey(WATER_ENTRY_HEIGHT); 
     localbox.getBlocks(world);
     m_isInWater = false;
     // checks horizontal slice at array y 1 (feet)
@@ -395,7 +404,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
             m_isInWater = true;
             m_isOnGround = false;
-            
+
             break;
         }
     }
