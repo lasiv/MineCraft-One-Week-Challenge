@@ -24,3 +24,9 @@ ShaderType
 
 Collidable
 0
+
+Slipperiness
+100
+
+Bounce
+0

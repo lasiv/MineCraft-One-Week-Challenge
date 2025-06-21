@@ -206,7 +206,7 @@ void Player::calculate(World &world) {
     }
 
     // --- Horizontal movement parameters ---
-    const float slip       = m_isOnGround ? DEFAULT_SLIPPERINESS : AIR_SLIPPERINESS;
+    const float slip       = m_slipperiness;
     const float friction   = slip * (m_isInWater ? WATER_FRICTION : BASE_FRICTION);
     const float accelBase  = m_isOnGround ? GROUND_ACCEL_BASE : AIR_ACCEL_BASE;
 
@@ -373,7 +373,9 @@ void Player::move(World &world, const glm::vec3 &vel) {
     // collision
     // loop vertical slice at z 0 or 1 (dependent on direction) excluding array y 0
     for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
+        
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        
         if (block != 0 && block.getData().isCollidable) {
 
             velocity.z = 0;
@@ -409,6 +411,14 @@ void Player::move(World &world, const glm::vec3 &vel) {
         }
     }
 
+    // check slipperiness
+    m_slipperiness = DEFAULT_SLIPPERINESS;
+    for (int i = m_isOnGround ? 0 : 2; i < 16; i += 1 + ((i % 2) * 6)) {
+
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        float slip = block.getData().slip / 100.f;
+        if (slip < m_slipperiness) m_slipperiness = slip;
+    }
 }
 
 /// @todo add movement keys to config

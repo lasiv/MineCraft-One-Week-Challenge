@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>14</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>812</x>
+      <y>728</y>
+      <w>196</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;NonCopyable&gt;&gt;
+BlockDataHolder
+--
+id : BlockId
+isOpaque : bool
+isColidable : bool
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>280</x>
+      <y>742</y>
+      <w>308</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>ChunkBlock
+--
+getData() : BlockDataHolder
+getType() : BlockType
+--
+id : Block_t</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>574</x>
+      <y>784</y>
+      <w>266</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>322</x>
+      <y>420</y>
+      <w>238</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;NonCopyable&gt;&gt;
+BlockType
+--
+getData() : BlockData</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>546</y>
+      <w>56</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>742</x>
+      <y>420</y>
+      <w>350</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;NonCopyable&gt;&gt;
+BlockData
+--
+getBlockData() : BlockDataHolder
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>546</x>
+      <y>462</y>
+      <w>224</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+r2=data</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>896</x>
+      <y>546</y>
+      <w>84</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+r2=data</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1162</x>
+      <y>224</y>
+      <w>238</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>DefaultBlock filename
+BlockType filename
+BlockData filename
+File</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>308</x>
+      <y>84</y>
+      <w>252</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Signleton&gt;&gt;
+BlockDatabase
+--
+_get() : BlockDatabase_
+getData() : BlockData
+getBlock() : BlockType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>210</y>
+      <w>98</w>
+      <h>238</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=*
+r2=blocks</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+</diagram>

@@ -30,6 +30,9 @@ struct BlockDataHolder : public NonCopyable {
 
     bool isOpaque;
     bool isCollidable;
+
+    int slip;
+    int bounce;
 };
 
 class BlockData : public NonCopyable {

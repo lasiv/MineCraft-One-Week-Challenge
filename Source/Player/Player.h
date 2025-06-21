@@ -264,6 +264,7 @@ class Player : public Entity {
     bool m_isFlying = false;
     bool m_isSneaking = false;
     bool m_isSprinting = false;
+    float m_slipperiness = 0.6f;
     
     glm::vec3 m_spawnPoint;
     
@@ -295,8 +296,7 @@ class Player : public Entity {
 
     static constexpr float TICK                         = 0.05f;
 
-    static constexpr float DEFAULT_SLIPPERINESS         = 0.6f;
-    static constexpr float AIR_SLIPPERINESS             = 1.0f;
+    static constexpr float DEFAULT_SLIPPERINESS         = 1.0f;
 
     static constexpr float MOVE_MULT_SPRINT             = 1.3f;
     static constexpr float MOVE_MULT_WALK               = 1.0f;
@@ -315,7 +315,7 @@ class Player : public Entity {
     static constexpr float GROUND_ACCEL_BASE            = 0.1f;
     static constexpr float AIR_ACCEL_BASE               = 0.02f;
     static constexpr float WATER_ACCEL_BASE             = 0.08f;
-    static constexpr float JUMP_SPRINT_BOOST            = 0.064f; 
+    static constexpr float JUMP_SPRINT_BOOST            = 0.2f; 
 
     static constexpr float JUMP_INIT                    = 0.46f;
     static constexpr float GRAVITY_ACCEL                = 0.08f;
@@ -324,7 +324,7 @@ class Player : public Entity {
     static constexpr float WATER_FRICTION               = 0.8f; // horizontal factor
     static constexpr float WATER_DRAG                   = 0.7f; // vertical factor
     static constexpr float WATER_GRAVITY                = 0.05f;
-    static constexpr float WATER_ENTRY_HEIGHT           = 0.5f; // 0 -> entry at feet, used to disable jitter at water surface
+    static constexpr float WATER_ENTRY_HEIGHT           = 0.5f; // 0.f -> entry at feet, used to disable jitter at water surface
 
     // Respawn height if the player falls below y ≤ 0
     static constexpr float RESPAWN_HEIGHT               = 300.0f;

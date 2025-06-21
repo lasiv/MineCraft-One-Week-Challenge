@@ -54,6 +54,12 @@ BlockData::BlockData(const std::string &fileName)
         else if (line == "Collidable") {
             inFile >> m_data.isCollidable;
         }
+        else if (line == "Slipperiness") {
+            inFile >> m_data.slip;
+        }
+        else if (line == "Bounce") {
+            inFile >> m_data.bounce;
+        }
         else if (line == "MeshType") {
             int id;
             inFile >> id;
