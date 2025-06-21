@@ -136,7 +136,7 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 
     if (m_num1.isKeyPressed()) {
-        m_debugBlock = true;
+        m_heldItem = 0;
     }
     if (m_num2.isKeyPressed()) {
         m_heldItem = 1;
@@ -154,39 +154,6 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 
 // known problems: linear interpolation between ticks makes sudden changes feel floaty, might change by using past changes to blend the changes better.
 void Player::update(float dt, World &world) {
-
-    if (m_debugBlock) {
-
-        int xs[2] = {
-            int(std::floor(position.x - box.dimensions.x)),
-            int(std::floor(position.x + box.dimensions.x))
-        };
-
-        int ys[4] = {                                           // assuming aabb is max 2 blocks as intended
-            int(std::floor(position.y - box.dimensions.y)) - 1, // below-aabb‐level block (outside AABB)
-            int(std::floor(position.y - box.dimensions.y)),     // block at the feet (inside AABB)
-            int(std::floor(position.y - box.dimensions.y)) + 1, // filler block if box overlaps three layers (inside AABB)
-            int(std::floor(position.y + box.dimensions.y))      // block at the head (inside AABB)
-        };
-
-        int zs[2] = {
-            int(std::floor(position.z - box.dimensions.z)),
-            int(std::floor(position.z + box.dimensions.z))
-        };
-
-        for (int xi = 0; xi < 2; ++xi) {
-            for (int yi = 0; yi < 4; ++yi) {
-                for (int zi = 0; zi < 2; ++zi) {
-                    int bx = xs[xi];
-                    int by = ys[yi];
-                    int bz = zs[zi];
-                    world.updateChunk(bx, by, bz);
-                    world.setBlock(bx, by, bz, 7);
-                }
-            }
-        }
-        m_debugBlock = false;
-    }
 
     static float alpha = 0.0f;
     float last_alpha = alpha;
