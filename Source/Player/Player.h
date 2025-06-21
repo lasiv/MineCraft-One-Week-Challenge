@@ -230,10 +230,10 @@ class Player : public Entity {
             };
 
             int ys[4] = {
-                int(std::floor(min.y)) - 1,
-                int(std::floor(min.y)),
-                int(std::floor(center.y)),
-                int(std::floor(max.y))
+                int(std::floor(min.y)) - 1, // below feet
+                int(std::floor(min.y)),     // feet level
+                int(std::floor(center.y)),  // center to fill collision
+                int(std::floor(max.y))      // head level
             };
 
             int zs[2] = {

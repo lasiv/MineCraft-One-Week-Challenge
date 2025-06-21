@@ -250,11 +250,12 @@ void Player::calculate(World &world) {
 }
 
 //
-// sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
-// using engine conventions: +x is east, +z ist south
-// has some small inconsistancy in some edge cases i cant figure out
-// could be more optimized with 0 velocity checks and no collision when edge sneak was detected etc
+
 void Player::move(World &world, const glm::vec3 &vel) {
+    // sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
+    // using engine conventions: +x is east, +z ist south
+    // has some small inconsistancy in some edge cases i cant figure out with sneaking
+    // could be more optimized with 0 velocity checks and no collision when edge sneak was detected etc
     
     LocalAABB localbox = LocalAABB(position, box);
     
@@ -264,8 +265,11 @@ void Player::move(World &world, const glm::vec3 &vel) {
     bool movDown = (vel.y < 0);
     
     m_isOnGround = false;
-    for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { // loop horizontal slice at level y
+    // loop horizontal slice at array y 1 or 3 (head or feet)
+    for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { 
+
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
         if (block != 0 && block.getData().isCollidable) {
 
             m_isOnGround = movDown;
@@ -291,23 +295,31 @@ void Player::move(World &world, const glm::vec3 &vel) {
     // sneaking
     if (m_isSneaking && m_isOnGround) {
         bool ground = false;
+        // loop horizontal slice at array y 0 (below feet)
         for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+
             ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
             if (block != 0 && block.getData().isCollidable) {
                 ground = true;
                 break;
             }
         }
         if (!ground) {
+
             velocity.y = 0;
+
             if (movEast) localbox.setMinX(std::floor(localbox.min.x - 0.001f) - 0.001f);
             else localbox.setMaxX(std::floor(localbox.max.x + 0.001f) + 1.001f);
         }
     }
     
     // collision
+    // loop vertical slice at x 0 or 1 (dependent on direction) excluding array y 0
     for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
+
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
         if (block != 0 && block.getData().isCollidable) {
 
             velocity.x = 0;
@@ -330,21 +342,27 @@ void Player::move(World &world, const glm::vec3 &vel) {
     // sneaking
     if (m_isSneaking && m_isOnGround) {
         bool ground = false;
+        // loop horizontal slice at array y 0 (below feet)
         for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+
             ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
             if (block != 0 && block.getData().isCollidable) {
                 ground = true;
                 break;
             }
         }
         if (!ground) {
+            
             velocity.y = 0;
+
             if (movSouth) localbox.setMinZ(std::floor(localbox.min.z - 0.001f) - 0.001f);
             else localbox.setMaxZ(std::floor(localbox.max.z + 0.001f) + 1.001f);
         }
     }
 
     // collision
+    // loop vertical slice at z 0 or 1 (dependent on direction) excluding array y 0
     for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         if (block != 0 && block.getData().isCollidable) {
@@ -364,14 +382,20 @@ void Player::move(World &world, const glm::vec3 &vel) {
     m_nextPosition = localbox.center;
 
     // check water
-    if (movDown) localbox.movey(0.5f);
+    // moves position to avoid jittering at surface swimming
+    if (movDown) localbox.movey(0.5f); 
     localbox.getBlocks(world);
     m_isInWater = false;
+    // checks horizontal slice at array y 1 (feet)
     for (int i = 2; i < 16; i += 1 + ((i % 2) * 6)) {
+
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
         if (block == 7) {
+
             m_isInWater = true;
             m_isOnGround = false;
+            
             break;
         }
     }
