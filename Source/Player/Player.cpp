@@ -90,7 +90,9 @@ void Player::printdebug(World &world) const
                 << "In("
                 << m_input.x << ", "
                 << m_input.y << ", "
-                << m_input.z << ")"
+                << m_input.z << ")  "
+                << "bounce="
+                << m_bounce
                 << std::flush;
     
     // 2) sample the block at the player's feet
@@ -166,7 +168,7 @@ void Player::update(float dt, World &world) {
     for (; alpha > 1.f; alpha--) {
         last_alpha = 0.f;
         calculate(world);
-        move(world, velocity);
+        move(world);
         printdebug(world);
     }
 
@@ -193,8 +195,12 @@ void Player::calculate(World &world) {
         velocity.y = (velocity.y - WATER_GRAVITY) * WATER_DRAG + m_input.y * WATER_ACCEL_BASE;
     }
     else {
+        // Initiate bounce
+        if (m_isOnGround && m_bounce > BOUNCE_TRESHOLD) {
+            velocity.y = m_bounce; // m_bounce already is the velocity as calculated in the tick before
+        }
         // Initiate jump
-        if (m_isOnGround && m_input.y == 1) {
+        else if (m_isOnGround && m_input.y == 1) {
             m_isOnGround = false;
             justJumped   = true;
             velocity.y   = JUMP_INIT;
@@ -255,7 +261,7 @@ void Player::calculate(World &world) {
 
 //
 
-void Player::move(World &world, const glm::vec3 &vel) {
+void Player::move(World &world) {
     // sneaking detection will only work, if the hitbox is above 1 bot lower then two blocks in height and less than a block in width each direction, as this is the intended size for the player figure
     // using engine conventions: +x is east, +z ist south
     // has some small inconsistancy in some edge cases i cant figure out with sneaking
@@ -266,12 +272,12 @@ void Player::move(World &world, const glm::vec3 &vel) {
         return;
     }
     
-    LocalAABB localbox = LocalAABB(position, box);
+    LocalAABB localbox = LocalAABB(position, velocity, box);
     
     // check collision y level
-    localbox.movey(vel.y);
+    localbox.movey(velocity.y);
     localbox.getBlocks(world);
-    bool movDown = (vel.y < 0);
+    bool movDown = (velocity.y < 0);
     
     m_isOnGround = false;
     // loop horizontal slice at array y 1 or 3 (head or feet)
@@ -279,7 +285,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-        if (block != 0 && block.getData().isCollidable) {
+        if (block != BlockId::Air && block.getData().isCollidable) {
 
             m_isOnGround = movDown;
 
@@ -294,11 +300,12 @@ void Player::move(World &world, const glm::vec3 &vel) {
         }
     }
 
+
     // check collision and sneaking edge x direction
-    localbox.movex(vel.x);
+    localbox.movex(velocity.x);
     localbox.getBlocks(world);
 
-    bool movEast = (vel.x > 0);
+    bool movEast = (velocity.x > 0);
     bool collide = false;
     
     // sneaking
@@ -309,7 +316,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
             ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-            if (block != 0 && block.getData().isCollidable) {
+            if (block != BlockId::Air && block.getData().isCollidable) {
                 ground = true;
                 break;
             }
@@ -329,7 +336,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-        if (block != 0 && block.getData().isCollidable) {
+        if (block != BlockId::Air && block.getData().isCollidable) {
 
             velocity.x = 0;
 
@@ -343,10 +350,10 @@ void Player::move(World &world, const glm::vec3 &vel) {
     }
 
     // check collision and sneaking edge z direction
-    localbox.movez(vel.z);
+    localbox.movez(velocity.z);
     localbox.getBlocks(world);
 
-    bool movSouth = (vel.z > 0);
+    bool movSouth = (velocity.z > 0);
 
     // sneaking
     if (m_isSneaking && m_isOnGround) {
@@ -356,7 +363,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
             ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-            if (block != 0 && block.getData().isCollidable) {
+            if (block != BlockId::Air && block.getData().isCollidable) {
                 ground = true;
                 break;
             }
@@ -376,7 +383,7 @@ void Player::move(World &world, const glm::vec3 &vel) {
         
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
         
-        if (block != 0 && block.getData().isCollidable) {
+        if (block != BlockId::Air && block.getData().isCollidable) {
 
             velocity.z = 0;
 
@@ -388,9 +395,32 @@ void Player::move(World &world, const glm::vec3 &vel) {
             break;
         }
     }
+    
+    // set slipperiness and bounce
+    m_slipperiness = DEFAULT_SLIPPERINESS;
+    for (int i = m_isOnGround ? 0 : 2; i < 16; i += 1 + ((i % 2) * 6)) {
+
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
+        float slip = block.getData().slip / 100.f;
+        if (slip < m_slipperiness) m_slipperiness = slip;
+    }
+
+    m_bounce = (movDown && m_isOnGround) ? 1.f : 0.f;
+    for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+
+        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
+        float bounce = block.getData().bounce;
+        if (block == BlockId::Air || !block.getData().isCollidable) continue;
+        if (bounce < m_bounce) m_bounce = bounce;
+    }
+    if (m_bounce > BOUNCE_TRESHOLD) {
+         m_bounce *= glm::abs(localbox.velocity.y);
+    } 
 
     // apply position
-    m_nextPosition = localbox.center;
+    m_nextPosition = localbox.position;
 
     // check water
     // moves position to avoid jittering at surface swimming
@@ -402,22 +432,13 @@ void Player::move(World &world, const glm::vec3 &vel) {
 
         ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-        if (block == 7) {
+        if (block == BlockId::Water) {
 
             m_isInWater = true;
             m_isOnGround = false;
 
             break;
         }
-    }
-
-    // check slipperiness
-    m_slipperiness = DEFAULT_SLIPPERINESS;
-    for (int i = m_isOnGround ? 0 : 2; i < 16; i += 1 + ((i % 2) * 6)) {
-
-        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
-        float slip = block.getData().slip / 100.f;
-        if (slip < m_slipperiness) m_slipperiness = slip;
     }
 }
 

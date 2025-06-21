@@ -20,19 +20,19 @@ enum class BlockShaderType {
 
 /// @brief Struct designed to hold geometric and tangibility data for each individual block.
 struct BlockDataHolder : public NonCopyable {
-    BlockId id;
-    sf::Vector2i texTopCoord;
-    sf::Vector2i texSideCoord;
-    sf::Vector2i texBottomCoord;
+    BlockId id = BlockId::Air;
+    sf::Vector2i texTopCoord = {0, 0};
+    sf::Vector2i texSideCoord = {0, 0};
+    sf::Vector2i texBottomCoord = {0, 0};
 
-    BlockMeshType meshType;
-    BlockShaderType shaderType;
+    BlockMeshType meshType = BlockMeshType::Cube;
+    BlockShaderType shaderType = BlockShaderType::Chunk;
 
-    bool isOpaque;
-    bool isCollidable;
+    bool isOpaque = false;
+    bool isCollidable = false;
 
-    int slip;
-    int bounce;
+    int slip = 100;
+    float bounce = 0.f;
 };
 
 class BlockData : public NonCopyable {

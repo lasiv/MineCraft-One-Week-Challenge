@@ -123,7 +123,7 @@ class Player : public Entity {
      * @details
      * Moves the player to the calculated position, checks collision along the way and checks for edges while sneak walking.
      */
-    void move(World &world, const glm::vec3 &vel);
+    void move(World &world);
 
     /**
      * @brief Handles keyboard input for player movement and actions.
@@ -153,18 +153,20 @@ class Player : public Entity {
     struct LocalAABB {
         glm::vec3 min;
         glm::vec3 max;
-        glm::vec3 center;
+        glm::vec3 position;
+        glm::vec3 velocity;
         ChunkBlock blocks[2][4][2] = {0};
         glm::ivec3 coords[2][4][2];
 
-        LocalAABB(const glm::vec3 &position, const AABB box) {
-            center = position;
-            min = center - box.dimensions;
-            max = center + box.dimensions;
+        LocalAABB(const glm::vec3 position, const glm::vec3 velocity, const AABB box) {
+            this->position = position;
+            this->velocity = velocity;
+            min = position - box.dimensions;
+            max = position + box.dimensions;
         }
 
         void move(const glm::vec3 &delta) {
-            center += delta;
+            position += delta;
             min += delta;
             max += delta;
         }
@@ -182,19 +184,19 @@ class Player : public Entity {
         }
 
         void set(const glm::vec3 &location) {
-            move(location - center);
+            move(location - position);
         }
 
         void setx(const float location) {
-            movex(location - center.x);
+            movex(location - position.x);
         }
 
         void sety(const float location) {
-            movey(location - center.y);
+            movey(location - position.y);
         }
 
         void setz(const float location) {
-            movez(location - center.z);
+            movez(location - position.z);
         }
 
         void setMin(const glm::vec3 &location) {
@@ -234,7 +236,7 @@ class Player : public Entity {
             int ys[4] = {
                 int(std::floor(min.y)) - 1, // below feet
                 int(std::floor(min.y)),     // feet level
-                int(std::floor(center.y)),  // center to fill collision
+                int(std::floor(position.y)),  // center to fill collision
                 int(std::floor(max.y))      // head level
             };
 
@@ -265,6 +267,7 @@ class Player : public Entity {
     bool m_isSneaking = false;
     bool m_isSprinting = false;
     float m_slipperiness = 0.6f;
+    float m_bounce = 0.0f;
     
     glm::vec3 m_spawnPoint;
     
@@ -310,7 +313,7 @@ class Player : public Entity {
 
     static constexpr float BASE_FRICTION                = 0.91f; // vertical anbd flying speed reduction factor
 
-    static constexpr float NEGLIGIBLE_SPEED_THRESHOLD   = 0.005f; // cut speed below threshold to 0, unused due to bugs
+    static constexpr float BOUNCE_TRESHOLD              = 0.05f; // speed to stop bouncing
 
     static constexpr float GROUND_ACCEL_BASE            = 0.1f;
     static constexpr float AIR_ACCEL_BASE               = 0.02f;
