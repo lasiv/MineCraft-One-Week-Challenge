@@ -10,7 +10,7 @@
 #include "../Structures/TreeGenerator.h"
 
 namespace {
-const int seed = RandomSingleton::get().intInRange(424, 325322);
+const int seed = 315974; //RandomSingleton::get().intInRange(424, 325322);
 }
 
 NoiseGenerator ClassicOverWorldGenerator::m_biomeNoiseGen(seed * 2);
@@ -23,6 +23,7 @@ ClassicOverWorldGenerator::ClassicOverWorldGenerator()
     , m_lightForest(seed)
 {
     setUpNoise();
+    m_heightMap.setAll(0);
 }
 
 void ClassicOverWorldGenerator::setUpNoise()
