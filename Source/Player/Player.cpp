@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <thread>
 
 #include "../Input/Keyboard.h"
 #include "../Renderer/RenderMaster.h"
@@ -132,7 +133,6 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 
     if (m_num1.isKeyPressed()) {
-        m_debug = true;
         m_heldItem = 0;
     }
     if (m_num2.isKeyPressed()) {
@@ -152,10 +152,9 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 // known problems: linear interpolation between ticks makes sudden changes feel floaty, might change by using past changes to blend the changes better.
 void Player::update(float dt, World &world) {
 
-    if (m_debug) {
-        printdebug(world);
-        m_debug = false;
-    }
+    // std::thread([this, &world]() {
+    //     this->printdebug(world);
+    // }).detach();
 
     static float alpha = 0.0f;
     float last_alpha = alpha;
@@ -184,7 +183,7 @@ void Player::calculate(World &world) {
     }
 
     if (m_isFlying) {
-        velocity.y = velocity.y * DEFAULT_SLIPPERINESS * BASE_FRICTION + m_input.y * GROUND_ACCEL_BASE;
+        velocity.y = velocity.y * 0.6f * BASE_FRICTION + m_input.y * GROUND_ACCEL_BASE;
     }
     else if (m_isInWater) {
         velocity.y = (velocity.y - WATER_GRAVITY) * WATER_DRAG + m_input.y * WATER_ACCEL_BASE;
@@ -215,10 +214,10 @@ void Player::calculate(World &world) {
     const float mov       = m_isSprinting ? MOVE_MULT_SPRINT
                                 : m_isSneaking ? MOVE_MULT_SNEAK
                                                : MOVE_MULT_WALK;
-    const float movMult   = (m_input.x && m_input.z)
+    const float movMult   = ((m_input.x && m_input.z)
                                 ? (m_isSneaking ? DIR_MULT_SNEAK_45
                                                : DIR_MULT_STRAFE_45)
-                                : DIR_MULT_DEFAULT
+                                : DIR_MULT_DEFAULT)
                             * (m_isFlying ? 2 : 1);
     const float slipCube  = m_isOnGround ? cube(0.6f / slip) : 1.0f;
 
@@ -268,130 +267,169 @@ void Player::move(World &world) {
     }
     
     LocalAABB localbox = LocalAABB(position, velocity, box);
-    
-    // check collision y level
-    localbox.movey(velocity.y);
-    localbox.getBlocks(world);
+
     bool movDown = (velocity.y < 0);
-    
-    m_isOnGround = false;
-    // loop horizontal slice at array y 1 or 3 (head or feet)
-    for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { 
-
-        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
-
-        if (block != BlockId::Air && block.getData().isCollidable) {
-
-            m_isOnGround = movDown;
-
-            velocity.y = 0;
-            
-            int blocky = (*(&localbox.coords[0][0][0] + i)).y;
-
-            if (movDown) localbox.setMinY((float)blocky + 1.f);
-            else localbox.setMaxY((float)blocky);
-
-            break;
-        }
-    }
-
-
-    // check collision and sneaking edge x direction
-    localbox.movex(velocity.x);
-    localbox.getBlocks(world);
-
-    bool movEast = (velocity.x > 0);
+    float vely = velocity.y;
     bool collide = false;
-    
-    // sneaking
-    if (m_isSneaking && m_isOnGround) {
-        bool ground = false;
-        // loop horizontal slice at array y 0 (below feet)
-        for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+    do {
+        float step = glm::clamp(vely, -1.f, 1.f);
+
+        // check collision y level
+        localbox.movey(step);
+        // localbox.movey(velocity.y);
+        localbox.getBlocks(world);
+        
+        m_isOnGround = false;
+        // loop horizontal slice at array y 1 or 3 (head or feet)
+        for (int i = 2 * (movDown ? 1 : 3); i < 16; i += 1 + ((i % 2) * 6)) { 
 
             ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
             if (block != BlockId::Air && block.getData().isCollidable) {
-                ground = true;
+
+                collide = true;
+
+                m_isOnGround = movDown;
+
+                velocity.y = 0;
+                
+                int blocky = (*(&localbox.coords[0][0][0] + i)).y;
+
+                if (movDown) localbox.setMinY((float)blocky + 1.f);
+                else localbox.setMaxY((float)blocky - 0.001f);
+
                 break;
             }
         }
-        if (!ground) {
+        if (collide) break;
 
-            velocity.y = 0;
-
-            if (movEast) localbox.setMinX(std::floor(localbox.min.x - 0.001f) - 0.001f);
-            else localbox.setMaxX(std::floor(localbox.max.x + 0.001f) + 1.001f);
-        }
-    }
+        vely -= step;
+    } while (std::abs(vely) > 0.f);
     
-    // collision
-    // loop vertical slice at x 0 or 1 (dependent on direction) excluding array y 0
-    for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
+    float velx = velocity.x;
+    collide = false;
+    do {
+        float step = glm::clamp(velx, -1.f, 1.f);
 
-        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+        // check collision and sneaking edge x direction
+        localbox.movex(step);
+        localbox.getBlocks(world);
 
-        if (block != BlockId::Air && block.getData().isCollidable) {
+        bool movEast = (velocity.x > 0);
+        
+        // sneaking
+        if (m_isSneaking && m_isOnGround) {
+            bool ground = false;
+            // loop horizontal slice at array y 0 (below feet)
+            for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
 
-            velocity.x = 0;
+                ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
 
-            int blockx = (*(&localbox.coords[0][0][0] + i)).x;
+                if (block != BlockId::Air && block.getData().isCollidable) {
+                    ground = true;
+                    break;
+                }
+            }
+            if (!ground) {
 
-            if (movEast) localbox.setMaxX((float)blockx - 0.001f);
-            else localbox.setMinX((float)blockx + 1.f);
+                velocity.x = 0;
 
-            break;
+                if (movEast) localbox.setMinX(std::floor(localbox.min.x + 0.01f) - 0.001f);
+                else localbox.setMaxX(std::floor(localbox.max.x - 0.01f) + 1.001f);
+
+                break;
+            }
         }
-    }
+        
+        // collision
+        // loop vertical slice at x 0 or 1 (dependent on direction) excluding array y 0
+        for (int i = 8 * (movEast ? 1 : 0) + 2; i < 8 + (movEast ? 8 : 0); ++i) {
 
-    // check collision and sneaking edge z direction
-    localbox.movez(velocity.z);
+            ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
+            if (block != BlockId::Air && block.getData().isCollidable) {
+
+                collide = true;
+
+                velocity.x = 0;
+
+                int blockx = (*(&localbox.coords[0][0][0] + i)).x;
+
+                if (movEast) localbox.setMaxX((float)blockx - 0.001f);
+                else localbox.setMinX((float)blockx + 1.f);
+
+                break;
+            }
+        }
+        if (collide) break;
+
+        velx -= step;
+    } while (std::abs(velx) > 0.f);
+
+    float velz = velocity.z;
+    collide = false;
+    do {
+        float step = glm::clamp(velz, -1.f, 1.f);
+
+        // check collision and sneaking edge z direction
+        localbox.movez(step);
+        localbox.getBlocks(world);
+
+        bool movSouth = (velocity.z > 0);
+
+        // sneaking
+        if (m_isSneaking && m_isOnGround) {
+            bool ground = false;
+            // loop horizontal slice at array y 0 (below feet)
+            for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
+
+                ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+
+                if (block != BlockId::Air && block.getData().isCollidable) {
+                    ground = true;
+                    break;
+                }
+            }
+            if (!ground) {
+                
+                velocity.z = 0;
+
+                if (movSouth) localbox.setMinZ(std::floor(localbox.min.z + 0.01f) - 0.001f);
+                else localbox.setMaxZ(std::floor(localbox.max.z - 0.01f) + 1.001f);
+
+                break;
+            }
+        }
+
+        // collision
+        // loop vertical slice at z 0 or 1 (dependent on direction) excluding array y 0
+        for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
+            
+            ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
+            
+            if (block != BlockId::Air && block.getData().isCollidable) {
+
+                collide = true;
+
+                velocity.z = 0;
+
+                int blockz = (*(&localbox.coords[0][0][0] + i)).z;
+
+                if (movSouth) localbox.setMaxZ((float)blockz - 0.001f);
+                else localbox.setMinZ((float)blockz + 1.f);
+
+                break;
+            }
+        }
+
+        if (collide) break;
+
+        velz -= step;
+    } while (std::abs(velz) > 0.f);
+
+    // set slipperiness and bounce
     localbox.getBlocks(world);
 
-    bool movSouth = (velocity.z > 0);
-
-    // sneaking
-    if (m_isSneaking && m_isOnGround) {
-        bool ground = false;
-        // loop horizontal slice at array y 0 (below feet)
-        for (int i = 0; i < 16; i += 1 + ((i % 2) * 6)) {
-
-            ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
-
-            if (block != BlockId::Air && block.getData().isCollidable) {
-                ground = true;
-                break;
-            }
-        }
-        if (!ground) {
-            
-            velocity.y = 0;
-
-            if (movSouth) localbox.setMinZ(std::floor(localbox.min.z - 0.001f) - 0.001f);
-            else localbox.setMaxZ(std::floor(localbox.max.z + 0.001f) + 1.001f);
-        }
-    }
-
-    // collision
-    // loop vertical slice at z 0 or 1 (dependent on direction) excluding array y 0
-    for (int i = (movSouth ? 1 : 0) + 2; i < 16; i += 2 + ((i % 8 > 5) ? 2 : 0)) {
-        
-        ChunkBlock block = *(&localbox.blocks[0][0][0] + i);
-        
-        if (block != BlockId::Air && block.getData().isCollidable) {
-
-            velocity.z = 0;
-
-            int blockz = (*(&localbox.coords[0][0][0] + i)).z;
-
-            if (movSouth) localbox.setMaxZ((float)blockz - 0.001f);
-            else localbox.setMinZ((float)blockz + 1.f);
-
-            break;
-        }
-    }
-    
-    // set slipperiness and bounce
     m_slipperiness = DEFAULT_SLIPPERINESS;
     for (int i = m_isOnGround ? 0 : 2; i < 16; i += 1 + ((i % 2) * 6)) {
 
@@ -437,10 +475,7 @@ void Player::move(World &world) {
     }
 }
 
-// fix vertical flight too fast
-// fix horizontal diagonal movement not speed up
 // fix interpolation linear -> anything better
-// fix phasing through blocks at high speeds
 
 /// @todo add movement keys to config
 void Player::keyboardInput(Keyboard &keyboard)
