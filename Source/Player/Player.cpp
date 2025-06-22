@@ -78,6 +78,12 @@ void Player::printdebug(World &world) const
                 << position.x << ", "
                 << position.y << ", "
                 << position.z << ")  "
+                << "Chunk("
+                << world.getChunkXZ(std::floor(position.x), std::floor(position.z)).x << ", "
+                << world.getChunkXZ(std::floor(position.x), std::floor(position.z)).z << ")  "
+                << "ChunkBlock("
+                << world.getBlockXZ(std::floor(position.x), std::floor(position.z)).x << ", "
+                << world.getBlockXZ(std::floor(position.x), std::floor(position.z)).z << ")  "
                 << "Rot("
                 << rotation.x << ", "
                 << rotation.y << ", "
@@ -90,24 +96,8 @@ void Player::printdebug(World &world) const
                 << "In("
                 << m_input.x << ", "
                 << m_input.y << ", "
-                << m_input.z << ")  "
-                << "bounce="
-                << m_bounce
+                << m_input.z << ")"
                 << std::flush;
-    
-    // 2) sample the block at the player's feet
-    int bx = int(std::floor(position.x - .5f)) + 1 ;
-    int by = int(std::floor(position.y + box.dimensions.y)); 
-    int bz = int(std::floor(position.z - .5f));
-
-    // world.updateChunk(bx, by, bz);
-    // world.setBlock(bx, by, bz, 7);
-
-    // auto block = world.getBlock(bx, by, bz);
-    // int blockID = block.id;  // your ChunkBlock.id member
-
-    // std::cout << "BlockID=" << blockID
-    //           << std::flush;
 }
 
 void Player::setPosition(glm::vec3 pos) {
@@ -142,6 +132,7 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
     }
 
     if (m_num1.isKeyPressed()) {
+        m_debug = true;
         m_heldItem = 0;
     }
     if (m_num2.isKeyPressed()) {
@@ -161,6 +152,11 @@ void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 // known problems: linear interpolation between ticks makes sudden changes feel floaty, might change by using past changes to blend the changes better.
 void Player::update(float dt, World &world) {
 
+    if (m_debug) {
+        printdebug(world);
+        m_debug = false;
+    }
+
     static float alpha = 0.0f;
     float last_alpha = alpha;
     alpha += dt / TICK;
@@ -169,7 +165,6 @@ void Player::update(float dt, World &world) {
         last_alpha = 0.f;
         calculate(world);
         move(world);
-        printdebug(world);
     }
 
     float k = (alpha - last_alpha)/(1.f - last_alpha);

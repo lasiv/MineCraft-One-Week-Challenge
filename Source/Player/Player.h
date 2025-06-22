@@ -268,6 +268,8 @@ class Player : public Entity {
     bool m_isSprinting = false;
     float m_slipperiness = 0.6f;
     float m_bounce = 0.0f;
+
+    bool m_debug = false;
     
     glm::vec3 m_spawnPoint;
     
