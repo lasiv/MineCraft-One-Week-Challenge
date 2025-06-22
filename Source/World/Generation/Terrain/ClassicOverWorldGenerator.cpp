@@ -113,9 +113,9 @@ void ClassicOverWorldGenerator::getBiomeMap()
 {
     auto location = m_pChunk->getLocation();
 
-    for (int x = 0; x < CHUNK_SIZE + 1; x++)
-        for (int z = 0; z < CHUNK_SIZE + 1; z++) {
-            double h = m_biomeNoiseGen.getHeight(x, z, location.x + 10,
+    for (int x = 0; x < 3*CHUNK_SIZE + 1; x++)
+        for (int z = 0; z < 3*CHUNK_SIZE + 1; z++) {
+            double h = m_biomeNoiseGen.getHeight(x - CHUNK_SIZE + 1, z - CHUNK_SIZE + 1, location.x + 10,
                                                  location.y + 10);
             m_biomeMap.get(x, z) = static_cast<int>(h);
         }
@@ -188,7 +188,7 @@ void ClassicOverWorldGenerator::setBlocks(int maxHeight)
 
 const Biome &ClassicOverWorldGenerator::getBiome(int x, int z) const
 {
-    int biomeValue = m_biomeMap.get(x, z);
+    int biomeValue = m_biomeMap.get(x + CHUNK_SIZE, z + CHUNK_SIZE);
 
     if (biomeValue > 160) {
         return m_oceanBiome;
