@@ -68,10 +68,10 @@ double NoiseGenerator::noise(double x, double z) const noexcept
 double NoiseGenerator::getHeight(int x, int z, int chunkX, int chunkZ) const
     noexcept
 {
-    auto newX = (x + (chunkX * CHUNK_SIZE));
-    auto newZ = (z + (chunkZ * CHUNK_SIZE));
+    auto world_x = (x + (chunkX * CHUNK_SIZE));
+    auto world_z = (z + (chunkZ * CHUNK_SIZE));
 
-    if (newX < 0 || newZ < 0) {
+    if (world_x < 0 || world_z < 0) {
         return WATER_LEVEL - 1;
     }
 
@@ -80,15 +80,11 @@ double NoiseGenerator::getHeight(int x, int z, int chunkX, int chunkZ) const
     for (auto a = 0; a < m_noiseParameters.octaves - 1;
          a++) // This loops through the octaves.
     {
-        auto frequency = pow(
-            2.0,
-            a); // This increases the frequency with every loop of the octave.
-        auto amplitude = pow(
-            m_noiseParameters.roughness,
-            a); // This decreases the amplitude with every loop of the octave.
+        auto frequency = pow(2.0, a); // This increases the frequency with every loop of the octave.
+        auto amplitude = pow(m_noiseParameters.roughness, a); // This decreases the amplitude with every loop of the octave.
         totalValue +=
-            noise(((double)newX) * frequency / m_noiseParameters.smoothness,
-                  ((double)newZ) * frequency / m_noiseParameters.smoothness) *
+            noise(((double)world_x) * frequency / m_noiseParameters.smoothness,
+                  ((double)world_z) * frequency / m_noiseParameters.smoothness) *
             amplitude;
     }
 
