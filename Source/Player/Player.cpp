@@ -442,6 +442,11 @@ void Player::move(World &world) {
     }
 }
 
+// fix vertical flight too fast
+// fix horizontal diagonal movement not speed up
+// fix interpolation linear -> anything better
+// fix phasing through blocks at high speeds
+
 /// @todo add movement keys to config
 void Player::keyboardInput(Keyboard &keyboard)
 {   bool w = keyboard.isKeyDown(sf::Keyboard::W);
