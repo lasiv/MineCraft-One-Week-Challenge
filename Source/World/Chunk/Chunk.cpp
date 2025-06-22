@@ -29,8 +29,22 @@ bool Chunk::makeMesh(const Camera &camera)
 void Chunk::setBlock(int x, int y, int z, ChunkBlock block)
 {
     addSectionsBlockTarget(y);
-    if (outOfBound(x, y, z))
+    if (outOfBound(x, y, z)) {
         return;
+
+        if(outOfBound(0, y, 0)) {
+            return;
+        }
+
+        int world_x = CHUNK_SIZE * m_location.x + x;
+        int world_z = CHUNK_SIZE * m_location.y + z;
+
+        // Can't place the block inside my borders
+        // Ask my parent to do it for me
+        m_pWorld->setBlock(world_x, y, world_z, block);
+
+        return;
+    }
 
     int bY = y % CHUNK_SIZE;
     m_chunks[y / CHUNK_SIZE].setBlock(x, bY, z, block);
