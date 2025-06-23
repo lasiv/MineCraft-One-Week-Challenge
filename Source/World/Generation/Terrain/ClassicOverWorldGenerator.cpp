@@ -90,7 +90,7 @@ void ClassicOverWorldGenerator::getHeightIn(int xMin, int zMin, int xMax,
                 static_cast<float>(zMin), static_cast<float>(zMax),
                 static_cast<float>(x), static_cast<float>(z));
 
-            m_heightMap.get(x, z) = static_cast<int>(h);
+            m_heightMap.get(x + CHUNK_SIZE, z + CHUNK_SIZE) = static_cast<int>(h);
         }
 }
 
@@ -99,10 +99,15 @@ void ClassicOverWorldGenerator::getHeightMap()
     constexpr static auto HALF_CHUNK = CHUNK_SIZE / 2;
     constexpr static auto CHUNK = CHUNK_SIZE;
 
-    getHeightIn(0, 0, HALF_CHUNK, HALF_CHUNK);
-    getHeightIn(HALF_CHUNK, 0, CHUNK, HALF_CHUNK);
-    getHeightIn(0, HALF_CHUNK, HALF_CHUNK, CHUNK);
-    getHeightIn(HALF_CHUNK, HALF_CHUNK, CHUNK, CHUNK);
+    for(int offx = -CHUNK_SIZE; offx <= CHUNK_SIZE; offx += CHUNK_SIZE) {
+        for(int offz = -CHUNK_SIZE; offz <= CHUNK_SIZE; offz += CHUNK_SIZE) {
+            getHeightIn(offx + 0, offz + 0, offx + HALF_CHUNK, offz + HALF_CHUNK);
+            getHeightIn(offx + HALF_CHUNK, offz + 0, offx + CHUNK, offz + HALF_CHUNK);
+            getHeightIn(offx + 0, offz + HALF_CHUNK, offx + HALF_CHUNK, offz + CHUNK);
+            getHeightIn(offx + HALF_CHUNK, offz + HALF_CHUNK, offx + CHUNK, offz + CHUNK);
+        }
+    }
+
 }
 
 void ClassicOverWorldGenerator::getBiomeMap()
@@ -123,9 +128,9 @@ void ClassicOverWorldGenerator::setBlocks(int maxHeight)
     std::vector<sf::Vector3i> plants;
 
     for (int y = 0; y < maxHeight + 1; y++)
-        for (int x = 0; x < CHUNK_SIZE; x++)
-            for (int z = 0; z < CHUNK_SIZE; z++) {
-                int height = m_heightMap.get(x, z);
+        for (int x = -CHUNK_SIZE; x < 2*CHUNK_SIZE; x++)
+            for (int z = -CHUNK_SIZE; z < 2*CHUNK_SIZE; z++) {
+                int height = m_heightMap.get(x + CHUNK_SIZE, z + CHUNK_SIZE);
                 auto &biome = getBiome(x, z);
 
                 if (y > height) {
