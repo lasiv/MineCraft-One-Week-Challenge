@@ -14,6 +14,7 @@
 #include "../Biome/LightForest.h"
 #include "../Biome/OceanBiome.h"
 #include "../Biome/TemperateForestBiome.h"
+#include <SFML/System/Vector3.hpp>
 
 class Chunk;
 
@@ -127,7 +128,7 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      */
     void getBiomeMap();
 
-    /**
+    /**<int>
      * @brief Gets the biome for the specified coordinates.
      * 
      * @param x The x-coordinate of the block.
@@ -147,7 +148,9 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      */
     const Biome &getBiome(int x, int z) const;
 
-    Array2D<int, CHUNK_SIZE> m_heightMap;
+    void getStructuresFor(int chunkX, int chunkZ, std::vector<sf::Vector3i>& structures);
+
+    Array2D<int, 3*CHUNK_SIZE> m_heightMap;
     Array2D<int, 3*CHUNK_SIZE + 1> m_biomeMap;
 
     Random<std::minstd_rand> m_random;

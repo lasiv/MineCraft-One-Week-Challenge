@@ -13,6 +13,10 @@ namespace {
 const int seed = 315974; //RandomSingleton::get().intInRange(424, 325322);
 }
 
+constexpr int chunk_seed(int chunkX, int chunkZ) {
+    return (chunkX ^ chunkZ) << 2;
+}
+
 NoiseGenerator ClassicOverWorldGenerator::m_biomeNoiseGen(seed * 2);
 
 ClassicOverWorldGenerator::ClassicOverWorldGenerator()
@@ -50,7 +54,7 @@ void ClassicOverWorldGenerator::generateTerrainFor(Chunk &chunk)
     m_pChunk = &chunk;
 
     auto location = chunk.getLocation();
-    m_random.setSeed((location.x ^ location.y) << 2);
+    m_random.setSeed(chunk_seed(location.x, location.y));
 
     getBiomeMap();
     getHeightMap();
@@ -84,18 +88,13 @@ void ClassicOverWorldGenerator::getHeightIn(int xMin, int zMin, int xMax,
 
     for (int x = xMin; x < xMax; ++x)
         for (int z = zMin; z < zMax; ++z) {
-            if (x == CHUNK_SIZE)
-                continue;
-            if (z == CHUNK_SIZE)
-                continue;
-
             float h = smoothInterpolation(
                 bottomLeft, topLeft, bottomRight, topRight,
                 static_cast<float>(xMin), static_cast<float>(xMax),
                 static_cast<float>(zMin), static_cast<float>(zMax),
                 static_cast<float>(x), static_cast<float>(z));
 
-            m_heightMap.get(x, z) = static_cast<int>(h);
+            m_heightMap.get(x + CHUNK_SIZE, z + CHUNK_SIZE) = static_cast<int>(h);
         }
 }
 
@@ -104,10 +103,15 @@ void ClassicOverWorldGenerator::getHeightMap()
     constexpr static auto HALF_CHUNK = CHUNK_SIZE / 2;
     constexpr static auto CHUNK = CHUNK_SIZE;
 
-    getHeightIn(0, 0, HALF_CHUNK, HALF_CHUNK);
-    getHeightIn(HALF_CHUNK, 0, CHUNK, HALF_CHUNK);
-    getHeightIn(0, HALF_CHUNK, HALF_CHUNK, CHUNK);
-    getHeightIn(HALF_CHUNK, HALF_CHUNK, CHUNK, CHUNK);
+    for(int offx = -CHUNK_SIZE; offx <= CHUNK_SIZE; offx += CHUNK_SIZE) {
+        for(int offz = -CHUNK_SIZE; offz <= CHUNK_SIZE; offz += CHUNK_SIZE) {
+            getHeightIn(offx + 0, offz + 0, offx + HALF_CHUNK, offz + HALF_CHUNK);
+            getHeightIn(offx + HALF_CHUNK, offz + 0, offx + CHUNK, offz + HALF_CHUNK);
+            getHeightIn(offx + 0, offz + HALF_CHUNK, offx + HALF_CHUNK, offz + CHUNK);
+            getHeightIn(offx + HALF_CHUNK, offz + HALF_CHUNK, offx + CHUNK, offz + CHUNK);
+        }
+    }
+
 }
 
 void ClassicOverWorldGenerator::getBiomeMap()
@@ -122,15 +126,52 @@ void ClassicOverWorldGenerator::getBiomeMap()
         }
 }
 
+void ClassicOverWorldGenerator::getStructuresFor(int offX, int offZ, std::vector<sf::Vector3i>& structures)
+{
+    Random<std::minstd_rand> chunk_random;
+    int chunkX = m_pChunk->getLocation().x + offX;
+    int chunkZ = m_pChunk->getLocation().y + offZ;
+    chunk_random.setSeed(chunk_seed(chunkX, chunkZ));
+
+    for(int x = 0; x < CHUNK_SIZE; x++) {
+        for(int z = 0; z < CHUNK_SIZE; z++) {
+            int arrayIdx = x + CHUNK_SIZE + (offX * CHUNK_SIZE);
+            int arrayIdz = z + CHUNK_SIZE + (offZ * CHUNK_SIZE);
+
+            int posX = x + offX * CHUNK_SIZE;
+            int posZ = z + offZ * CHUNK_SIZE;
+
+            int height = m_heightMap.get(arrayIdx, arrayIdz);
+            auto &biome = getBiome(posX, posZ);
+
+            if(height <= WATER_LEVEL) continue;
+
+            if(chunk_random.intInRange(0, biome.getTreeFrequency()) == 5) {
+                structures.emplace_back(posX, height, posZ);
+            }
+        }
+    }
+}
+
 void ClassicOverWorldGenerator::setBlocks(int maxHeight)
 {
     std::vector<sf::Vector3i> trees;
     std::vector<sf::Vector3i> plants;
 
+    getStructuresFor(-1, -1, trees);
+    getStructuresFor(-1,  0, trees);
+    getStructuresFor(-1,  1, trees);
+    getStructuresFor( 0, -1, trees);
+    getStructuresFor( 0,  0, trees);
+    getStructuresFor( 0,  1, trees);
+    getStructuresFor( 1, -1, trees);
+    getStructuresFor( 1,  0, trees);
+    getStructuresFor( 1,  1, trees);
+
     for (int y = 0; y < maxHeight + 1; y++)
         for (int x = 0; x < CHUNK_SIZE; x++)
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                int height = m_heightMap.get(x, z);
+                int height = m_heightMap.get(x + CHUNK_SIZE, z + CHUNK_SIZE);
                 auto &biome = getBiome(x, z);
 
                 if (y > height) {
@@ -149,7 +190,7 @@ void ClassicOverWorldGenerator::setBlocks(int maxHeight)
 
                         if (m_random.intInRange(0, biome.getTreeFrequency()) ==
                             5) {
-                            trees.emplace_back(x, y + 1, z);
+                            //trees.emplace_back(x, y + 1, z);
                         }
                         if (m_random.intInRange(0, biome.getPlantFrequency()) ==
                             5) {
