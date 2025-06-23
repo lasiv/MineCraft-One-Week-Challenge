@@ -116,7 +116,7 @@ void ClassicOverWorldGenerator::getBiomeMap()
 
     for (int x = 0; x < 3*CHUNK_SIZE + 1; x++)
         for (int z = 0; z < 3*CHUNK_SIZE + 1; z++) {
-            double h = m_biomeNoiseGen.getHeight(x - CHUNK_SIZE + 1, z - CHUNK_SIZE + 1, location.x + 10,
+            double h = m_biomeNoiseGen.getHeight(x - CHUNK_SIZE, z - CHUNK_SIZE, location.x + 10,
                                                  location.y + 10);
             m_biomeMap.get(x, z) = static_cast<int>(h);
         }
