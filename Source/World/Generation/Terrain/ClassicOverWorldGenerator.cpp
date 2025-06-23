@@ -84,11 +84,6 @@ void ClassicOverWorldGenerator::getHeightIn(int xMin, int zMin, int xMax,
 
     for (int x = xMin; x < xMax; ++x)
         for (int z = zMin; z < zMax; ++z) {
-            if (x == CHUNK_SIZE)
-                continue;
-            if (z == CHUNK_SIZE)
-                continue;
-
             float h = smoothInterpolation(
                 bottomLeft, topLeft, bottomRight, topRight,
                 static_cast<float>(xMin), static_cast<float>(xMax),
