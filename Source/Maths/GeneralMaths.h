@@ -1,6 +1,8 @@
 #ifndef GENERALMATHS_H_INCLUDED
 #define GENERALMATHS_H_INCLUDED
 
+#include "../Maths/glm.h"
+
 /**
  * @brief Smooth interpolation function that uses smoothstep for interpolation.
  * 
@@ -31,5 +33,10 @@ float bilinearInterpolation(float bottomLeft, float topLeft, float bottomRight,
 float smoothInterpolation(float bottomLeft, float topLeft, float bottomRight,
                           float topRight, float xMin, float xMax, float zMin,
                           float zMax, float x, float z);
+
+glm::vec2 cubicBezier(float t, const glm::vec2& p0, const glm::vec2& p1,
+                        const glm::vec2& p2, const glm::vec2& p3);
+
+float getBezierYforX(float x, float a);
 
 #endif // GENERALMATHS_H_INCLUDED

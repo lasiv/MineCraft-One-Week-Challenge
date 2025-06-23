@@ -10,6 +10,7 @@
 #include "../Input/Keyboard.h"
 #include "../Renderer/RenderMaster.h"
 #include "../World/World.h"
+#include "../Maths/GeneralMaths.h"
 
 sf::Font f;
 
@@ -156,17 +157,29 @@ void Player::update(float dt, World &world) {
     //     this->printdebug(world);
     // }).detach();
 
-    static float alpha = 0.0f;
-    float last_alpha = alpha;
-    alpha += dt / TICK;
+    static glm::vec3 last_vel = {0.f,0.f,0.f};
+    static float param = 0.f;
+    static float last_alpha = 0.f;
+    
+    
+    
+    static float delta = 0.f;
+    delta += dt / TICK;
 
-    for (; alpha > 1.f; alpha--) {
+    for (; delta > 1.f; delta--) {
         last_alpha = 0.f;
         calculate(world);
         move(world);
+        
+        param = glm::length(velocity) - glm::length(last_vel);
+        param = 0.5 + param * INTERPOLATION_CONST;
+        param = glm::clamp(param,0.f,1.f);
+        last_vel = velocity;
     }
 
+    float alpha = getBezierYforX(delta, param);
     float k = (alpha - last_alpha)/(1.f - last_alpha);
+    last_alpha = alpha;
 
     position += (m_nextPosition - position) * k;
 

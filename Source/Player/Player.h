@@ -333,6 +333,8 @@ class Player : public Entity {
 
     // Respawn height if the player falls below y ≤ 0
     static constexpr float RESPAWN_HEIGHT               = 300.0f;
+
+    static constexpr float INTERPOLATION_CONST          = 0.25f;
 };
 
 #endif // PLAYER_H_INCLUDED
