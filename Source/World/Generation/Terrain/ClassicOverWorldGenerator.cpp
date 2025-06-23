@@ -10,7 +10,7 @@
 #include "../Structures/TreeGenerator.h"
 
 namespace {
-const int seed = 315974; //RandomSingleton::get().intInRange(424, 325322);
+const int seed = RandomSingleton::get().intInRange(424, 325322);
 }
 
 constexpr int chunk_seed(int chunkX, int chunkZ) {
