@@ -72,9 +72,13 @@ void FPSCounter::draw(sf::RenderWindow &window, World &world, Player &player)
                 << "Vel("
                 << player.velocity.x << ", "
                 << player.velocity.y << ", "
-                << player.velocity.z << ")" << std::endl;
+                << player.velocity.z << ")\n"  
+                
+                << " 0: Id: " << player.getInventory().getItemOfSlot(0).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack()
 
-    m_text.setString(ss.str() + "FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
+                << std::endl;
+
+    m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps)) + ss.str()); // falls du es hier lassen willst
     //window.pushGLStates();
     //window.resetGLStates();
     window.draw(m_text);

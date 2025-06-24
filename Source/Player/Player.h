@@ -103,6 +103,9 @@ class Player : public Entity {
      */
     ItemStack& getHeldItems();
 
+    // temp debug function
+    Inventory& getInventory();
+
   private:
 
     /**

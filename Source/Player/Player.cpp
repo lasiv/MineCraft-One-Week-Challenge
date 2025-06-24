@@ -64,6 +64,11 @@ ItemStack& Player::getHeldItems()
     }
 }
 
+Inventory& Player::getInventory()
+{
+    return m_inventory;
+}
+
 void Player::handleInput(const sf::Window &window, Keyboard &keyboard)
 {
     keyboardInput(keyboard);
