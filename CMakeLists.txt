@@ -5,7 +5,7 @@ project(
     VERSION 1.0
 )
 
-include("vcpkg/scripts/buildsystems/vcpkg.cmake")
+include("$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 
 add_executable(${PROJECT_NAME}
     Source/Item/Material.cpp
