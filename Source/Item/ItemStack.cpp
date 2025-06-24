@@ -39,3 +39,8 @@ const Material &ItemStack::getMaterial() const
 {
     return *m_pMaterial;
 }
+
+void ItemStack::setMaterial(const Material* id)
+{
+    m_pMaterial = id;
+}
