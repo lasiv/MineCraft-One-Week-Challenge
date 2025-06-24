@@ -8,6 +8,7 @@
 #include "../../Chunk/Chunk.h"
 
 #include "../Structures/TreeGenerator.h"
+#include "../Structures/Structure.h"
 
 namespace {
 const int seed = RandomSingleton::get().intInRange(424, 325322);
@@ -28,6 +29,8 @@ ClassicOverWorldGenerator::ClassicOverWorldGenerator()
 {
     setUpNoise();
     m_heightMap.setAll(0);
+    Structure structure("oak4");
+    structure.print_info();
 }
 
 void ClassicOverWorldGenerator::setUpNoise()
