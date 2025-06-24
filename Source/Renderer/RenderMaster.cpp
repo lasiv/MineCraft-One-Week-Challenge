@@ -81,7 +81,7 @@ void RenderMaster::finishRender(sf::RenderWindow &window, const Camera &camera)
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
-    window.pushGLStates();
+    /* window.pushGLStates();
     window.display();
-    window.popGLStates();
+    window.popGLStates(); */
 }
