@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <algorithm>
 
 Structure::Structure(std::string fileName)
 {
@@ -28,7 +29,8 @@ Structure::Structure(std::string fileName)
             int dimX = dimensions[0];
             int dimY = dimensions[1];
             int dimZ = dimensions[2];
-            layers.reserve(dimX*dimY*dimZ);
+
+            layers.resize(dimX*dimY*dimZ);
             
             for(int y = 0; y < dimY; y++) {
                 for(int z = 0; z < dimZ; z++) {
@@ -42,6 +44,14 @@ Structure::Structure(std::string fileName)
             }
         }
     }
+}
+
+Structure::Structure(const Structure& other)
+{
+    this->name = other.name;
+    this->id = other.id;
+    this->layers = other.layers;
+    std::copy(std::begin(other.dimensions), std::end(other.dimensions), this->dimensions);
 }
 
 void Structure::generate_structure()
@@ -63,17 +73,5 @@ void Structure::print_info() {
             std::cout << std::endl;
         }
         std::cout << std::endl;
-    }
-}
-
-void load_all_structures()
-{
-    std::filesystem::directory_iterator struct_it("Res/Structures/");
-
-    for(auto entry : struct_it) {
-        if(!entry.is_regular_file())
-            continue;
-
-        entry.path().filename();
     }
 }

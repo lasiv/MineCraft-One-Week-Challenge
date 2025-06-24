@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <iostream>
+#include <filesystem>
 
 #include "../../../Maths/GeneralMaths.h"
 #include "../../../Util/Random.h"
@@ -29,8 +30,20 @@ ClassicOverWorldGenerator::ClassicOverWorldGenerator()
 {
     setUpNoise();
     m_heightMap.setAll(0);
-    Structure structure("oak4");
-    structure.print_info();
+
+    std::filesystem::directory_iterator struct_it("Res/Structures/");
+
+    for(auto entry : struct_it) {
+        if(!entry.is_regular_file())
+            continue;
+
+        std::filesystem::path file_path = entry.path().stem();
+        
+        Structure st(file_path);
+        if(structures.size() < st.get_id())
+            structures.resize(st.get_id());
+        structures[st.get_id()-1].push_back(st);
+    }
 }
 
 void ClassicOverWorldGenerator::setUpNoise()

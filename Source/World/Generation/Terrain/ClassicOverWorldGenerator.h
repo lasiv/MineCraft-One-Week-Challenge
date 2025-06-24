@@ -15,6 +15,8 @@
 #include "../Biome/OceanBiome.h"
 #include "../Biome/TemperateForestBiome.h"
 #include <SFML/System/Vector3.hpp>
+#include <vector>
+#include "../Structures/Structure.h"
 
 class Chunk;
 
@@ -60,6 +62,7 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      * The spawn height is set to a constant value defined by WATER_LEVEL.
      */
     int getMinimumSpawnHeight() const noexcept override;
+    void check_integrity();
 
   private:
     
@@ -156,6 +159,8 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
     Random<std::minstd_rand> m_random;
 
     static NoiseGenerator m_biomeNoiseGen;
+
+    std::vector<std::vector<Structure>> structures;
 
     GrasslandBiome m_grassBiome;
     TemperateForestBiome m_temperateForest;

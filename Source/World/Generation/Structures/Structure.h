@@ -8,16 +8,18 @@
 
 class Structure {
     public:
+        Structure(const Structure& other);
         Structure(std::string file_name);
         void generate_structure();
         void print_info();
+        inline int get_id() {
+            return id;
+        }
     private:
         std::string name;
         int id;
         std::vector<Block_t> layers;
         int dimensions[3];
 };
-
-void load_all_structures();
 
 #endif
