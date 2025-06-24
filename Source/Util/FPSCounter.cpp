@@ -47,7 +47,7 @@ void FPSCounter::update()
 
 void FPSCounter::draw(sf::RenderWindow &window)
 {
-    std::cout << "FPSCounter::draw called, fps: " << m_fps << "\n";
+    //std::cout << "FPSCounter::draw called, fps: " << m_fps << "\n";
     m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
     //window.pushGLStates();
     //window.resetGLStates();
