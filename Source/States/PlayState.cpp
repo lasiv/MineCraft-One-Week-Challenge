@@ -75,8 +75,11 @@ void StatePlay::update(float deltaTime)
 
 void StatePlay::render(RenderMaster &renderer)
 {
-    static sf::Clock dt;
+    m_world.renderWorld(renderer, m_pApplication->getCamera());
+}
 
+void StatePlay::drawUI(sf::RenderWindow &window)
+{
     static bool drawGUI = false;
     static ToggleKey drawKey(sf::Keyboard::F3);
 
@@ -85,11 +88,8 @@ void StatePlay::render(RenderMaster &renderer)
         std::cout << "drawGUI toggled: " << drawGUI << "\n";
     }
 
-    m_world.renderWorld(renderer, m_pApplication->getCamera());
-
     if (drawGUI) {
-        m_fpsCounter.draw(m_pApplication->getWindow());
-        //m_player.draw(renderer);
+        m_fpsCounter.draw(window);
     }
 }
 
