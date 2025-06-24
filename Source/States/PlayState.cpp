@@ -89,8 +89,10 @@ void StatePlay::drawUI(sf::RenderWindow &window)
     }
 
     if (drawGUI) {
-        m_fpsCounter.draw(window);
+        m_fpsCounter.draw(window, m_world, m_player);
     }
+
+
 }
 
 void StatePlay::onOpen()

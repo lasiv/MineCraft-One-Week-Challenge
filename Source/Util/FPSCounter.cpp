@@ -1,8 +1,12 @@
 #include "FPSCounter.h"
 
 #include "../Renderer/RenderMaster.h"
+#include "../Player/Player.h"
+#include "../World/World.h"
 
 #include <iostream>
+#include <sstream> 
+#include <iomanip>
 
 /// @todo add fps counter to the config file and render it to the screen
 FPSCounter::FPSCounter()
@@ -45,10 +49,32 @@ void FPSCounter::update()
     }
 }
 
-void FPSCounter::draw(sf::RenderWindow &window)
+void FPSCounter::draw(sf::RenderWindow &window, World &world, Player &player)
 {
     //std::cout << "FPSCounter::draw called, fps: " << m_fps << "\n";
-    m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
+    std::stringstream ss;
+
+    ss << std::fixed << std::setprecision(2)
+                << "Pos(" 
+                << player.position.x << ", "
+                << player.position.y << ", "
+                << player.position.z << ")\n"
+                << "Chunk("
+                << world.getChunkXZ(std::floor(player.position.x), std::floor(player.position.z)).x << ", "
+                << world.getChunkXZ(std::floor(player.position.x), std::floor(player.position.z)).z << ")\n"
+                << "ChunkBlock("
+                << world.getBlockXZ(std::floor(player.position.x), std::floor(player.position.z)).x << ", "
+                << world.getBlockXZ(std::floor(player.position.x), std::floor(player.position.z)).z << ")\n"
+                << "Rot("
+                << player.rotation.x << ", "
+                << player.rotation.y << ", "
+                << player.rotation.z << ")\n"
+                << "Vel("
+                << player.velocity.x << ", "
+                << player.velocity.y << ", "
+                << player.velocity.z << ")" << std::endl;
+
+    m_text.setString(ss.str() + "FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
     //window.pushGLStates();
     //window.resetGLStates();
     window.draw(m_text);
