@@ -44,7 +44,7 @@ class Inventory
          */
         void mouseInput();
 
-        void addItem(const Material &material_id);
+        void addItem(const Material* material);
 
         void toggleVisibility();
 

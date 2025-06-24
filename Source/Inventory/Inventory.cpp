@@ -22,27 +22,32 @@ void Inventory::mouseInput()
 
 }
 
-void Inventory::addItem(const Material &material)
+void Inventory::addItem(const Material* material)
 {
-    Material::ID id = material.id;
-    int leftOver = 0;
+    Material::ID id = material->id;
+    //int leftOver = 0;
 
-    for (unsigned i = 0; i < getSlots().size(); i++) 
+    for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
     {
         if (m_slots[i].getMaterial().id == id) 
         {
-            leftOver = m_slots[i].add(1);
-            if (leftOver == 0)
-            {
-                return;
-            }
+            /*int leftOver =*/m_slots[i].add(1);
+
+            return;
+        }
+        else if (m_slots[i].getMaterial().id == Material::ID::Nothing) 
+        {
+            m_slots[i].setMaterial(material);
+            return;
         }
     }
-    int firstFree = getFirstFreeSlotNum();
+
+    /* int firstFree = getFirstFreeSlotNum();
+    
     if (leftOver && firstFree != -1)
     {
-        m_slots[firstFree] = {material, 1};
-    }
+        m_slots[firstFree].setMaterial(material);
+    } */
 }
 
 int Inventory::getFirstFreeSlotNum()

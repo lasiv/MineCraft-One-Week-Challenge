@@ -53,7 +53,7 @@ Player::Player()
 
 void Player::addItem(const Material &material)
 {
-    m_inventory.addItem(material);
+    m_inventory.addItem(&material);
 }
 
 ItemStack& Player::getHeldItems()
