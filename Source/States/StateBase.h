@@ -69,6 +69,8 @@ class StateBase {
      */
     virtual void render(RenderMaster &renderer) = 0;
 
+    virtual void drawUI(sf::RenderWindow &window) = 0;
+
     /**
      * @brief Called when this state becomes the active state.
      *
