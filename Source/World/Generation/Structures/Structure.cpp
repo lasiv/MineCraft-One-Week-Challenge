@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 Structure::Structure(std::string fileName)
 {
@@ -70,5 +71,17 @@ void Structure::print_info() {
             std::cout << std::endl;
         }
         std::cout << std::endl;
+    }
+}
+
+void load_all_structures()
+{
+    std::filesystem::directory_iterator struct_it("Res/Structures/");
+
+    for(auto entry : struct_it) {
+        if(!entry.is_regular_file())
+            continue;
+
+        entry.path().filename();
     }
 }
