@@ -68,6 +68,8 @@ class StatePlay : public StateBase {
      */
     void render(RenderMaster &renderer) override;
 
+    void drawUI(sf::RenderWindow &window) override;
+
     /**
      * @brief Called when this state is pushed onto the state stack.
      *
