@@ -11,7 +11,7 @@ FPSCounter::FPSCounter()
     debugging = false;
 
     m_text.setPosition(sf::Vector2f(10.f,10.f));
-    m_text.move(10, 10);
+    //m_text.move(10, 10);
     m_text.setOutlineColor(sf::Color::Black);
     m_text.setOutlineThickness(2);
 
@@ -49,8 +49,8 @@ void FPSCounter::draw(sf::RenderWindow &window)
 {
     std::cout << "FPSCounter::draw called, fps: " << m_fps << "\n";
     m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps))); // falls du es hier lassen willst
-    window.pushGLStates();
-    window.resetGLStates();
+    //window.pushGLStates();
+    //window.resetGLStates();
     window.draw(m_text);
-    window.popGLStates();
+    //window.popGLStates();
 }
