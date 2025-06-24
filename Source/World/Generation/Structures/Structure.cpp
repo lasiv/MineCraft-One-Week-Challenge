@@ -52,8 +52,26 @@ Structure::Structure(const Structure& other)
     this->dimZ = other.dimZ;
 }
 
-void Structure::generate_structure()
-{
+void Structure::generate_structure(Chunk* chunk, sf::Vector3i center) {
+    int x_offset = -dimX/2;
+    int z_offset = -dimZ/2;
+
+    sf::Vector3i offset(x_offset, 0, z_offset);
+
+    for(int y = 0; y < dimY; y++) {
+        for(int z = 0; z < dimZ; z++) {
+            for(int x = 0; x < dimX; x++) {
+                int index = y * (dimX*dimZ) + z * dimX + x;
+                sf::Vector3i position(x, y, z);
+                position += center + offset;
+
+                if(layers[index] == 255) 
+                    continue;
+
+                chunk->setBlock(position.x, position.y, position.z, layers[index]);
+            }
+        }
+    }
 }
 
 void Structure::print_info() {

@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <filesystem>
+#include <utility>
 
 #include "../../../Maths/GeneralMaths.h"
 #include "../../../Util/Random.h"
@@ -142,7 +143,7 @@ void ClassicOverWorldGenerator::getBiomeMap()
         }
 }
 
-void ClassicOverWorldGenerator::getStructuresFor(int offX, int offZ, std::vector<sf::Vector3i>& structures)
+void ClassicOverWorldGenerator::getLargeVegetation(int offX, int offZ, std::vector<std::pair<sf::Vector3i, Structure*>>& structures)
 {
     Random<std::minstd_rand> chunk_random;
     int chunkX = m_pChunk->getLocation().x + offX;
@@ -163,7 +164,10 @@ void ClassicOverWorldGenerator::getStructuresFor(int offX, int offZ, std::vector
             if(height <= WATER_LEVEL) continue;
 
             if(chunk_random.intInRange(0, biome.getTreeFrequency()) == 5) {
-                structures.emplace_back(posX, height, posZ);
+                int tree_type = biome.getTreeType(chunk_random, height);
+                int variant = chunk_random.intInRange(0, (int)(this->structures[tree_type].size())-1);
+                sf::Vector3i pos(posX, height, posZ);
+                structures.emplace_back(pos, &(this->structures[tree_type].data()[variant]));
             }
         }
     }
@@ -171,18 +175,18 @@ void ClassicOverWorldGenerator::getStructuresFor(int offX, int offZ, std::vector
 
 void ClassicOverWorldGenerator::setBlocks(int maxHeight)
 {
-    std::vector<sf::Vector3i> trees;
+    std::vector<std::pair<sf::Vector3i, Structure*>> trees;
     std::vector<sf::Vector3i> plants;
 
-    getStructuresFor(-1, -1, trees);
-    getStructuresFor(-1,  0, trees);
-    getStructuresFor(-1,  1, trees);
-    getStructuresFor( 0, -1, trees);
-    getStructuresFor( 0,  0, trees);
-    getStructuresFor( 0,  1, trees);
-    getStructuresFor( 1, -1, trees);
-    getStructuresFor( 1,  0, trees);
-    getStructuresFor( 1,  1, trees);
+    getLargeVegetation(-1, -1, trees);
+    getLargeVegetation(-1,  0, trees);
+    getLargeVegetation(-1,  1, trees);
+    getLargeVegetation( 0, -1, trees);
+    getLargeVegetation( 0,  0, trees);
+    getLargeVegetation( 0,  1, trees);
+    getLargeVegetation( 1, -1, trees);
+    getLargeVegetation( 1,  0, trees);
+    getLargeVegetation( 1,  1, trees);
 
     for (int y = 0; y < maxHeight + 1; y++)
         for (int x = 0; x < CHUNK_SIZE; x++)
@@ -237,10 +241,14 @@ void ClassicOverWorldGenerator::setBlocks(int maxHeight)
     }
 
     for (auto &tree : trees) {
-        int x = tree.x;
-        int z = tree.z;
+        tree.second->generate_structure(m_pChunk, tree.first);
+        // int x = tree.x;
+        // int z = tree.z;
 
-        getBiome(x, z).makeTree(m_random, *m_pChunk, x, tree.y, z);
+        // auto tree_type = getBiome(x, z).getTreeType(m_random, *m_pChunk, x, tree.y, z);
+
+        // int variant_index = m_random.intInRange(0, (int)structures[tree_type].size()-1);
+        // structures[tree_type][variant_index].generate_structure(m_pChunk, tree);
     }
 }
 

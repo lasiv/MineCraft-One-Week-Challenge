@@ -85,7 +85,7 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      * It uses the getBiome method to retrieve the biome for each coordinate
      * and sets the block type accordingly. The method also handles the
      * placement of trees and plants based on the biome and height values.
-     * It uses the makeTree method from the biome class to generate
+     * It uses the getTree method from the biome class to generate
      * trees and plants.
      */
     void setBlocks(int maxHeight);
@@ -151,7 +151,7 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      */
     const Biome &getBiome(int x, int z) const;
 
-    void getStructuresFor(int chunkX, int chunkZ, std::vector<sf::Vector3i>& structures);
+    void getLargeVegetation(int chunkX, int chunkZ, std::vector<std::pair<sf::Vector3i, Structure*>>& structures);
 
     Array2D<int, 3*CHUNK_SIZE> m_heightMap;
     Array2D<int, 3*CHUNK_SIZE + 1> m_biomeMap;

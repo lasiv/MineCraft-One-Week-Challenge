@@ -10,7 +10,7 @@ class Structure {
     public:
         Structure(const Structure& other);
         Structure(std::string file_name);
-        void generate_structure();
+        void generate_structure(Chunk* chunk, sf::Vector3i center);
         void print_info();
         inline int get_id() {
             return id;
@@ -19,7 +19,7 @@ class Structure {
         std::string name;
         int id;
         std::vector<Block_t> layers;
-        int dimensions[3];
+        int dimX, dimY, dimZ;
 };
 
 #endif
