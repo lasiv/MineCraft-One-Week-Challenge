@@ -74,11 +74,22 @@ void FPSCounter::draw(sf::RenderWindow &window, World &world, Player &player)
                 << player.velocity.y << ", "
                 << player.velocity.z << ")\n"  
                 
-                << " 0: Id: " << player.getInventory().getItemOfSlot(0).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack()
+                << " 0: (Id: " << player.getInventory().getItemOfSlot(0).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 1: (Id: " << player.getInventory().getItemOfSlot(1).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 2: (Id: " << player.getInventory().getItemOfSlot(2).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 3: (Id: " << player.getInventory().getItemOfSlot(3).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 4: (Id: " << player.getInventory().getItemOfSlot(4).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 5: (Id: " << player.getInventory().getItemOfSlot(5).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 6: (Id: " << player.getInventory().getItemOfSlot(6).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 7: (Id: " << player.getInventory().getItemOfSlot(7).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 8: (Id: " << player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 9: (Id: " << player.getInventory().getItemOfSlot(9).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 10: (Id: " << player.getInventory().getItemOfSlot(10).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack()
+
 
                 << std::endl;
 
-    m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps)) + ss.str()); // falls du es hier lassen willst
+    m_text.setString("FPS: " + std::to_string(static_cast<int>(m_fps)) + "\n" + ss.str()); // falls du es hier lassen willst
     //window.pushGLStates();
     //window.resetGLStates();
     window.draw(m_text);
