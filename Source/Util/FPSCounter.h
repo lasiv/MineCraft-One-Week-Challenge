@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../Player/Player.h"
+#include "../World/World.h"
+
 class RenderMaster;
 
 /**
@@ -42,7 +45,7 @@ class FPSCounter {
      * This function sets the string of the m_text object to display the current FPS
      * and then draws it using the provided RenderMaster object.
      */
-    void draw(sf::RenderWindow &window);
+    void draw(sf::RenderWindow &window, World &world, Player &player);
 
   private:
     bool enabled = true;
