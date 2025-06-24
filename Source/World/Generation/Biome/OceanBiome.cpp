@@ -17,10 +17,10 @@ ChunkBlock OceanBiome::getUnderWaterBlock(Rand &rand) const
     return BlockId::Sand;
 }
 
-void OceanBiome::makeTree(Rand &rand, Chunk &chunk, int x, int y, int z) const
+int OceanBiome::getTreeType(Rand &rand, int y) const
 {
-    rand.intInRange(0, 5) < 3 ? makePalmTree(chunk, rand, x, y, z)
-                              : makeOakTree(chunk, rand, x, y, z);
+    return rand.intInRange(0, 5) < 3 ? 1
+                              : 0;
 }
 
 NoiseParameters OceanBiome::getNoiseParameters()

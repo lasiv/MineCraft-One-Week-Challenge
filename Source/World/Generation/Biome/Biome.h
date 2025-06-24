@@ -30,8 +30,7 @@ struct Biome {
     virtual ChunkBlock getTopBlock(Rand &rand) const = 0;
     virtual ChunkBlock getUnderWaterBlock(Rand &rand) const = 0;
     virtual ChunkBlock getBeachBlock(Rand &rand) const;
-    virtual void makeTree(Rand &rand, Chunk &chunk, int x, int y,
-                          int z) const = 0;
+    virtual int getTreeType(Rand &rand, int y) const = 0;
 
     int getHeight(int x, int z, int chunkX, int chunkZ) const;
     int getTreeFrequency() const noexcept;
