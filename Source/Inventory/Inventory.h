@@ -53,21 +53,46 @@ class Inventory
          */
         void addItem(const Material* material);
 
+        /**
+         * @brief toggles the visibility of the inv 
+         */
         void toggleVisibility();
 
+        /**
+         * @brief get the current visibility
+         * 
+         * @return current visibility
+         */
         bool getVisibility();
 
+        /**
+         * @brief returns the ItemStack of the specified slot in the inventory
+         * 
+         * @param slotNum the slot number to return the ItemStack of
+         * 
+         * @return the ItemStack of the inventory at the given number 
+         */  
         ItemStack& getItemOfSlot(int slotNum);
 
+        /**
+         * @brief finds the first slot which has the id of nothing
+         * 
+         * @return number where the first ItemStack with the id of nothing
+         */
         int getFirstFreeSlotNum();
 
+        /**
+         * @brief returns the member m_slots
+         * 
+         * @return cpp-vector with type ItemStack
+         */
         std::vector<ItemStack>& getSlots();
 
     private:
 
         std::vector<ItemStack> m_slots;
 
-        bool m_showInventory = false;
+        bool m_showInventory = true;
 };
 
 #endif // INVENTORY_H_INCLUDED
