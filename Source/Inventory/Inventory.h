@@ -44,6 +44,13 @@ class Inventory
          */
         void mouseInput();
 
+        /**
+         * @brief increases the number of an ItemStack
+         * 
+         * @param material a material of the struct Material
+         * 
+         * @details The addItem method is used to increment the numInStack of the Slot of given material. It is also used for changing the material to the given one, when no Stack with given material is found.
+         */
         void addItem(const Material* material);
 
         void toggleVisibility();
