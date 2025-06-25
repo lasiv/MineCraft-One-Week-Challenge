@@ -6,12 +6,27 @@
 #include "../World/Event/PlayerDigEvent.h"
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 StatePlay::StatePlay(Application &app, const Config &config)
     : StateBase(app)
     , m_world(app.getCamera(), config, m_player)
 {
     app.getCamera().hookEntity(m_player);
+
+    m_debugText.setPosition(sf::Vector2f(10.f,35.f));
+    //m_text.move(10, 10);
+    m_debugText.setOutlineColor(sf::Color::Black);
+    m_debugText.setOutlineThickness(2);
+
+    if (!m_font.loadFromFile("Res/Fonts/rs.ttf")) 
+    {
+        std::cerr << "FEHLER: Font konnte nicht geladen werden!\n";
+    }
+
+    m_debugText.setFont(m_font);
+    m_debugText.setCharacterSize(25);
 }
 
 void StatePlay::handleEvent(sf::Event e)
@@ -78,6 +93,50 @@ void StatePlay::render(RenderMaster &renderer)
     m_world.renderWorld(renderer, m_pApplication->getCamera());
 }
 
+void StatePlay::drawDebugInfo(sf::RenderWindow &window)
+{
+    std::stringstream ss;
+
+    ss << std::fixed << std::setprecision(2)
+
+                << "Pos(" 
+                << m_player.position.x << ", "
+                << m_player.position.y << ", "
+                << m_player.position.z << ")\n"
+                << "Chunk("
+                << m_world.getChunkXZ(std::floor(m_player.position.x), std::floor(m_player.position.z)).x << ", "
+                << m_world.getChunkXZ(std::floor(m_player.position.x), std::floor(m_player.position.z)).z << ")\n"
+                << "ChunkBlock("
+                << m_world.getBlockXZ(std::floor(m_player.position.x), std::floor(m_player.position.z)).x << ", "
+                << m_world.getBlockXZ(std::floor(m_player.position.x), std::floor(m_player.position.z)).z << ")\n"
+                << "Rot("
+                << m_player.rotation.x << ", "
+                << m_player.rotation.y << ", "
+                << m_player.rotation.z << ")\n"
+                << "Vel("
+                << m_player.velocity.x << ", "
+                << m_player.velocity.y << ", "
+                << m_player.velocity.z << ")\n"  
+                
+                << " 0: (Id: " << m_player.getInventory().getItemOfSlot(0).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
+                << " 1: (Id: " << m_player.getInventory().getItemOfSlot(1).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(1).getNumInStack() << ")\n"
+                << " 2: (Id: " << m_player.getInventory().getItemOfSlot(2).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(2).getNumInStack() << ")\n"
+                << " 3: (Id: " << m_player.getInventory().getItemOfSlot(3).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(3).getNumInStack() << ")\n"
+                << " 4: (Id: " << m_player.getInventory().getItemOfSlot(4).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(4).getNumInStack() << ")\n"
+                << " 5: (Id: " << m_player.getInventory().getItemOfSlot(5).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(5).getNumInStack() << ")\n"
+                << " 6: (Id: " << m_player.getInventory().getItemOfSlot(6).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(6).getNumInStack() << ")\n"
+                << " 7: (Id: " << m_player.getInventory().getItemOfSlot(7).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(7).getNumInStack() << ")\n"
+                << " 8: (Id: " << m_player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(8).getNumInStack() << ")\n"
+                << " 9: (Id: " << m_player.getInventory().getItemOfSlot(9).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(9).getNumInStack() << ")\n"
+                << " 10: (Id: " << m_player.getInventory().getItemOfSlot(10).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(10).getNumInStack()
+
+                << std::endl;
+
+    m_debugText.setString(ss.str());
+
+    window.draw(m_debugText);
+}
+
 void StatePlay::drawUI(sf::RenderWindow &window)
 {
     static bool drawDebug = false;
@@ -89,9 +148,9 @@ void StatePlay::drawUI(sf::RenderWindow &window)
     }
 
     if (drawDebug) {
-        m_fpsCounter.draw(window, m_world, m_player);
+        drawDebugInfo(window);
+        m_fpsCounter.draw(window);
     }
-
 
 }
 
