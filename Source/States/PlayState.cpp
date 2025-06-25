@@ -126,9 +126,7 @@ void StatePlay::drawDebugInfo(sf::RenderWindow &window)
                 << " 5: (Id: " << m_player.getInventory().getItemOfSlot(5).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(5).getNumInStack() << ")\n"
                 << " 6: (Id: " << m_player.getInventory().getItemOfSlot(6).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(6).getNumInStack() << ")\n"
                 << " 7: (Id: " << m_player.getInventory().getItemOfSlot(7).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(7).getNumInStack() << ")\n"
-                << " 8: (Id: " << m_player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(8).getNumInStack() << ")\n"
-                << " 9: (Id: " << m_player.getInventory().getItemOfSlot(9).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(9).getNumInStack() << ")\n"
-                << " 10: (Id: " << m_player.getInventory().getItemOfSlot(10).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(10).getNumInStack()
+                << " 8: (Id: " << m_player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << m_player.getInventory().getItemOfSlot(8).getNumInStack()
 
                 << std::endl;
 
@@ -144,7 +142,7 @@ void StatePlay::drawUI(sf::RenderWindow &window)
 
     if (debugKey.isKeyPressed()) {
         drawDebug = !drawDebug;
-        std::cout << "drawDebug toggled: " << drawDebug << "\n";
+        //std::cout << "drawDebug toggled: " << drawDebug << "\n";
     }
 
     if (drawDebug) {

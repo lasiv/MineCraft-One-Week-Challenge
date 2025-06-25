@@ -1,7 +1,7 @@
 #ifndef INVENTORY_H_INCLUDED
 #define INVENTORY_H_INCLUDED
 
-#define MAX_INV_SLOTS 36
+#define MAX_INV_SLOTS 9
 #define MAX_HOTBAR_SLOTS 9
 
 #include <SFML/Graphics.hpp>
