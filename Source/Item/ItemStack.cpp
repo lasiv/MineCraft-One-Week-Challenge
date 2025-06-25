@@ -43,4 +43,5 @@ const Material &ItemStack::getMaterial() const
 void ItemStack::setMaterial(const Material* id)
 {
     m_pMaterial = id;
+    m_numInStack += 1;
 }
