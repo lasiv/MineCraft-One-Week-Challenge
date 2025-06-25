@@ -139,6 +139,9 @@ class Player : public Entity {
      * The mouse input is only processed if the useMouse flag is set to true.
      */
     void mouseInput(const sf::Window &window);
+
+    int getHeldItem();
+
     bool m_isOnGround = false;
     bool m_isFlying = false;
     bool m_isSneak = false;
