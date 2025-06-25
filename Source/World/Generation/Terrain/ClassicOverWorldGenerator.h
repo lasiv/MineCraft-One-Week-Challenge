@@ -151,7 +151,7 @@ class ClassicOverWorldGenerator : public TerrainGenerator {
      */
     const Biome &getBiome(int x, int z) const;
 
-    void getLargeVegetation(int chunkX, int chunkZ, std::vector<std::pair<sf::Vector3i, Structure*>>& structures);
+    void getStructures(int chunkX, int chunkZ, std::vector<std::pair<sf::Vector3i, Structure*>>& structures);
 
     Array2D<int, 3*CHUNK_SIZE> m_heightMap;
     Array2D<int, 3*CHUNK_SIZE + 1> m_biomeMap;
