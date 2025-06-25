@@ -161,6 +161,9 @@ Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller ei
 
 In dieser Kopie des Spiels sind einige Haupt-Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten in dem Klon, wie die Monster und Tiere die es im Basis Spiel gibt. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
+Im Laufe des Projekts wurden einige der Standard-Funktionen dazu programmiert. Die Bewegung des Spielers wurde erweitert um die Fähigkeit in Wasser zu schwimmen, und beim Schleichen nicht von Kanten zu fallen. Ebenso können verschiedene Blöcke nach konfiguration rutschiger sein als andere und man kann auch von den Blöcken elastisch wieder nach oben geworfen werden. Im Zuge der Übersichtlichkeit ein Grundstein an Nutzeroberfläche programmiert, darunter eine Ansicht wichtiger Werte zum Debuggen des Spiels, diesen gibt es im Originalspiel auch. Ebenso soll ein Fadenkreuz in die Mitte des Bildschirmes projiziert werden, sowie eine Möglichkeit das Inventar des Spielers anzuzeigen.
+Ebenso wurde die Generierung der Welt etwas angepasst, jetzt sollen Bäume und andere Strukturen nicht nur in ihrem Chunk zu generieren sein, das führt dazu, dass sie teilweise nicht vollständig generiert werden, sondern über die Chunks hinweg dargestellt werden können. 
+
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
 Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
@@ -484,7 +487,7 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
   \umlsimpleclass[x=22.30,y=-8.60,alias=UMLClass4]{ChunkManager}
   \umlsimpleclass[x=22.40,y=-10.80,alias=UMLClass5]{Chunk}
   \umlsimpleclass[x=22.50,y=-13.80,alias=UMLClass6]{ChunkSection}
-  \umlsimpleclass[x=22.50,y=-15.80,alias=UMLClass7]{ChunkBlock}
+  \umlsimpleclass[x=22.50,y=-16.30,alias=UMLClass7]{ChunkBlock}
   \umluniassoc[name=Relation0,geometry=|-,anchor1=150.3,anchor2=0.0,mult1={1},pos1=0.2,mult2={*},arg2={events},pos2=1.6]{UMLClass1}{UMLClass3}
   \umlinherit[name=Relation1,geometry=--,anchor1=90.0,anchor2=-90.0]{UMLClass2}{UMLClass3}
   \umluniassoc[name=Relation2,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={*},arg1={pPLayer},pos1=0.2,mult2={1},pos2=0.8]{UMLClass2}{UMLClass0}
@@ -497,7 +500,62 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
   \umlaggreg[name=Relation9,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={blocks},pos2=0.8]{UMLClass6}{UMLClass7}
 \end{gfx}
 
-Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese beinhaltet die Blöcke, die in der Welt platziert sind, welche in Chunks unterteilt ist. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
+Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unterteilt, die jeweils mehrere ChunkSections definieren, in denen die Blöcke der Welt gespeichert sind. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
+
+\FloatBarrier
+\subsubsection*{Blöcke}
+
+\FloatBarrier
+\subsubsection*{World}
+
+\begin{gfx}{Blöcke}{blocks}{ht}
+\umlclass[x=13.00,y=-11.40,alias=UMLClass0,type={NonCopyable}]{BlockDataHolder}
+{
+  id : BlockId \\
+  isOpaque : bool \\
+  isColidable : bool \\
+  bounce : float \\
+  slip : int 
+}
+{
+}
+\umlclass[x=6.700,y=-11.50,alias=UMLClass1]{ChunkBlock}
+{
+  getData() : BlockDataHolder \\
+  getType() : BlockType \\
+}
+{
+  id : Block\_t \\
+}
+\umlclass[x=6.40,y=-7.00,alias=UMLClass2,type={NonCopyable}]{BlockType}
+{
+}
+{
+  getData() : BlockData \\
+}
+\umlclass[x=13.10,y=-7.00,alias=UMLClass3,type={NonCopyable}]{BlockData}
+{
+}
+{
+  getBlockData() : BlockDataHolder \\
+}
+\node at (19.30,-4.00) [name=note_UMLNote0]{};
+\umlclass[x=6.40,y=-2.20,alias=UMLClass4,type={Signleton}]{BlockDatabase}
+{
+}
+{
+  \umlstatic{get() : BlockDatabase} \\
+  getData() : BlockData \\
+  getBlock() : BlockType \\
+}
+\umluniassoc[name=Relation0,geometry=--,anchor1=2.6,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass0}
+\umluniassoc[name=Relation1,geometry=--,anchor1=90.0,anchor2=-95.7,mult1={*},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={data},pos2=0.8]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation3,geometry=--,anchor1=-95.7,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},arg2={data},pos2=0.8]{UMLClass3}{UMLClass0}
+\umlcompo[name=Relation4,geometry=--,anchor1=-90.0,anchor2=95.7,mult1={1},pos1=0.2,mult2={*},arg2={blocks},pos2=0.8]{UMLClass4}{UMLClass2}
+\end{gfx}
+
+Die Blöcke selber enthalten Daten über ihre Eigenschaften. Sie speichern nicht ihre eigene Position. Die Eigenschaften der Blöcke werden aus Dateien geladen, die zentral in einer Art Datenbank gespeichert sind. Die Chunk-Blöcke enthalten Verweise auf diese Daten.
 
 \FloatBarrier
 \subsubsection*{Generierung}
