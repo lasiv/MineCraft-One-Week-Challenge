@@ -3,6 +3,8 @@
 #include "../../WorldConstants.h"
 #include "../Structures/TreeGenerator.h"
 
+#include <iostream>
+
 DesertBiome::DesertBiome(int seed)
     : Biome(getNoiseParameters(), 1350, 500, seed)
 {
@@ -30,6 +32,18 @@ int DesertBiome::getTreeType(Rand &rand, int y) const
     }
     else {
         return 2;
+    }
+}
+
+int DesertBiome::getStructure(Rand& rand, int y) const 
+{
+    if((y - 10) < WATER_LEVEL) return -1;
+    
+    if(rand.intInRange(0, 1000) < 1)  {
+        return 3;
+    }
+    else {
+        return -1;
     }
 }
 

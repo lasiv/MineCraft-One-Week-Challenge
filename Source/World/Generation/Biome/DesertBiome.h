@@ -11,6 +11,7 @@ class DesertBiome : public Biome {
     ChunkBlock getTopBlock(Rand &rand) const override;
     ChunkBlock getUnderWaterBlock(Rand &rand) const override;
     int getTreeType(Rand &rand, int y) const override;
+    int getStructure(Rand &rand, int y) const override;
 
   private:
     NoiseParameters getNoiseParameters() override;
