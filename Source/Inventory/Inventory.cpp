@@ -5,11 +5,20 @@
 Inventory::Inventory()
 {
     m_slots = std::vector<ItemStack>(MAX_INV_SLOTS, ItemStack(Material::NOTHING, 0));
+
+    // Drawing
+
+    rectangle.setSize(sf::Vector2f(400.f, 50.f));
+    rectangle.setFillColor(sf::Color::Transparent);
+    rectangle.setOutlineThickness(3.f);
+    rectangle.setOutlineColor(sf::Color::Black);
 }
 
 void Inventory::draw(sf::RenderWindow &window)
 {
+    rectangle.setPosition((window.getSize().x/2)-200.f, window.getSize().y - 60.f);
 
+    window.draw(rectangle);
 }
 
 void Inventory::update()

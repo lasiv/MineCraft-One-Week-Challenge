@@ -93,6 +93,8 @@ class Inventory
         std::vector<ItemStack> m_slots;
 
         bool m_showInventory = true;
+
+        sf::RectangleShape rectangle;
 };
 
 #endif // INVENTORY_H_INCLUDED
