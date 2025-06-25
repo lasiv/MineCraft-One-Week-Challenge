@@ -7,7 +7,7 @@ Inventory::Inventory()
     m_slots = std::vector<ItemStack>(MAX_INV_SLOTS, ItemStack(Material::NOTHING, 0));
 }
 
-void Inventory::draw(RenderMaster &renderer)
+void Inventory::draw(sf::RenderWindow &window)
 {
 
 }
@@ -17,10 +17,10 @@ void Inventory::update()
 
 }
 
-void Inventory::mouseInput()
+/* void Inventory::mouseInput()
 {
 
-}
+} */
 
 void Inventory::addItem(const Material* material)
 {
@@ -78,4 +78,9 @@ ItemStack& Inventory::getItemOfSlot(int slotNum)
 void Inventory::toggleVisibility()
 {
     m_showInventory = !m_showInventory;
+}
+
+bool Inventory::getVisibility()
+{
+    return m_showInventory;
 }

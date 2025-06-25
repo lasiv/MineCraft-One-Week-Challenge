@@ -26,11 +26,11 @@ class Inventory
         /**
          * @brief Draws the Inventory with given rendermaster
          * 
-         * @param renderer the rendermaster which processes rendering
+         * @param window the window where to draw the inventory
          * 
-         * @details Draws the Inventory using the rendermaster in a specific area and an even layout
+         * @details Draws the Inventory using the window in a specific area and an even layout
          */
-        void draw(RenderMaster &renderer);
+        void draw(sf::RenderWindow &window);
 
         /**
          * @brief Updates the inventory, to add items
@@ -42,7 +42,7 @@ class Inventory
         /**
          * @brief 
          */
-        void mouseInput();
+        /* void mouseInput(); */
 
         /**
          * @brief increases the number of an ItemStack
@@ -54,6 +54,8 @@ class Inventory
         void addItem(const Material* material);
 
         void toggleVisibility();
+
+        bool getVisibility();
 
         ItemStack& getItemOfSlot(int slotNum);
 
