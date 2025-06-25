@@ -94,7 +94,9 @@ class Inventory
 
         bool m_showInventory = true;
 
-        sf::RectangleShape rectangle;
+        sf::RectangleShape m_rectangle;
+        float m_inv_step;
+        std::vector<sf::RectangleShape> m_guiSlots; 
 };
 
 #endif // INVENTORY_H_INCLUDED

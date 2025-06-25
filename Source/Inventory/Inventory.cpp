@@ -8,17 +8,37 @@ Inventory::Inventory()
 
     // Drawing
 
-    rectangle.setSize(sf::Vector2f(400.f, 50.f));
-    rectangle.setFillColor(sf::Color::Transparent);
-    rectangle.setOutlineThickness(3.f);
-    rectangle.setOutlineColor(sf::Color::Black);
+    m_rectangle.setSize(sf::Vector2f(450.f, 50.f));
+    m_rectangle.setFillColor(sf::Color::Transparent);
+    m_rectangle.setOutlineThickness(6.f);
+    m_rectangle.setOutlineColor(sf::Color::Black);
+
+    m_inv_step = m_rectangle.getSize().x/9;
+
+    m_guiSlots = std::vector<sf::RectangleShape>(MAX_INV_SLOTS);
+
+    for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
+    {
+        m_guiSlots[i].setSize(sf::Vector2(m_inv_step-2, m_rectangle.getSize().y-2));
+        
+        m_guiSlots[i].setFillColor(sf::Color(50,105,105,105));
+        m_guiSlots[i].setOutlineThickness(2.f);
+        m_guiSlots[i].setOutlineColor(sf::Color::White);
+    }
 }
 
 void Inventory::draw(sf::RenderWindow &window)
 {
-    rectangle.setPosition((window.getSize().x/2)-200.f, window.getSize().y - 60.f);
+    m_rectangle.setPosition((window.getSize().x/2)-200.f, window.getSize().y - 60.f); //position must be set here to use window
 
-    window.draw(rectangle);
+    window.draw(m_rectangle);
+
+    for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
+    {
+        m_guiSlots[i].setPosition(m_rectangle.getPosition().x+1 + m_inv_step*i, m_rectangle.getPosition().y+1);
+        window.draw(m_guiSlots[i]);
+    }
+    
 }
 
 void Inventory::update()
