@@ -8,7 +8,7 @@
 #include "../Item/ItemStack.h"
 #include <vector>
 
-class RenderMaster;
+//class RenderMaster;
 
 /**
  * @class Inventory
