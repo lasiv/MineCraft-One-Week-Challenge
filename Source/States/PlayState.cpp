@@ -81,9 +81,9 @@ void StatePlay::render(RenderMaster &renderer)
 void StatePlay::drawUI(sf::RenderWindow &window)
 {
     static bool drawDebug = false;
-    static ToggleKey drawKey(sf::Keyboard::F3);
+    static ToggleKey debugKey(sf::Keyboard::F3);
 
-    if (drawKey.isKeyPressed()) {
+    if (debugKey.isKeyPressed()) {
         drawDebug = !drawDebug;
         std::cout << "drawDebug toggled: " << drawDebug << "\n";
     }
