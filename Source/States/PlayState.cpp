@@ -80,15 +80,15 @@ void StatePlay::render(RenderMaster &renderer)
 
 void StatePlay::drawUI(sf::RenderWindow &window)
 {
-    static bool drawGUI = false;
+    static bool drawDebug = false;
     static ToggleKey drawKey(sf::Keyboard::F3);
 
     if (drawKey.isKeyPressed()) {
-        drawGUI = !drawGUI;
-        std::cout << "drawGUI toggled: " << drawGUI << "\n";
+        drawDebug = !drawDebug;
+        std::cout << "drawDebug toggled: " << drawDebug << "\n";
     }
 
-    if (drawGUI) {
+    if (drawDebug) {
         m_fpsCounter.draw(window, m_world, m_player);
     }
 
