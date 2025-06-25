@@ -75,16 +75,16 @@ void FPSCounter::draw(sf::RenderWindow &window, World &world, Player &player)
                 << player.velocity.z << ")\n"  
                 
                 << " 0: (Id: " << player.getInventory().getItemOfSlot(0).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 1: (Id: " << player.getInventory().getItemOfSlot(1).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 2: (Id: " << player.getInventory().getItemOfSlot(2).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 3: (Id: " << player.getInventory().getItemOfSlot(3).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 4: (Id: " << player.getInventory().getItemOfSlot(4).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 5: (Id: " << player.getInventory().getItemOfSlot(5).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 6: (Id: " << player.getInventory().getItemOfSlot(6).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 7: (Id: " << player.getInventory().getItemOfSlot(7).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 8: (Id: " << player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 9: (Id: " << player.getInventory().getItemOfSlot(9).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack() << ")\n"
-                << " 10: (Id: " << player.getInventory().getItemOfSlot(10).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(0).getNumInStack()
+                << " 1: (Id: " << player.getInventory().getItemOfSlot(1).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(1).getNumInStack() << ")\n"
+                << " 2: (Id: " << player.getInventory().getItemOfSlot(2).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(2).getNumInStack() << ")\n"
+                << " 3: (Id: " << player.getInventory().getItemOfSlot(3).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(3).getNumInStack() << ")\n"
+                << " 4: (Id: " << player.getInventory().getItemOfSlot(4).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(4).getNumInStack() << ")\n"
+                << " 5: (Id: " << player.getInventory().getItemOfSlot(5).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(5).getNumInStack() << ")\n"
+                << " 6: (Id: " << player.getInventory().getItemOfSlot(6).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(6).getNumInStack() << ")\n"
+                << " 7: (Id: " << player.getInventory().getItemOfSlot(7).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(7).getNumInStack() << ")\n"
+                << " 8: (Id: " << player.getInventory().getItemOfSlot(8).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(8).getNumInStack() << ")\n"
+                << " 9: (Id: " << player.getInventory().getItemOfSlot(9).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(9).getNumInStack() << ")\n"
+                << " 10: (Id: " << player.getInventory().getItemOfSlot(10).getMaterial().id << " Num: " << player.getInventory().getItemOfSlot(10).getNumInStack()
 
 
                 << std::endl;
