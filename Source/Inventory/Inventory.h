@@ -27,10 +27,11 @@ class Inventory
          * @brief Draws the Inventory with given rendermaster
          * 
          * @param window the window where to draw the inventory
+         * @param activeSlot the active slot of player
          * 
          * @details Draws the Inventory using the window in a specific area and an even layout
          */
-        void draw(sf::RenderWindow &window);
+        void draw(sf::RenderWindow &window, int activeSlot);
 
         /**
          * @brief Updates the inventory, to add items
