@@ -17,10 +17,9 @@ ChunkBlock TemperateForestBiome::getUnderWaterBlock(Rand &rand) const
     return rand.intInRange(0, 10) > 8 ? BlockId::Dirt : BlockId::Sand;
 }
 
-void TemperateForestBiome::makeTree(Rand &rand, Chunk &chunk, int x, int y,
-                                    int z) const
+int TemperateForestBiome::getTreeType(Rand &rand, int y) const
 {
-    makeOakTree(chunk, rand, x, y, z);
+    return 0;
 }
 
 NoiseParameters TemperateForestBiome::getNoiseParameters()

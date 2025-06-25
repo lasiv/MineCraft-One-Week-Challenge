@@ -3,6 +3,8 @@
 #include "../../WorldConstants.h"
 #include "../Structures/TreeGenerator.h"
 
+#include <iostream>
+
 DesertBiome::DesertBiome(int seed)
     : Biome(getNoiseParameters(), 1350, 500, seed)
 {
@@ -18,18 +20,30 @@ ChunkBlock DesertBiome::getUnderWaterBlock(Rand &rand) const
     return BlockId::Sand;
 }
 
-void DesertBiome::makeTree(Rand &rand, Chunk &chunk, int x, int y, int z) const
+int DesertBiome::getTreeType(Rand &rand, int y) const
 {
     if (y < WATER_LEVEL + 15) {
         if (rand.intInRange(0, 100) > 75) {
-            makePalmTree(chunk, rand, x, y, z);
+            return 1;
         }
         else {
-            makeCactus(chunk, rand, x, y, z);
+            return 2;
         }
     }
     else {
-        makeCactus(chunk, rand, x, y, z);
+        return 2;
+    }
+}
+
+int DesertBiome::getStructure(Rand& rand, int y) const 
+{
+    if((y - 10) < WATER_LEVEL) return -1;
+    
+    if(rand.intInRange(0, 1000) < 1)  {
+        return 3;
+    }
+    else {
+        return -1;
     }
 }
 

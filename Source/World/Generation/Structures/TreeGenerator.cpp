@@ -10,7 +10,7 @@ void makeCactus1(Chunk &chunk, Random<std::minstd_rand> &rand, int x, int y,
                  int z)
 {
     StructureBuilder builder;
-    builder.makeColumn(x, z, y, rand.intInRange(4, 7), CACTUS);
+    builder.makeColumn(x, z, y, 6, CACTUS);
     builder.build(chunk);
 }
 
@@ -18,7 +18,8 @@ void makeCactus2(Chunk &chunk, Random<std::minstd_rand> &rand, int x, int y,
                  int z)
 {
     StructureBuilder builder;
-    int height = rand.intInRange(6, 8);
+    // int height = rand.intInRange(6, 8);
+    int height = 7;
     builder.makeColumn(x, z, y, height, CACTUS);
 
     int stem = height / 2;
@@ -35,7 +36,8 @@ void makeCactus3(Chunk &chunk, Random<std::minstd_rand> &rand, int x, int y,
                  int z)
 {
     StructureBuilder builder;
-    int height = rand.intInRange(6, 8);
+    // int height = rand.intInRange(6, 8);
+    int height = 7;
     builder.makeColumn(x, z, y, height, CACTUS);
 
     int stem = height / 2;
@@ -54,7 +56,8 @@ void makeOakTree(Chunk &chunk, Random<std::minstd_rand> &rand, int x, int y,
 {
     StructureBuilder builder;
 
-    int h = rand.intInRange(4, 7);
+    // int h = rand.intInRange(4, 7);
+    int h = 6;
     int leafSize = 2;
 
     int newY = h + y;
@@ -80,8 +83,11 @@ void makePalmTree(Chunk &chunk, Random<std::minstd_rand> &rand, int x, int y,
 {
     StructureBuilder builder;
 
-    int height = rand.intInRange(7, 9);
-    int diameter = rand.intInRange(4, 6);
+    // int height = rand.intInRange(7, 9);
+    // int diameter = rand.intInRange(4, 6);
+
+    int height = 8;
+    int diameter = 5;
 
     for (int xLeaf = -diameter; xLeaf < diameter; xLeaf++) {
         builder.addBlock(xLeaf + x, y + height, z, BlockId::OakLeaf);

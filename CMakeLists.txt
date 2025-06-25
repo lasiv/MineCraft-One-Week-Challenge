@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
     Source/World/Generation/Biome/OceanBiome.cpp
     Source/World/Generation/Structures/TreeGenerator.cpp
     Source/World/Generation/Structures/StructureBuilder.cpp
+    Source/World/Generation/Structures/Structure.cpp
     Source/World/Generation/Terrain/SuperFlatGenerator.cpp
     Source/World/Generation/Terrain/ClassicOverWorldGenerator.cpp
     Source/World/Chunk/ChunkMesh.cpp

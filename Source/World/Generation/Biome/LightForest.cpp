@@ -17,9 +17,9 @@ ChunkBlock LightForest::getUnderWaterBlock(Rand &rand) const
     return rand.intInRange(0, 10) > 9 ? BlockId::Sand : BlockId::Dirt;
 }
 
-void LightForest::makeTree(Rand &rand, Chunk &chunk, int x, int y, int z) const
+int LightForest::getTreeType(Rand &rand, int y) const
 {
-    makeOakTree(chunk, rand, x, y, z);
+    return 0;
 }
 
 NoiseParameters LightForest::getNoiseParameters()

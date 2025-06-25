@@ -22,10 +22,9 @@ ChunkBlock GrasslandBiome::getBeachBlock(Rand &rand) const
     return rand.intInRange(0, 10) > 2 ? BlockId::Grass : BlockId::Dirt;
 }
 
-void GrasslandBiome::makeTree(Rand &rand, Chunk &chunk, int x, int y,
-                              int z) const
+int GrasslandBiome::getTreeType(Rand &rand, int y) const
 {
-    makeOakTree(chunk, rand, x, y, z);
+    return 0;
 }
 
 NoiseParameters GrasslandBiome::getNoiseParameters()

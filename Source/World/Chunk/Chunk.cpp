@@ -29,8 +29,9 @@ bool Chunk::makeMesh(const Camera &camera)
 void Chunk::setBlock(int x, int y, int z, ChunkBlock block)
 {
     addSectionsBlockTarget(y);
-    if (outOfBound(x, y, z))
+    if (outOfBound(x, y, z)) {
         return;
+    }
 
     int bY = y % CHUNK_SIZE;
     m_chunks[y / CHUNK_SIZE].setBlock(x, bY, z, block);
