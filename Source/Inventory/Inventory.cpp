@@ -46,13 +46,19 @@ void Inventory::initDraw(sf::RenderWindow &window)
 void Inventory::addItem(const Material* material)
 {
     Material::ID id = material->id;
-    //int leftOver = 0;
+    int leftOver = 0;
 
     for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
     {
         if (m_slots[i].getMaterial().id == id) 
         {
-            /*int leftOver =*/m_slots[i].add(1);
+            leftOver = m_slots[i].add(1);
+            int firstFree = getFirstFreeSlotNum();
+    
+            if (leftOver > 0 && firstFree != -1)
+            {
+                m_slots[firstFree].setMaterial(material);
+            }
 
             return;
         }
@@ -62,13 +68,6 @@ void Inventory::addItem(const Material* material)
             return;
         }
     }
-
-    /* int firstFree = getFirstFreeSlotNum();
-    
-    if (leftOver && firstFree != -1)
-    {
-        m_slots[firstFree].setMaterial(material);
-    } */
 }
 
 int Inventory::getFirstFreeSlotNum()
