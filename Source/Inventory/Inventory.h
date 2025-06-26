@@ -27,10 +27,11 @@ class Inventory
          * @brief Draws the Inventory with given rendermaster
          * 
          * @param window the window where to draw the inventory
+         * @param activeSlot the active slot of player
          * 
          * @details Draws the Inventory using the window in a specific area and an even layout
          */
-        void draw(sf::RenderWindow &window);
+        void draw(sf::RenderWindow &window, int activeSlot);
 
         /**
          * @brief Updates the inventory, to add items
@@ -93,6 +94,10 @@ class Inventory
         std::vector<ItemStack> m_slots;
 
         bool m_showInventory = true;
+
+        sf::RectangleShape m_rectangle;
+        float m_inv_step;
+        std::vector<sf::RectangleShape> m_guiSlots; 
 };
 
 #endif // INVENTORY_H_INCLUDED

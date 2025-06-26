@@ -327,3 +327,8 @@ void Player::jump()
         m_acceleration.y += speed * 3;
     }
 }
+
+int Player::getHeldItem()
+{
+    return m_heldItem;
+}
