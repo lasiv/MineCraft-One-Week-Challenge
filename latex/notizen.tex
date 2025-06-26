@@ -707,19 +707,57 @@ Schwerpunkt von Meilenstein 3 ist das Aufzeigen der tatsächlichen Veränderunge
 
 \subsection{Beschreibung der Änderungen}
 
+Im folgenden Abschnitt werden die Umsetzungen bzw. die tatsächlichen Änderungen beschrieben.
+
 \subsubsection{Strukturen und Weltgenerierung}
 
 \subsubsection{Movement}
 
-\subsubsection{Inventar}
+\subsubsection{GUI und Inventar}
+
+Im Zuge der geforderten Veränderungen der grafischen Benutzeroberfläche und des Inventars, wurden die folgenden Änderungen umgesetzt.
+
+\begin{description}
+  \item[Inventarsystem:] Das \texttt{Inventar} ist grundsätlich einen neu eingebaute Klasse, welche der Klasse \texttt{Player} angehört. Sie ist fähig das Inventar selbständig nach bestimmtem Schema aufzufüllen und dieses zu verwalten. Es lag bereits eine sehr grobe Art eines Inventars vor, welches die Items direkt über die Klasse \texttt{ItemStack} verwaltet hat. Die Klasse \texttt{Inventory} verfügt nun über diese Stacks und verwaltet die Items des Spielers zentral. Dabei können Items maximal die Anzahl 64 pro Inventarslot annehmen, wobei sie bei nicht Erfüllen dessen, in den nächst freien Slot sortiert werden.
+  \item[Inventar Grafik:] Das Zeichnen des Inventars übernimmt teils die Klasse \texttt{Player}, und teils die Klasse \texttt{Inventory} selbst. Mithilfe der Bibliothek \texttt{SFML} können Rechtecke gezeichnet, und editiert werden, welche das Inventar zusammensetzen. Hinzu kommt hierbei jedoch, das selbstständige Verwalten des Zeichnens über den Grafiktreiber \texttt{OpenGL}. Durch das teilweise zeichnen aus der Klasse \texttt{Player} wird auf das Fenster zugegriffen, welches vorerst von der Klasse \texttt{Context} initialisiert wird. Das Anzeigen der Anzahl im Stack wird durch Zugriff auf das Inventar des Spielers möglich gemacht. Die zu jedem Material gehörigen Icons, sind mithilfe eines Online-Pixel-Art-Zeichners realisiert. 
+  \item[Fadenkreuz:] Das Fadenkreuz ist ein von \texttt{SFML} gezeichneter Kreis, welcher sich durch Informationen des Fensters immer in der Mitte befindet. Dieser wird in der Klasse \texttt{Player} gezeichnet, weil auch hier wieder der Zugriff auf das Fenster nötig ist. Damit ist eine hohe Präzison beim Zerstören oder Platzieren von Blöcken möglich.
+  \item[Kompass:] Bei dem Kompass handelt es sich um ein Nebenprodukt des Debuggens. Die Klasse \texttt{Player} enthält viele Daten, welche wichtig zur Berechnung der Bewegungen sind. Eine von diesen ist die Blickrichtung, welche mittels Maus verändert wird. Die Blickrichtung wird mit drücken der Taste F3, welche die Debuginformationen anzeigt, ersichtlich. 
+\end{description}
+
+Abschließend ist festzustellen, dass hauptsächlich die Klasse \texttt{Inventory} komplett neu ist. Klassen wie \texttt{Player} und \texttt{Context} mussten zwar verändert werden, bleiben aber in ihrer funktionalität gleich wie zuvor. Für die Grafik ist hauptsächlich die Bibliothek \texttt{SFML} wichtig.
 
 \subsection{Modelle gemäß der Veränderungen}
 
+In diesem Abschnitt werden Modelle um wichtige Klassen oder Beziehungen ergänzt bzw. erklärend verändert.
+
 \subsubsection{Strukturen und Weltgenerierung}
 
 \subsubsection{Movement}
 
-\subsubsection{Inventar}
+\subsubsection{GUI und Inventar}
+
+Dadurch, dass die grafische Benutzeroberfläche mithilfe einer Bibliothek und \texttt{OpenGL} realisiert wurde, lässt sich im folgenden nur eklären, wie das Inventar implementiert wurde.
+
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \umlsimpleclass[x=14.50,y=-7.50,alias=UMLClass0]{Player}
+    \umlsimpleclass[x=14.60,y=-5.50,alias=UMLClass1]{Entity}
+    \umlsimpleclass[x=19.40,y=-5.50,alias=UMLClass2]{AABB}
+    \umlsimpleclass[x=14.50,y=-12.30,alias=UMLClass3]{ItemStack}
+    \umlsimpleclass[x=14.50,y=-14.70,alias=UMLClass4]{Material}
+    \umlsimpleclass[x=11.00,y=-5.50,alias=UMLClass5]{PlayState}
+    \umlsimpleclass[x=14.50,y=-9.90,alias=UMLClass6]{Inventory}
+    \umlinherit[name=Relation0,geometry=--,anchor1=71.6,anchor2=-90.0]{UMLClass0}{UMLClass1}
+    \umlcompo[name=Relation1,geometry=--,anchor1=-4.1,anchor2=-175.9]{UMLClass1}{UMLClass2}
+    \umlcompo[name=Relation2,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={*},arg2={slots},pos2=0.8]{UMLClass6}{UMLClass3}
+    \umlcompo[name=Relation3,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass3}{UMLClass4}
+    \umlcompo[name=Relation4,geometry=|-,anchor1=-90.0,anchor2=-177.3,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=1.8]{UMLClass5}{UMLClass0}
+    \umlcompo[name=Relation5,geometry=--,anchor1=-71.6,anchor2=71.6,mult1={1},pos1=0.2,mult2={1},arg2={inventory},pos2=0.8]{UMLClass0}{UMLClass6}
+  \end{tikzpicture}
+  \title{Verändertes Designmodell der Playerklasse und ihrer Beziehungen}
+  \caption{Wie bereits beschrieben, dient die Klasse \texttt{Inventory} dazu, das Inventar zentral zu verwalten. Der Spieler hat genau ein Inventar und das Inventar mehrere slots gemäß der definierten Konstante \texttt{MAX\_INV\_SLOTS}.}
+  \label{fig:design_player_changed}
+\end{figure}
 
 \subsection{Fazit}
 
