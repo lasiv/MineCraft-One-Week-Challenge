@@ -371,17 +371,20 @@ int Player::getHeldItem()
 
 void Player::drawInventory(sf::RenderWindow &window)
 {
+    // initialize drawing
     if(m_inventory.isGuiInit() == false)
     {
         m_inventory.initDraw(window);
     }
 
+    // draw base rectangle
     window.draw(m_inventory.getRect());
 
     unsigned int highlightSlotIndex;
 
     sf::RectangleShape icon;
 
+    // drawing slots
     for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
     {
         if (m_heldItem == i)
@@ -402,6 +405,7 @@ void Player::drawInventory(sf::RenderWindow &window)
 
     window.draw(m_inventory.getGuiSlots()[highlightSlotIndex]);
 
+    // drawing icons
     for (int i = 0; i < MAX_INV_SLOTS; i++)
     {
         if (m_inventory.getSlots()[i].getMaterial().id != Material::Nothing)
