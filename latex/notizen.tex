@@ -505,21 +505,18 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unter
 \FloatBarrier
 \subsubsection*{Blöcke}
 
-\FloatBarrier
-\subsubsection*{World}
-
 \begin{gfx}{Blöcke}{blocks}{ht}
-\umlclass[x=13.00,y=-11.40,alias=UMLClass0,type={NonCopyable}]{BlockDataHolder}
+\umlclass[x=13.60,y=-12.40,alias=UMLClass0,type={NonCopyable}]{BlockDataHolder}
 {
   id : BlockId \\
   isOpaque : bool \\
   isColidable : bool \\
   bounce : float \\
-  slip : int 
+  slip: int \\
 }
 {
 }
-\umlclass[x=6.700,y=-11.50,alias=UMLClass1]{ChunkBlock}
+\umlclass[x=8.20,y=-7.90,alias=UMLClass1]{ChunkBlock}
 {
   getData() : BlockDataHolder \\
   getType() : BlockType \\
@@ -527,20 +524,19 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unter
 {
   id : Block\_t \\
 }
-\umlclass[x=6.40,y=-7.00,alias=UMLClass2,type={NonCopyable}]{BlockType}
+\umlclass[x=13.70,y=-3.60,alias=UMLClass2,type={NonCopyable}]{BlockType}
 {
 }
 {
   getData() : BlockData \\
 }
-\umlclass[x=13.10,y=-7.00,alias=UMLClass3,type={NonCopyable}]{BlockData}
+\umlclass[x=13.70,y=-7.80,alias=UMLClass3,type={NonCopyable}]{BlockData}
 {
 }
 {
   getBlockData() : BlockDataHolder \\
 }
-\node at (19.30,-4.00) [name=note_UMLNote0]{};
-\umlclass[x=6.40,y=-2.20,alias=UMLClass4,type={Signleton}]{BlockDatabase}
+\umlclass[x=7.80,y=-3.60,alias=UMLClass4,type={Signleton}]{BlockDatabase}
 {
 }
 {
@@ -548,11 +544,11 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unter
   getData() : BlockData \\
   getBlock() : BlockType \\
 }
-\umluniassoc[name=Relation0,geometry=--,anchor1=2.6,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass0}
-\umluniassoc[name=Relation1,geometry=--,anchor1=90.0,anchor2=-95.7,mult1={*},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
-\umlcompo[name=Relation2,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={data},pos2=0.8]{UMLClass2}{UMLClass3}
+\umluniassoc[name=Relation0,geometry=|-,anchor1=-102.5,anchor2=164.1,mult1={*},pos1=0.2,mult2={1},pos2=1.8]{UMLClass1}{UMLClass0}
+\umluniassoc[name=Relation1,geometry=|-|,anchor1=90.0,anchor2=-132.0,mult1={*},pos1=0.2,mult2={1},pos2=2.8]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,anchor1=-95.7,anchor2=95.7,mult1={1},pos1=0.2,mult2={1},arg2={data},pos2=0.8]{UMLClass2}{UMLClass3}
 \umlcompo[name=Relation3,geometry=--,anchor1=-95.7,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},arg2={data},pos2=0.8]{UMLClass3}{UMLClass0}
-\umlcompo[name=Relation4,geometry=--,anchor1=-90.0,anchor2=95.7,mult1={1},pos1=0.2,mult2={*},arg2={blocks},pos2=0.8]{UMLClass4}{UMLClass2}
+\umlcompo[name=Relation4,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},arg2={blocks},pos2=0.8]{UMLClass4}{UMLClass2}
 \end{gfx}
 
 Die Blöcke selber enthalten Daten über ihre Eigenschaften. Sie speichern nicht ihre eigene Position. Die Eigenschaften der Blöcke werden aus Dateien geladen, die zentral in einer Art Datenbank gespeichert sind. Die Chunk-Blöcke enthalten Verweise auf diese Daten.
@@ -704,6 +700,10 @@ Folgende Änderungen können hier getätigt werden:
   \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte Welt wieder geöffnet werden kann. Dies braucht dann einige zusätzliche Features der Bedienung.
   \item[Weltauswahl:] Eine Möglichkeit wäre, im Zuge der Änderungen an UI eine Art Auswahl-Menü zu bauen, in der Welten generiert und gestartet werden können.
 \end{description}
+
+\section{Meilenstein 3} \label{sec:ms3}
+
+\subsection{Beschreibung der Änderungen}
 
 
 
