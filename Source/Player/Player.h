@@ -108,6 +108,8 @@ class Player : public Entity {
 
     int getHeldItem();
 
+    void drawInventory(sf::RenderWindow &window);
+
   private:
 
     /**

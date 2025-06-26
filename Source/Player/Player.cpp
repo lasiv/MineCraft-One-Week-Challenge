@@ -332,3 +332,36 @@ int Player::getHeldItem()
 {
     return m_heldItem;
 }
+
+void Player::drawInventory(sf::RenderWindow &window)
+{
+    if(m_inventory.isGuiInit() == false)
+    {
+        m_inventory.initDraw(window);
+    }
+
+    window.draw(m_inventory.getRect());
+
+    unsigned int highlightSlotIndex;
+
+    for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
+    {
+        if (m_heldItem == i)
+        {
+            highlightSlotIndex = i;
+            continue;
+        }
+        else
+        {
+            m_inventory.getGuiSlots()[i].setOutlineColor(sf::Color(69,69,69,255));
+            m_inventory.getGuiSlots()[i].setOutlineThickness(2.f);
+        }
+
+        window.draw(m_inventory.getGuiSlots()[i]);
+    }
+
+    m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineColor(sf::Color::White);
+    m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineThickness(5.f);
+
+    window.draw(m_inventory.getGuiSlots()[highlightSlotIndex]);
+}

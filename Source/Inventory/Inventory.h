@@ -31,14 +31,14 @@ class Inventory
          * 
          * @details Draws the Inventory using the window in a specific area and an even layout
          */
-        void initDraw(sf::RenderWindow &window, int activeSlot);
+        void initDraw(sf::RenderWindow &window);
 
         /**
          * @brief Updates the inventory, to add items
          * 
          * @details The update method is used by the Player Class to update the Inventory, whenever the player updates or interacts with the world
          */
-        void update();
+        /* void update(); */
 
         /**
          * @brief 
@@ -85,23 +85,27 @@ class Inventory
         /**
          * @brief returns the member m_slots
          * 
-         * @return cpp-vector with type ItemStack
+         * @return reference to a cpp-vector with type ItemStack
          */
         std::vector<ItemStack>& getSlots();
 
-        std::vector<sf::RectangleShape> getGuiSlots();
+        std::vector<sf::RectangleShape>& getGuiSlots();
 
-        sf::RectangleShape getRect();
+        sf::RectangleShape& getRect();
+
+        bool isGuiInit();
+
+        float getGuiSlotStep();
 
     private:
 
         std::vector<ItemStack> m_slots;
 
         bool m_showInventory = true;
-        bool m_initialized = false;
+        bool m_guiInitialized = false;
 
         sf::RectangleShape m_rectangle;
-        float m_inv_step;
+        float m_GuiSlotStep;
         std::vector<sf::RectangleShape> m_guiSlots; 
 };
 

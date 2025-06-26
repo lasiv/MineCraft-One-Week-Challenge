@@ -169,7 +169,7 @@ void StatePlay::drawUI(sf::RenderWindow &window)
 
     if (m_player.getInventory().getVisibility() == true)
     {
-        m_player.getInventory().draw(window, m_player.getHeldItem());
+        m_player.drawInventory(window);
     }
 
 }
