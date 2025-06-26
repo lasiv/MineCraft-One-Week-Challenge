@@ -50,7 +50,7 @@ void Inventory::addItem(const Material* material)
 
     for (unsigned i = 0; i < MAX_INV_SLOTS; i++) 
     {
-        if (m_slots[i].getMaterial().id == id) 
+        if (m_slots[i].getMaterial().id == id && m_slots[i].getNumInStack() != m_slots[i].getMaterial().maxStackSize) 
         {
             leftOver = m_slots[i].add(1);
             int firstFree = getFirstFreeSlotNum();
@@ -58,6 +58,7 @@ void Inventory::addItem(const Material* material)
             if (leftOver > 0 && firstFree != -1)
             {
                 m_slots[firstFree].setMaterial(material);
+                leftOver = 0;
             }
 
             return;
