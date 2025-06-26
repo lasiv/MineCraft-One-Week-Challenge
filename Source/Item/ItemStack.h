@@ -61,6 +61,8 @@ class ItemStack {
      */
     const Material &getMaterial() const;
 
+    void setMaterial(const Material* id);
+
   private:
     const Material *m_pMaterial = &Material::NOTHING;
     int m_numInStack = 0;

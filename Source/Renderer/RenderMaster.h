@@ -18,7 +18,7 @@ class RenderMaster {
     void drawChunk(const ChunkSection &chunk);
     void drawSky();
 
-    void finishRender(sf::Window &window, const Camera &camera);
+    void finishRender(sf::RenderWindow &window, const Camera &camera);
 
   private:
     // Chunks

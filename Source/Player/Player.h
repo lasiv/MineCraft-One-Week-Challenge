@@ -11,6 +11,7 @@
 #include "../World/World.h"
 
 #include <iostream>
+#include "../Inventory/Inventory.h"
 
 class Keyboard;
 class World;
@@ -30,6 +31,8 @@ class RenderMaster;
 class Player : public Entity {
   public:
     Player();
+
+    ~Player();
 
     /**
      * @brief Handles input from the keyboard and mouse.
@@ -66,7 +69,7 @@ class Player : public Entity {
      * If the item already exists, it increments the quantity.
      * If the inventory is full, it does nothing.
      */
-    void addItem(const Material &material);
+    void addItem(const Material &material); // should be handled in Inventory class
 
     /**
      * @brief Draws the player and its items to the screen.
@@ -89,7 +92,16 @@ class Player : public Entity {
      * This method provides access to the item that the player is currently holding.
      * It can be used to interact with the world or perform actions.
      */
-    ItemStack &getHeldItems();
+    ItemStack& getHeldItems();
+
+    // temp debug function
+    Inventory& getInventory();
+
+    int getHeldItem();
+
+    void drawInventory(sf::RenderWindow &window);
+
+    const sf::Texture* getIconFromId(const Material::ID& id);
 
     void setPosition(glm::vec3 pos);
 
@@ -272,9 +284,9 @@ class Player : public Entity {
     bool m_debug = false;
     
     glm::vec3 m_spawnPoint;
-    
 
-    std::vector<ItemStack> m_items;
+    // std::vector<ItemStack> m_items;
+    Inventory m_inventory;
     std::vector<sf::Text> m_itemText;
     sf::Text m_posPrint;
     int m_heldItem = 0;
@@ -288,6 +300,12 @@ class Player : public Entity {
     ToggleKey m_num3;
     ToggleKey m_num4;
     ToggleKey m_num5;
+    ToggleKey m_num6;
+    ToggleKey m_num7;
+    ToggleKey m_num8;
+    ToggleKey m_num9;
+
+    ToggleKey m_inv;
 
     struct input{
       int x;
@@ -335,6 +353,17 @@ class Player : public Entity {
     static constexpr float RESPAWN_HEIGHT               = 300.0f;
 
     static constexpr float INTERPOLATION_CONST          = 0.25f;
+
+    sf::Texture* m_grass_icon;
+    sf::Texture* m_oak_bark_icon;
+    sf::Texture* m_oak_leaf_icon;
+    sf::Texture* m_stone_icon;
+    sf::Texture* m_dirt_icon;
+    sf::Texture* m_sand_icon;
+    sf::Texture* m_cactus_icon;
+    sf::Texture* m_rose_icon;
+    sf::Texture* m_tall_grass_icon;
+    sf::Texture* m_dead_shrub_icon;
 };
 
 #endif // PLAYER_H_INCLUDED

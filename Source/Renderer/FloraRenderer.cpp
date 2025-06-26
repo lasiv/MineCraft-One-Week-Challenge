@@ -31,4 +31,7 @@ void FloraRenderer::render(const Camera &camera)
     }
 
     m_chunks.clear();
+
+    glBindVertexArray(0);
+    glUseProgram(0);
 }

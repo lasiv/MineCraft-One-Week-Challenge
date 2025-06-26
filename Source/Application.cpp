@@ -51,8 +51,16 @@ void Application::runLoop()
         state.update(deltaTime.asSeconds());
         m_camera.update();
 
+        m_context.window.clear();
+
         state.render(m_masterRenderer);
         m_masterRenderer.finishRender(m_context.window, m_camera);
+
+        m_context.window.pushGLStates();
+        state.drawUI(m_context.window);
+        m_context.window.popGLStates();
+
+        m_context.window.display();
 
         handleEvents();
         if (m_isPopState)

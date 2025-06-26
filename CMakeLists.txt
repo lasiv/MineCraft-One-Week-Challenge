@@ -10,6 +10,7 @@ include("$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 add_executable(${PROJECT_NAME}
     Source/Item/Material.cpp
     Source/Item/ItemStack.cpp
+    Source/Inventory/Inventory.cpp
     Source/Application.cpp
     Source/World/Event/PlayerDigEvent.cpp
     Source/World/Block/BlockDatabase.cpp

@@ -68,6 +68,10 @@ class StatePlay : public StateBase {
      */
     void render(RenderMaster &renderer) override;
 
+    void drawUI(sf::RenderWindow &window) override;
+
+    void drawDebugInfo(sf::RenderWindow &window);
+
     /**
      * @brief Called when this state is pushed onto the state stack.
      *
@@ -83,6 +87,11 @@ class StatePlay : public StateBase {
     World m_world;
 
     FPSCounter m_fpsCounter;
+
+    sf::Text m_debugText;
+    sf::Font m_font;
+
+    sf::CircleShape m_crosshair;
 };
 
 #endif // PlayState_H_INCLUDED
