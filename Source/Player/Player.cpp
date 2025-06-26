@@ -69,8 +69,8 @@ Player::Player()
     m_sand_icon->loadFromFile("Res/Icons/sand_icon.png");
     m_cactus_icon->loadFromFile("Res/Icons/cactus_icon.png");
     m_rose_icon->loadFromFile("Res/Icons/rose_icon.png");
-    m_tall_grass_icon->loadFromFile("Res/Icons/tall_grass.png");
-    m_dead_shrub_icon->loadFromFile("Res/Icons/dead_shrub.png");
+    m_tall_grass_icon->loadFromFile("Res/Icons/tall_grass_icon.png");
+    m_dead_shrub_icon->loadFromFile("Res/Icons/dead_shrub_icon.png");
 }
 
 Player::~Player()
