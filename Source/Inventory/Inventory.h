@@ -31,7 +31,7 @@ class Inventory
          * 
          * @details Draws the Inventory using the window in a specific area and an even layout
          */
-        void draw(sf::RenderWindow &window, int activeSlot);
+        void initDraw(sf::RenderWindow &window, int activeSlot);
 
         /**
          * @brief Updates the inventory, to add items
@@ -89,11 +89,16 @@ class Inventory
          */
         std::vector<ItemStack>& getSlots();
 
+        std::vector<sf::RectangleShape> getGuiSlots();
+
+        sf::RectangleShape getRect();
+
     private:
 
         std::vector<ItemStack> m_slots;
 
         bool m_showInventory = true;
+        bool m_initialized = false;
 
         sf::RectangleShape m_rectangle;
         float m_inv_step;

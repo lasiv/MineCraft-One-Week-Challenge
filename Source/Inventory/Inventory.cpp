@@ -24,7 +24,7 @@ Inventory::Inventory()
     }
 }
 
-void Inventory::draw(sf::RenderWindow &window, int activeSlot)
+void Inventory::initDraw(sf::RenderWindow &window, int activeSlot)
 {
     m_rectangle.setPosition((window.getSize().x/2)-200.f, window.getSize().y - 60.f); //position must be set here to use window
 
@@ -47,6 +47,8 @@ void Inventory::draw(sf::RenderWindow &window, int activeSlot)
 
         window.draw(m_guiSlots[i]);
     }
+
+    m_initialized = true;
     
 }
 
@@ -111,6 +113,16 @@ ItemStack& Inventory::getItemOfSlot(int slotNum)
     {
         return m_slots[slotNum];
     }
+}
+
+std::vector<sf::RectangleShape> Inventory::getGuiSlots()
+{
+    return m_guiSlots;
+}
+
+sf::RectangleShape Inventory::getRect()
+{
+    return m_rectangle;
 }
 
 void Inventory::toggleVisibility()
