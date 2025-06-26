@@ -383,6 +383,7 @@ void Player::drawInventory(sf::RenderWindow &window)
     unsigned int highlightSlotIndex;
 
     sf::RectangleShape icon;
+    sf::Text amount;
 
     // drawing slots
     for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
@@ -415,7 +416,13 @@ void Player::drawInventory(sf::RenderWindow &window)
             icon.setSize(m_inventory.getGuiSlots()[i].getSize());
             icon.setFillColor(sf::Color(255,255,255,255));
 
+            amount.setPosition(m_inventory.getGuiSlots()[i].getPosition().x +5, m_inventory.getGuiSlots()[i].getPosition().y+15);
+            amount.setScale(m_inventory.getGuiSlots()[i].getScale());
+            amount.setFont(f);
+            amount.setString(std::to_string(m_inventory.getSlots()[i].getNumInStack()));
+
             window.draw(icon);
+            window.draw(amount);
         }
     }
 }
