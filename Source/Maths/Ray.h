@@ -1,6 +1,7 @@
 #ifndef RAY_H_INCLUDED
 #define RAY_H_INCLUDED
 
+#include "../World/World.h"
 #include "glm.h"
 
 /**
@@ -30,6 +31,8 @@ class Ray {
      */
     void step(float scale);
 
+    bool cast(World& world, float maxLength, bool face);
+
     /**
      * @brief Gets the end position of the ray.
      * 
@@ -52,10 +55,14 @@ class Ray {
      */
     float getLength() const;
 
+    // returns direction as a vector
+    glm::vec3 getDirection();
+
   private:
     glm::vec3 m_rayStart;
     glm::vec3 m_rayEnd;
     glm::vec3 m_direction;
+    glm::vec3 m_angles;
 };
 
 #endif // RAY_H_INCLUDED

@@ -42,38 +42,32 @@ void StatePlay::handleInput()
     glm::vec3 lastPosition;
 
     // Ray is cast as player's 'vision'
-    for (Ray ray({m_player.position.x, m_player.position.y + 0.6f,
-                  m_player.position.z},
-                 m_player.rotation); // Corrected for camera offset
-         ray.getLength() < 6; ray.step(0.05f)) {
-        int x = static_cast<int>(ray.getEnd().x);
-        int y = static_cast<int>(ray.getEnd().y);
-        int z = static_cast<int>(ray.getEnd().z);
+    Ray ray({m_player.position.x, m_player.position.y + 0.6f, m_player.position.z},
+            m_player.rotation);
 
-        auto block = m_world.getBlock(x, y, z);
-        auto id = (BlockId)block.id;
-        
-        /// @todo add the keyboard handling to Player object
-        if (id != BlockId::Air && id != BlockId::Water) {
-            if (timer.getElapsedTime().asSeconds() > 0.2) {
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    timer.restart();
-                    // The player "digs" the block up
-                    m_world.addEvent<PlayerDigEvent>(sf::Mouse::Left,
-                                                     ray.getEnd(), m_player);
-                    break;
-                }
-                else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-                    timer.restart();
-                    // Block is placed by player
-                    m_world.addEvent<PlayerDigEvent>(sf::Mouse::Right,
-                                                     lastPosition, m_player);
-                    break;
-                }
-            }
-        }
-        lastPosition = ray.getEnd();
+    bool face = false;
+
+    // Determine what the player is trying to do
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+        face = true;
     }
+    else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        return; // Neither button pressed
+    }
+
+    if (timer.getElapsedTime().asSeconds() > 0.2f) {
+        if (ray.cast(m_world, 6.0f, face)) {
+            timer.restart();
+
+            // m_rayEnd is now the block to interact with
+            m_world.addEvent<PlayerDigEvent>(
+                face ? sf::Mouse::Right : sf::Mouse::Left,
+                ray.getEnd(),
+                m_player
+            );
+        }
+    }
+
 }
 
 void StatePlay::update(float deltaTime)
@@ -93,9 +87,27 @@ void StatePlay::render(RenderMaster &renderer)
     m_world.renderWorld(renderer, m_pApplication->getCamera());
 }
 
+static const char* getDirection(glm::vec3 direction) {
+    float angle = fmodf(direction.y, 360.0f);
+    if (angle < 0) angle += 360.0f;  // Normalize to [0, 360)
+
+    if (angle >= 315.0f || angle < 45.0f) {
+        return "North (-z)";
+    } else if (angle >= 45.0f && angle < 135.0f) {
+        return "East (+x)";
+    } else if (angle >= 135.0f && angle < 225.0f) {
+        return "South (+z)";
+    } else { // 225 <= angle < 315
+        return "West (-x)";
+    }
+}
+
+
 void StatePlay::drawDebugInfo(sf::RenderWindow &window)
 {
     std::stringstream ss;
+
+    Ray ray = Ray({0,0,0}, m_player.rotation);
 
     ss << std::fixed << std::setprecision(2)
 
@@ -113,6 +125,11 @@ void StatePlay::drawDebugInfo(sf::RenderWindow &window)
                 << m_player.rotation.x << ", "
                 << m_player.rotation.y << ", "
                 << m_player.rotation.z << ")\n"
+                << "Facing: " << getDirection(m_player.rotation) << "\n"
+                << "RotVec("
+                << ray.getDirection().x << ", "
+                << ray.getDirection().y << ", "
+                << ray.getDirection().z << ")\n"
                 << "Vel("
                 << m_player.velocity.x << ", "
                 << m_player.velocity.y << ", "
