@@ -27,6 +27,10 @@ StatePlay::StatePlay(Application &app, const Config &config)
 
     m_debugText.setFont(m_font);
     m_debugText.setCharacterSize(25);
+
+    m_crosshair.setRadius(3);
+    m_crosshair.setOrigin(3, 3);
+    m_crosshair.setPosition(app.getWindow().getSize().x/2, app.getWindow().getSize().y/2);
 }
 
 void StatePlay::handleEvent(sf::Event e)
@@ -171,6 +175,8 @@ void StatePlay::drawUI(sf::RenderWindow &window)
     {
         m_player.drawInventory(window);
     }
+
+    window.draw(m_crosshair);
 
 }
 

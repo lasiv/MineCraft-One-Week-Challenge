@@ -90,6 +90,8 @@ class StatePlay : public StateBase {
 
     sf::Text m_debugText;
     sf::Font m_font;
+
+    sf::CircleShape m_crosshair;
 };
 
 #endif // PlayState_H_INCLUDED
