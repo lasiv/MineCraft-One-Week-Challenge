@@ -711,6 +711,7 @@ Schwerpunkt von Meilenstein 3 ist das Aufzeigen der tatsächlichen Veränderunge
 
 \subsubsection{Movement}
 
+Die Bewegung der Spielerfigur funktioniert ursprünglich mit einem Delta. Es wird also die Zeit gemessen die das Spiel braucht ein Bild zu generieren, und die Formeln der Bewegung dann auf diesen Zeitbereich angewandt. Um die Bewegung der Spielerfigur möglichst vergleichsweise zum Originalspiel zu machen, wurden die genauen Bewegungsformeln aus dem Wiki des Spiels gezogen. (Fußnote mit Link) Diese sind rekursiv und basieren auf 20 festen Zeitsprüngen pro Sekunden, sogenannten Ticks. Rekursive formeln sind schwer umzustellen, daher wird die aktuelle Position nun zwischen einer vorherigen und einer nächsten Position interpoliert. Lineare Interpolation hat den Nachteil, bei großen Änderungen in der Geschwindigkeit ungenaue Bewegungen darzustellen. Aus Interesse für das Thema wurden hier stattdessen eine kubische Bezierkurve herangezogen. 
 \subsubsection{Inventar}
 
 \subsection{Modelle gemäß der Veränderungen}
@@ -720,6 +721,8 @@ Schwerpunkt von Meilenstein 3 ist das Aufzeigen der tatsächlichen Veränderunge
 \subsubsection{Movement}
 
 \subsubsection{Inventar}
+
+usecase hinzufügen: f3 menü, inventar toggle
 
 \subsection{Fazit}
 
