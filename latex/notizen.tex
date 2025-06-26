@@ -711,6 +711,8 @@ Im folgenden Abschnitt werden die Umsetzungen bzw. die tatsächlichen Änderunge
 
 \subsubsection{Strukturen und Weltgenerierung}
 
+Vor der Änderung waren die Biome selber für die Generierung ihrer Strukturen verantwortlich, zu dem Zeitpunkt ausschließlich Bäume. Dies wurde mit der erweiterten Version geändert: Der Terraingenerator fragt lediglich die Biome, welche Art von Strukturen und Vegetation in ihnen auftauchen und der Terraingenerator ist verantwortlich für die Generierung. Auch wurden die Fähigkeiten des Generators erweitert: Vorher wusste er nur von der Höhen- und Biomverteilung über den Chunk Bescheid, den er gerade bearbeitet. Dadurch war es unmöglich Teile von Strukturen zu generieren, deren Zentrum zwar außerhalb des Chunks waren aber in den aktuellen Chunk rein ragten. Der neue Code verbessert dies: Es wird nun die Höhen- und Biomverteilung von den direkt und vertikal angrenzenden Chunks generiert, sodass die sich dort befindlichen Strukturen ermittelt und die in den Chunk ragenden Teile platziert werden können. Zu guter letzt gibt es nun die Möglichkeit, neue Strukturen mithilfe von Dateien zu beschreiben, anstatt diese starr im Code definieren zu müssen. Zwar müssen neue Typen von Strukturen immernoch in den Code integriert werden, indem ihre ID an den Terraingenerator übergeben wird, was jedoch einen kleineren Aufwand darstellt als die Struktur komplett im Code zu definieren.
+
 \subsubsection{Movement}
 
 Die Bewegung der Spielerfigur funktioniert ursprünglich mit einem Delta. Es wird also die Zeit gemessen die das Spiel braucht ein Bild zu generieren, und die Formeln der Bewegung dann auf diesen Zeitbereich angewandt. Um die Bewegung der Spielerfigur möglichst vergleichsweise zum Originalspiel zu machen, wurden die genauen Bewegungsformeln aus dem Wiki des Spiels gezogen. (Fußnote mit Link) Diese sind rekursiv und basieren auf 20 festen Zeitsprüngen pro Sekunden, sogenannten Ticks. Rekursive formeln sind schwer umzustellen, daher wird die aktuelle Position nun zwischen einer vorherigen und einer nächsten Position interpoliert. Lineare Interpolation hat den Nachteil, bei großen Änderungen in der Geschwindigkeit ungenaue Bewegungen darzustellen. Aus Interesse für das Thema wurden hier stattdessen eine kubische Bezierkurve herangezogen. 
@@ -727,7 +729,7 @@ Im Zuge der geforderten Veränderungen der grafischen Benutzeroberfläche und de
 
 Abschließend ist festzustellen, dass hauptsächlich die Klasse \texttt{Inventory} komplett neu ist. Klassen wie \texttt{Player} und \texttt{Context} mussten zwar verändert werden, bleiben aber in ihrer funktionalität gleich wie zuvor. Für die Grafik ist hauptsächlich die Bibliothek \texttt{SFML} wichtig.
 
-\subsection{Modelle gemäß der Veränderungen}
+\subsection{Modelle gemä\ss{} der Veränderungen}
 
 In diesem Abschnitt werden Modelle um wichtige Klassen oder Beziehungen ergänzt bzw. erklärend verändert.
 
