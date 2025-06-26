@@ -37,7 +37,7 @@ Player::Player()
         m_items.emplace_back(Material::NOTHING, 0);
     }  */// should just create an inventory object
 
-    for (float i = 0; i < 5; i++) {
+    /* for (float i = 0; i < 5; i++) {
         sf::Text t;
         t.setFont(f);
         t.setOutlineColor(sf::Color::Black);
@@ -48,8 +48,8 @@ Player::Player()
     m_posPrint.setFont(f);
     m_posPrint.setOutlineColor(sf::Color::Black);
     m_posPrint.setCharacterSize(25);
-    m_posPrint.setPosition(20.0f, 20.0f * 6.0f + 100.0f);
-
+    m_posPrint.setPosition(20.0f, 20.0f * 6.0f + 100.0f); */
+    
     m_grass_icon = new sf::Texture();
     m_oak_bark_icon = new sf::Texture();
     m_oak_leaf_icon = new sf::Texture();
