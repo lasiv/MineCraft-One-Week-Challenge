@@ -49,6 +49,42 @@ Player::Player()
     m_posPrint.setOutlineColor(sf::Color::Black);
     m_posPrint.setCharacterSize(25);
     m_posPrint.setPosition(20.0f, 20.0f * 6.0f + 100.0f);
+
+    m_grass_icon = new sf::Texture();
+    m_oak_bark_icon = new sf::Texture();
+    m_oak_leaf_icon = new sf::Texture();
+    m_stone_icon = new sf::Texture();
+    m_dirt_icon = new sf::Texture();
+    m_sand_icon = new sf::Texture();
+    m_cactus_icon = new sf::Texture();
+    m_rose_icon = new sf::Texture();
+    m_tall_grass_icon = new sf::Texture();
+    m_dead_shrub_icon = new sf::Texture();
+
+    m_grass_icon->loadFromFile("Res/Icons/grass_icon.png");
+    m_oak_bark_icon->loadFromFile("Res/Icons/oak_bark_icon.png");
+    m_oak_leaf_icon->loadFromFile("Res/Icons/oak_leaf_icon.png");
+    m_stone_icon->loadFromFile("Res/Icons/stone_icon.png");
+    m_dirt_icon->loadFromFile("Res/Icons/dirt_icon.png");
+    m_sand_icon->loadFromFile("Res/Icons/sand_icon.png");
+    m_cactus_icon->loadFromFile("Res/Icons/cactus_icon.png");
+    m_rose_icon->loadFromFile("Res/Icons/rose_icon.png");
+    m_tall_grass_icon->loadFromFile("Res/Icons/tall_grass.png");
+    m_dead_shrub_icon->loadFromFile("Res/Icons/dead_shrub.png");
+}
+
+Player::~Player()
+{
+    delete m_grass_icon;
+    delete m_oak_bark_icon;
+    delete m_oak_leaf_icon;
+    delete m_stone_icon;
+    delete m_dirt_icon;
+    delete m_sand_icon;
+    delete m_cactus_icon;
+    delete m_rose_icon;
+    delete m_tall_grass_icon;
+    delete m_dead_shrub_icon;
 }
 
 void Player::addItem(const Material &material)
@@ -344,11 +380,15 @@ void Player::drawInventory(sf::RenderWindow &window)
 
     unsigned int highlightSlotIndex;
 
+    sf::RectangleShape icon;
+
     for(unsigned int i = 0; i < MAX_INV_SLOTS; i++)
     {
         if (m_heldItem == i)
         {
             highlightSlotIndex = i;
+            m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineColor(sf::Color::White);
+            m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineThickness(5.f);
             continue;
         }
         else
@@ -356,12 +396,49 @@ void Player::drawInventory(sf::RenderWindow &window)
             m_inventory.getGuiSlots()[i].setOutlineColor(sf::Color(69,69,69,255));
             m_inventory.getGuiSlots()[i].setOutlineThickness(2.f);
         }
-
+    
         window.draw(m_inventory.getGuiSlots()[i]);
     }
 
-    m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineColor(sf::Color::White);
-    m_inventory.getGuiSlots()[highlightSlotIndex].setOutlineThickness(5.f);
-
     window.draw(m_inventory.getGuiSlots()[highlightSlotIndex]);
+
+    for (int i = 0; i < MAX_INV_SLOTS; i++)
+    {
+        if (m_inventory.getSlots()[i].getMaterial().id != Material::Nothing)
+        {
+            icon.setTexture(getIconFromId(m_inventory.getSlots()[i].getMaterial().id));
+            icon.setPosition(m_inventory.getGuiSlots()[i].getPosition());
+            icon.setSize(m_inventory.getGuiSlots()[i].getSize());
+            icon.setFillColor(sf::Color(255,255,255,255));
+
+            window.draw(icon);
+        }
+    }
+}
+
+const sf::Texture* Player::getIconFromId(const Material::ID& id)
+{
+    switch(id)
+    {
+        case Material::Grass:
+            return m_grass_icon;
+        case Material::Sand:
+            return m_sand_icon;
+        case Material::Stone:
+            return m_stone_icon;
+        case Material::OakBark:
+            return m_oak_bark_icon;
+        case Material::OakLeaf:
+            return m_oak_leaf_icon;
+        case Material::Cactus:
+            return m_cactus_icon;
+        case Material::Dirt:
+            return m_dirt_icon;
+        case Material::Rose:
+            return m_rose_icon;
+        case Material::TallGrass:
+            return m_tall_grass_icon;
+        case Material::DeadShrub:
+            return m_dead_shrub_icon;
+    }
 }

@@ -29,6 +29,8 @@ class Player : public Entity {
   public:
     Player();
 
+    ~Player();
+
     /**
      * @brief Handles input from the keyboard and mouse.
      * 
@@ -110,6 +112,8 @@ class Player : public Entity {
 
     void drawInventory(sf::RenderWindow &window);
 
+    const sf::Texture* getIconFromId(const Material::ID& id);
+
   private:
 
     /**
@@ -173,6 +177,17 @@ class Player : public Entity {
     ToggleKey m_slow;
 
     glm::vec3 m_acceleration;
+
+    sf::Texture* m_grass_icon;
+    sf::Texture* m_oak_bark_icon;
+    sf::Texture* m_oak_leaf_icon;
+    sf::Texture* m_stone_icon;
+    sf::Texture* m_dirt_icon;
+    sf::Texture* m_sand_icon;
+    sf::Texture* m_cactus_icon;
+    sf::Texture* m_rose_icon;
+    sf::Texture* m_tall_grass_icon;
+    sf::Texture* m_dead_shrub_icon;
 };
 
 #endif // PLAYER_H_INCLUDED
