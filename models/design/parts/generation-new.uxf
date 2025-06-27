@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>8</zoom_level>
+  <zoom_level>12</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>416</x>
-      <y>456</y>
-      <w>72</w>
-      <h>32</h>
+      <x>456</x>
+      <y>180</y>
+      <w>108</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>World
 </panel_attributes>
@@ -16,10 +16,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>544</x>
-      <y>568</y>
-      <w>80</w>
-      <h>32</h>
+      <x>216</x>
+      <y>312</y>
+      <w>120</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>Chunk
 
@@ -30,24 +30,24 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>480</y>
-      <w>120</w>
-      <h>128</h>
+      <x>252</x>
+      <y>180</y>
+      <w>228</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 r1=pWorld
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;130.0;130.0;130.0</additional_attributes>
+    <additional_attributes>170.0;20.0;10.0;20.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>528</x>
-      <y>456</y>
-      <w>104</w>
-      <h>32</h>
+      <x>432</x>
+      <y>312</y>
+      <w>156</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>ChunkManager
 </panel_attributes>
@@ -56,53 +56,53 @@ m2=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>376</y>
-      <w>240</w>
-      <h>96</h>
+      <x>552</x>
+      <y>180</y>
+      <w>192</w>
+      <h>192</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1
 r2=chunkManager
 r1=world</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0;180.0;10.0;180.0;100.0</additional_attributes>
+    <additional_attributes>10.0;20.0;90.0;20.0;90.0;130.0;30.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
-      <y>480</y>
-      <w>64</w>
-      <h>104</h>
+      <x>324</x>
+      <y>312</y>
+      <w>132</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=chunks
 m2=*
 m1=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>624</x>
-      <y>456</y>
-      <w>176</w>
-      <h>40</h>
+      <x>516</x>
+      <y>348</y>
+      <w>168</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=terrainGenerator
 m2=1
 m1=*</panel_attributes>
-    <additional_attributes>10.0;20.0;200.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>784</x>
-      <y>456</y>
-      <w>160</w>
-      <h>32</h>
+      <x>420</x>
+      <y>492</y>
+      <w>240</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>ClassicOverworldGenerator
 
@@ -113,10 +113,10 @@ m1=*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>816</x>
-      <y>352</y>
-      <w>88</w>
-      <h>32</h>
+      <x>744</x>
+      <y>492</y>
+      <w>144</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>Biome
 
@@ -128,10 +128,10 @@ m1=*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1056</x>
-      <y>456</y>
-      <w>120</w>
-      <h>32</h>
+      <x>468</x>
+      <y>636</y>
+      <w>180</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>NoiseGenerator
 
@@ -142,51 +142,51 @@ m1=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>936</x>
-      <y>456</y>
-      <w>136</w>
-      <h>40</h>
+      <x>540</x>
+      <y>528</y>
+      <w>156</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=biomeNoiseGen
 m2=1
 m1=1</panel_attributes>
-    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>856</x>
-      <y>376</y>
-      <w>32</w>
-      <h>96</h>
+      <x>648</x>
+      <y>504</y>
+      <w>120</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=5
 m1=*</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>896</x>
-      <y>360</y>
-      <w>328</w>
-      <h>112</h>
+      <x>636</x>
+      <y>528</y>
+      <w>216</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=heightGenerator
 m2=1
 m1=1</panel_attributes>
-    <additional_attributes>10.0;10.0;280.0;10.0;280.0;120.0</additional_attributes>
+    <additional_attributes>150.0;10.0;150.0;110.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>824</x>
-      <y>576</y>
-      <w>80</w>
-      <h>32</h>
+      <x>300</x>
+      <y>636</y>
+      <w>120</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>Structure
 </panel_attributes>
@@ -195,14 +195,14 @@ m1=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>856</x>
-      <y>480</y>
-      <w>32</w>
-      <h>112</h>
+      <x>348</x>
+      <y>504</y>
+      <w>96</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;110.0</additional_attributes>
   </element>
 </diagram>
