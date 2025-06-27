@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>456</x>
-      <y>180</y>
+      <x>876</x>
+      <y>324</y>
       <w>108</w>
       <h>48</h>
     </coordinates>
@@ -16,8 +16,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>216</x>
-      <y>312</y>
+      <x>636</x>
+      <y>408</y>
       <w>120</w>
       <h>48</h>
     </coordinates>
@@ -30,22 +30,22 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>252</x>
-      <y>180</y>
+      <x>672</x>
+      <y>324</y>
       <w>228</w>
-      <h>156</h>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 r1=pWorld
 m2=*</panel_attributes>
-    <additional_attributes>170.0;20.0;10.0;20.0;10.0;110.0</additional_attributes>
+    <additional_attributes>170.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>432</x>
-      <y>312</y>
+      <x>852</x>
+      <y>492</y>
       <w>156</w>
       <h>48</h>
     </coordinates>
@@ -56,51 +56,51 @@ m2=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>552</x>
-      <y>180</y>
-      <w>192</w>
-      <h>192</h>
+      <x>924</x>
+      <y>360</y>
+      <w>156</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1
 r2=chunkManager
 r1=world</panel_attributes>
-    <additional_attributes>10.0;20.0;90.0;20.0;90.0;130.0;30.0;130.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>324</x>
-      <y>312</y>
-      <w>132</w>
-      <h>60</h>
+      <x>672</x>
+      <y>444</y>
+      <w>204</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=chunks
 m2=*
 m1=1</panel_attributes>
-    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>150.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>516</x>
-      <y>348</y>
-      <w>168</w>
-      <h>168</h>
+      <x>924</x>
+      <y>528</y>
+      <w>180</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 r2=terrainGenerator
 m2=1
 m1=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>420</x>
-      <y>492</y>
+      <x>804</x>
+      <y>660</y>
       <w>240</w>
       <h>48</h>
     </coordinates>
@@ -113,8 +113,8 @@ m1=*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>744</x>
-      <y>492</y>
+      <x>1128</x>
+      <y>660</y>
       <w>144</w>
       <h>48</h>
     </coordinates>
@@ -128,8 +128,8 @@ m1=*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>468</x>
-      <y>636</y>
+      <x>852</x>
+      <y>804</y>
       <w>180</w>
       <h>48</h>
     </coordinates>
@@ -142,9 +142,9 @@ m1=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>540</x>
-      <y>528</y>
-      <w>156</w>
+      <x>924</x>
+      <y>696</y>
+      <w>168</w>
       <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
@@ -156,8 +156,8 @@ m1=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>648</x>
-      <y>504</y>
+      <x>1032</x>
+      <y>672</y>
       <w>120</w>
       <h>48</h>
     </coordinates>
@@ -169,8 +169,8 @@ m1=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>528</y>
+      <x>1020</x>
+      <y>696</y>
       <w>216</w>
       <h>168</h>
     </coordinates>
@@ -183,8 +183,8 @@ m1=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>636</y>
+      <x>684</x>
+      <y>804</y>
       <w>120</w>
       <h>48</h>
     </coordinates>
@@ -195,8 +195,8 @@ m1=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>348</x>
-      <y>504</y>
+      <x>732</x>
+      <y>672</y>
       <w>96</w>
       <h>156</h>
     </coordinates>

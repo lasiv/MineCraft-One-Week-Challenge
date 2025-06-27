@@ -147,11 +147,7 @@
 
 %%% Inhalt %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Meilenstein 1} \label{sec:ms1}
-
-Meilenstein 1 befasst sich mit der Beschreibung der Software, wie sie ohne die Änderung aufgebaut ist. Sowohl textuell, als auch per Modell.
-
-\subsection{Informelle Beschreibung} \label{subsec:inf}
+\section{Informelle Beschreibung} \label{subsec:inf}
 
 Die ausgewählte Software ist ein Projekt eines YouTubers, in einer Woche einen Klon des bekannten Spiels \href{https://www.minecraft.net}{Minecraft} zu programmieren. Bei dem Spiel Minecraft handelt es sich um ein sogenanntes Open-World Survival Game. Das bedeutet, der Spieler findet sich in einer algorithmisch generierten Welt wieder, die frei von dem Spieler erkundet werden kann. In dieser Welt hat der Spieler die Aufgabe gegen KI-gesteuerte Monster zu überleben. Zudem ist Minecraft für den stilisierten Grafikstil bekannt, der durch die Verwendung von quadratischen Blöcken und pixeligen Texturen geprägt ist.
 
@@ -161,97 +157,20 @@ Die Spielwelt selber wird mithilfe von Rauschfunktionen generiert, spezieller ei
 
 In dieser Kopie des Spiels sind einige Haupt-Eigenschaften noch nicht umgesetzt. Es gibt keine weiteren Spiel-gesteuerten Entitäten in dem Klon, wie die Monster und Tiere die es im Basis Spiel gibt. Auch hat der Spieler nicht die Möglichkeit Schaden zu nehmen, zu schwimmen, in sein Inventar zu schauen oder verschiedene Materialien und Werkzeuge herzustellen. Das Projekt verfolgt nicht das Ziel, ein vollständiges Spiel zu sein, sondern entstand im Rahmen einer technischen Herausforderung. Es dient in erster Linie als Grundlage für Lernzwecke, zur Analyse grundlegender Spielmechaniken sowie als Ausgangspunkt für mögliche Erweiterungen durch Dritte. Das Original Open-Source-Projekt ist zu finden unter \url{https://github.com/Hopson97/MineCraft-One-Week-Challenge}.
 
-Im Laufe des Projekts wurden einige der Standard-Funktionen dazu programmiert. Die Bewegung des Spielers wurde erweitert um die Fähigkeit in Wasser zu schwimmen, und beim Schleichen nicht von Kanten zu fallen. Ebenso können verschiedene Blöcke nach konfiguration rutschiger sein als andere und man kann auch von den Blöcken elastisch wieder nach oben geworfen werden. UM sich in dem Spiel zurechfinden zu können wurden einige Grundelemente der Nutzeroberfläche hinzugefügt, darunter ein Fadenkreuz zum anvisieren der Blöcke, ein Inventarleiste, die die getragenen Items anzeigt und ein Debug-Menü, in dem wichtige Daten dargestellt werden. Ebenso wurde die Generierung der Welt etwas angepasst, jetzt sollen Bäume und andere Strukturen nicht nur in ihrem Chunk generieren, damit sie anders als vorher, an den Chunkgrenzen nicht anbgeschnitten werden.
+Im Laufe des Projekts wurden einige der Standard-Funktionen dazu programmiert. Die Bewegung des Spielers wurde erweitert um die Fähigkeit in Wasser zu schwimmen, und beim Schleichen nicht von Kanten zu fallen. Ebenso können verschiedene Blöcke nach Konfiguration rutschiger sein als andere und man kann auch von den Blöcken elastisch wieder nach oben geworfen werden. Um sich in dem Spiel zurechtzufinden, wurden einige Grundelemente der Nutzeroberfläche hinzugefügt, darunter ein Fadenkreuz zum anvisieren der Blöcke, ein Inventarleiste, die die getragenen Items anzeigt und ein Debug-Menü, in dem wichtige Daten dargestellt werden. Ebenso wurde die Generierung der Welt etwas angepasst, jetzt sollen Bäume und andere Strukturen nicht nur in ihrem Chunk generieren, damit sie anders als vorher, an den Chunkgrenzen nicht anbgeschnitten werden.
 
-\newpage
-\subsection{Use-Case-Modell} \label{subsec:usecase}
+\section{Use-Case-Modell} \label{subsec:usecase}
 
-Folgender Abschnitt thematisiert das Use-Case Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
+Folgender Abschnitt thematisiert das Use-Case Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die Use-Cases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
 
-\begin{gfx}{Use-Case Diagramm}{usecase}{ht}
-  % Systemgrenze
-  \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
-    \umlusecase[x=0, y=0]{Bewegen}
-    \umlusecase[x=0, y=-1.5]{Springen}
-    \umlusecase[x=0, y=-3]{Flugmodus umschalten}
-    \umlusecase[x=0, y=-4.5]{Maussteuerung deaktivieren}
-    \umlusecase[x=0, y=-6]{Block abbauen}
-    \umlusecase[x=0, y=-7.5]{Block platzieren}
-  \end{umlsystem}
+Für die Use-Cases sollen einige Rahmenbedingungen definiert werden. Abbildung~\ref{gfx:state} zeigt, in welchen Bewegungszuständen sich die Spielfigur befinden kann. In diesen zuständen verhalten sich bestimmte Eingaben anders, grundlegende Funktionen werden in den Rahmenbedingungen beschrieben und nicht in die Use-Cases mit aufgenommen.
 
-  % Akteur
-  \umlactor[x=-2, y=-4.5]{Spieler}
-
-  % Assoziationen
-  \umlassoc{Spieler}{usecase-1}
-  \umlassoc{Spieler}{usecase-2}
-  \umlassoc{Spieler}{usecase-3}
-  \umlassoc{Spieler}{usecase-4}
-  \umlassoc{Spieler}{usecase-5}
-  \umlassoc{Spieler}{usecase-6}
-\end{gfx}
-
-Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\ref{gfx:state} zeigt, in welchen Bewegungszuständen sich die Spielfigur befinden kann. Zusätzlich soll definiert werden, welche physikalischen Bedingungen auf die Spielfigur wirken und welche Bedienelemente des Spiels keine UseCases bekommen (umformulieren)
-
-\begin{gfx}{Bewegungszustände}{state}{ht}
-  
-  \umlstateinitial[x=-2.9,y=4,name=init]
-  \umlstatefinal[x=6.1,y=4,name=final]
-
-  \begin{umlstate}[x=0,y=0,name=spiel]{Spiel}
-
-    \umlstateinitial[x=-3,y=0,name=subinit]
-    \umlbasicstate[x=0,y=0,name=laufen]{Laufen}
-    \umlbasicstate[x=6,y=0,name=fallen]{Fallen}
-    \umlbasicstate[x=0,y=-6,name=schwimmen]{Schwimmen}
-    \umlbasicstate[x=6,y=-6,name=fliegen]{Fliegen}
-
-    \umltrans[anchor2=193]{subinit}{laufen}
-
-    \umltrans[anchor1=215,anchor2=55]{fallen}{schwimmen}
-    \coordinate (P) at (1.65,-3.5);
-    \node[rotate=45] (N) at (P) {berührtWasser};
-
-    \umltrans[anchor1=35,anchor2=235]{schwimmen}{fallen}
-    \coordinate (P) at (4.45,-1.9);
-    \node[rotate=45] (N) at (P) {verlässtWasser};
-
-    \umltrans[]{fliegen}{laufen}
-    \coordinate (P) at (2.1,-1.45);
-    \node[rotate=-45] (N) at (P) {berührtBoden};
-
-    \umltrans[]{laufen}{schwimmen}
-    \coordinate (P) at (-.2,-3);
-    \node[rotate=90] (N) at (P) {berührtWasser};
-
-    \umltrans[]{fallen}{fliegen}
-    \umltrans[]{fliegen}{fallen}
-    \coordinate (P) at (5.8,-3);
-    \node[rotate=90] (N) at (P) {flugUmschalten};
-
-    \umltrans[arg=berührtWasser,pos=0.5,rotate=45]{fliegen}{schwimmen}
-    \umltrans[anchor1=10,anchor2=170,arg={überKanteFallen, springen},pos=0.5,rotate=45]{laufen}{fallen}
-    \umltrans[anchor1=190,anchor2=350,arg=berührtBoden,pos=0.5,rotate=45]{fallen}{laufen}
-
-  \end{umlstate}
-
-  \umltrans[anchor2=136]{init}{spiel}
-  \umltrans[anchor1=46]{spiel}{final}
-
-\end{gfx}
-
-\FloatBarrier
-
-
-
-\newpage
-
-\subsubsection*{Rahmenbedingungen des Spiels}
+\subsection*{Rahmenbedingungen des Spiels}
 
 \begin{itemize}
   \item \textbf{Bewegungszustände:} Die Spielfigur befindet sich das komplette Spiel über in mindestens einem dieser Spielzustände. Eingaben auf der Tastatur können basierend auf diesen zuständen unterschiedliche Aktionen hervorrufen.
-  \item \textbf{Maussteuerung:} Solange die Maussteuerung nicht durch einen der später definierten Use-Cases ausgeschaltet wurde wird sie als immer aktiv angenommen. Selbst wenn nicht aktiv die Richtung geändert wird, zählt die Aktive Blickrichtung als gewählte Eingabe. Aus diesem Grund erhält diese keinen eigenen Use-Case und wird in anderen als Vorraussetzung genommen.
-  \item \textbf{Horizontale Bewegung:} Die Bewegung der Spielfigur findet mit 20Hz statt, in festen Ticks, zwischen den Positionen wird interpoliert. Die Horizontale Bewegung erfolgt nach rekursiver Formel. Grob unterteilt sich die Beweung in einen Teil Momentum, also die vorherige Geschwindigkeit multipliziert mit mehreren Parametern zur Dämpfing dieser, und einen zweiten Teil der Beschleunigung. Momentum und Beschleunigung werden zur Geschwindigkeit addiert. Die Parameter hängen von dem Zustand der Spielfigur ab:
+  \item \textbf{Maussteuerung:} Solange die Maussteuerung nicht durch einen der später definierten Use-Cases ausgeschaltet wurde, wird sie als immer aktiv angenommen. Selbst wenn nicht aktiv die Richtung mit der Maus geändert wird, zählt die momentane Blickrichtung als gewählte Eingabe. Aus diesem Grund erhält diese keinen eigenen Use-Case und wird in anderen als Vorraussetzung genommen.
+  \item \textbf{Horizontale Bewegung:} Die Bewegung der Spielfigur findet 20 mal pro Sekunde in festen Ticks statt, zwischen den berechneten Positionen wird interpoliert. Die Horizontale Bewegung erfolgt nach rekursiver Formel. Grob unterteilt sich die Beweung in ein Momentum, also die vorherige Geschwindigkeit multipliziert mit mehreren Parametern zur Dämpfing, und eine Beschleunigung. Momentum und Beschleunigung werden zur Geschwindigkeit addiert. Die Parameter hängen von dem Zustand der Spielfigur ab:
   \begin{itemize}
     \item \textbf{Laufen:} Ein Parameter der sowohl in Momentum also auch Beschleunigung Einfluss hat, ist die Haftreibung des Untergrunds. Zusätzlich gelten weiter spezifische Parameter, die extra zur präzisen Laufbewegung beitragen.
     \item \textbf{Fallen:} Hier spielt keine Haftreibung mehr eine Rolle, und die Bewegung wird annähernd wie beim laufen aber mit deutlich niedrigerer Reibung berechnet.
@@ -271,7 +190,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 
 \newpage
 
-\subsubsection*{UC01 – Bewegen}
+\subsection*{UC01 – Bewegen}
 
 \textbf{Name:} Bewegen \\
 \textbf{Akteur:} Spieler \\
@@ -294,7 +213,8 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
   \item[6.] Use-Case endet erfolgreich
 \end{description}
 
-\subsubsection*{UC02 – Bewegen (vertikal)}
+\newpage
+\subsection*{UC02 – Bewegen (vertikal)}
 
 \textbf{Name:} Bewegen (vertikal) \\
 \textbf{Akteur:} Spieler \\
@@ -316,7 +236,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
   \item[6.] Use-Case endet erfolgreich
 \end{description}
 
-\subsubsection*{UC03 – Springen}
+\subsection*{UC03 – Springen}
 
 \textbf{Name:} Springen \\
 \textbf{Akteur:} Spieler \\
@@ -338,7 +258,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 
 \newpage
 
-\subsubsection*{UC04 – Flugmodus umschalten}
+\subsection*{UC04 – Flugmodus umschalten}
 
 \textbf{Name:} Flugmodus umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -359,7 +279,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 
 \newpage
 
-\subsubsection*{UC05 – Maussteuerung umschalten}
+\subsection*{UC05 – Maussteuerung umschalten}
 
 \textbf{Name:} Maussteuerung umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -382,7 +302,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 
 \newpage
 
-\subsubsection*{UC06 – Block abbauen}
+\subsection*{UC06 – Block abbauen}
 
 \textbf{Name:} Block abbauen \\
 \textbf{Akteur:} Spieler \\
@@ -407,7 +327,7 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 
 \newpage
 
-\subsubsection*{UC07 – Block platzieren}
+\subsection*{UC07 – Block platzieren}
 
 \textbf{Name:} Block platzieren \\
 \textbf{Akteur:} Spieler \\
@@ -430,11 +350,13 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
   \item[6.] Use-Case endet erfolgreich
 \end{description}
 
-\subsubsection*{Spiel Verlassen}
+Die verbleibenden beiden Use-Cases sind aufgrund der Änderungen entstanden und werden in Section~\ref{subsec:changeguidia} beschrieben.
+
+\subsection*{Spiel Verlassen}
 
 Das Verlassen des Spiels ist nicht als Use-Case modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schlie\ss{}en des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
-\subsection{Domänenmodell} \label{subsec:domain}
+\section{Domänenmodell} \label{subsec:domain}
 
 Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde basierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Au\ss{}en hin sichtbar sind, mit denen interagiert wird. 
 
@@ -500,17 +422,13 @@ Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde ba
 
 Es ist zu sehen, wie sich die Spielfigur in einer Welt aus Blöcken befindet und sich in dieser auf verschiedene Arten bewegen kann. Die Blöcke der Welt können abgebaut und wieder platziert werden, und befinden sich zwischenzeitig als Item auf einem ItemStack in dem Inventar der Spielfigur.
 
-\section{Meilenstein 2} \label{sec:ms2}
-
-In Meilenstein 2 soll es darum gehen, die bevorstehenden Änderungen des Projektes zu beschreiben. Hier ebenfalls wieder in Modell- und Textform. 
-
-\subsection{Designmodell} \label{subsec:design}
+\section{Designmodell} \label{subsec:design}
 
 Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unterteilt worden. Dies ist dem gro\ss{}en Umfang des Modells geschuldet. Jeder Teil des Modells ist textuell erklärt. Die Erklärungen werden durch stark vereinfachte Ausschnitte des Designmodells unterstützt. Das komplette Designmodell kann hier eingesehen werden: \href{https://github.com/lasiv/MineCraft-One-Week-Challenge/blob/master/latex/design_full.png}{Designmodell}
 
-\subsubsection*{Application}
+\subsection*{Application}
 
-\begin{gfx}{States}{states}{ht}
+\begin{gfx}{Designmodell States}{states}{ht}
 \umlsimpleclass[x=0,y=-0.5,alias=UMLClass0]{Application}
 \umlsimpleclass[x=0,y=-3.00,alias=UMLClass1]{StateBase}
 \umlsimpleclass[x=0,y=-5,alias=UMLClass2]{PlayState}
@@ -529,8 +447,8 @@ Gängiges Vorgehen bei Spielen, ist sie in mehrere Zustände zu unterteilen, und
 
 Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthält die Welt, den Spieler, grundlegende Konfigurationen des Spiels und eine Referenz zur Eingabe von Tasten.
 
-\subsubsection*{Player}
-\begin{gfx}{Player}{player-design}{ht}
+\subsection*{Player}
+\begin{gfx}{Designmodell Player}{player-design}{ht}
 \umlsimpleclass[x=15.90,y=-8.30,alias=UMLClass0]{Player}
 \umlsimpleclass[x=16.00,y=-6.30,alias=UMLClass1]{Entity}
 \umlsimpleclass[x=20.80,y=-6.30,alias=UMLClass2]{AABB}
@@ -547,9 +465,9 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \FloatBarrier
-\subsubsection*{World}
+\subsection*{World}
 
-\begin{gfx}{World}{world}{ht}
+\begin{gfx}{Designmodell World}{world}{ht}
   \umlsimpleclass[x=14.40,y=-13.80,alias=UMLClass0]{Player}
   \umlsimpleclass[x=17.90,y=-10.80,alias=UMLClass1]{World}
   \umlsimpleclass[x=14.40,y=-10.80,alias=UMLClass2]{PlayerDigEvent}
@@ -573,9 +491,9 @@ Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit 
 Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unterteilt, die jeweils mehrere ChunkSections definieren, in denen die Blöcke der Welt gespeichert sind. Mithilfe des Chunkmanagers werden die Chunks generiert bzw. verwaltet. Sobald diese Blöcke, die dem Chunk angehören, abgebaut werden sollen, löst dies ein \texttt{PlayerDigEvent} aus. Dieses sorgt dafür, dass der Block tatsächlich aus der Welt verschwindet bzw. wieder auftaucht. Sobald eine Welt instanziiert wird, startet ein neuer Thread welcher für die Generierung von Chunks verantwortlich ist. Damit kann das Rendern unabhängig von der Generierung vonstatten gehen und die beiden Prozesse stehen sich nicht im Weg. 
 
 \FloatBarrier
-\subsubsection*{Blöcke}
+\subsection*{Blöcke}
 
-\begin{gfx}{Blöcke}{blocks}{ht}
+\begin{gfx}{Designmodell Blöcke}{blocks}{ht}
 \umlclass[x=13.60,y=-12.40,alias=UMLClass0,type={NonCopyable}]{BlockDataHolder}
 {
   id : BlockId \\
@@ -624,9 +542,9 @@ Im Zentrum des Spiels steht die \texttt{World} Klasse. Diese ist in Chunks unter
 Die Blöcke selber enthalten Daten über ihre Eigenschaften. Sie speichern nicht ihre eigene Position. Die Eigenschaften der Blöcke werden aus Dateien geladen, die zentral in einer Art Datenbank gespeichert sind. Die Chunk-Blöcke enthalten Verweise auf diese Daten.
 
 \FloatBarrier
-\subsubsection*{Generierung}
+\subsection*{Generierung}
 
-\begin{gfx}{Generation der Welt}{genreation}{ht}
+\begin{gfx}{Designmodell Generation der Welt}{genreation}{ht}
 \umlsimpleclass[x=5.90,y=-1.80,alias=UMLClass0]{World}
 \umlsimpleclass[x=9.20,y=-7.40,alias=UMLClass1]{Chunk}
 \umlsimpleclass[x=9.10,y=-4.40,alias=UMLClass2]{ChunkManager}
@@ -650,11 +568,11 @@ Hauptverantwortlich für die Generierung der Welt ist die \texttt{TerrainGenerat
 Die Biomkarte und Höhenkarte werden durch eine Rauchfunktion erstellt, welches eine organisch aussehende Welt mit Hügeln, Bergen und Ozeanen erstellen lässt. Die Vegetation wird durch einfache pseudo-zufällige Zahlengenerierung platziert.
 
 \FloatBarrier
-\subsubsection*{Rendering}
+\subsection*{Rendering}
 
 Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im Laufe unseres Projekts nicht verändert. Aufgrund der Komplexität ist es auch nicht vollständig modelliert, soll dennoch hier etwas genauer erklärt werden.
 
-\begin{gfx}{Rendering von Chunks}{render}{ht}
+\begin{gfx}{Designmodell Rendering von Chunks}{render}{ht}
 \umlsimpleclass[x=4.20,y=-3,alias=UMLClass0]{Chunk}
 \umlsimpleclass[x=4.20,y=-1,alias=UMLClass1,type={interface}]{IChunk}
 \umlsimpleclass[x=10.10,y=-7.40,alias=UMLClass2]{ChunkMeshCollection}
@@ -680,11 +598,11 @@ Das Rendering des Spiels ist eine komplexe Angelegenheit, und wird von uns im La
 Die Application hat eine Referenz zum sog. RenderMaster, die von der Application zu den jeweiligen Klassen weitergereicht wird, die diesen benutzen wollen. Dabei werden hier hauptsächlich nur die Einzelnen Chunks und die Skybox mit Model und Mesh versehen, und vom Renderer dargestellt. Abbildung \ref{gfx:render} zeigt den groben Aufbau von Modell und Mesh in einem Chunk, ist in dieser Form aber nicht im Gesamtmodell mit drin.
 
 \FloatBarrier
-\subsubsection*{Input}
+\subsection*{Input}
 
 Der Input erfolgt wie im nächstem Abschnitt beschrieben über die externe Bibliothek \texttt{SFML}. Es werden zwei Klassen definiert, die an verschiedenen Stellen im Projekt verwendet werden. Einmal eine \texttt{Keyboard} Klasse, die alle zur Zeit gedrückten Tasten als Boolean werte speichert. Eine weitere Klasse \texttt{ToggleKey}, die eine bestimmte Taste softwareseitig entprellt, um sie als Schalter nutzen zu können.
 
-\subsubsection*{Dependencies}
+\subsection*{Dependencies}
 
 Unser Projekt benutzt verschiedene Bibliotheken, die oft in solchen \texttt{C++} Projekten vorkommen. Für komplexere Rechnungen zieht der Programmierer hier \texttt{GLM} heran. Davon benutzt das Programm unterschiedlichen Vektoren, Materialien und Matrizen oder wird für z.B. Strahlenrechnung benutzt.
 
@@ -692,21 +610,17 @@ Die Bibliothek \texttt{SFML} ermöglicht die Erstellung von Fenstern in denen da
 
 \texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfe der Meshes, Modelle und Shadern das Spiel darzustellen.
 
-\subsection{Zustandsmodell} \label{subsec:statemodel}
-
-In unserem Projekt bietet sich nicht an, Zustandsdiagramme zu erstellen. Viele Prozesse laufen sehr statisch ab und würden in zu simplen Zustandsdiagrammen resultieren.
-
-\subsection{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
+\section{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
 
 Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äu\ss{}ern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
 
 Bei den Hauptthemen der Änderungen geht es vor allem um einen grafische Benutzeroberfläche, die Änderung von Bewegungsabläufen und der Physik und die Generierung von Strukturen.
 
-\subsubsection{Code}
+\subsection{Code}
 
 Neben den tatsächlichen Änderungen, steht eine Aufgabe an erster Stelle. Der Programmierer diese Projekts hat einige Funktionen, die letztenendes doch nicht benutzt werden, im Code stehen lassen. Deswegen versuchen wir zuerst unbenutzte Klassen und Codebereiche ''aufzuräumen'' bevor wir mit unseren Änderungen anfangen.
 
-\subsubsection{GUI \& Logik}
+\subsection{GUI \& Logik}
 
 Der aktuelle Zustand der Benutzeroberfläche ist quasi nicht existent. Denn es ist noch nicht wirklich eine Oberfläche vorhanden. Dies macht die Verwendung von der Software sperrig und unnötig schwerer. Dahingehend ist geplant, dass die Bedienung deutlich einfacher wird, indem an verschiedenen Stellen eine grafische Oberfläche implementiert wird.
 
@@ -719,7 +633,7 @@ Genau Verändern soll sich folgendes:
   \item[Kompass:] Der Kompass zeigt dem Spieler während des Spiels an in welche Richtung geschaut wird, was enorm zur Orientierung in der Spielwelt beiträgt.
 \end{description}
 
-\subsubsection{Movement/Physik}
+\subsection{Movement/Physik}
 
 Anpassung der Bewegung
 Schleichen kanten
@@ -739,7 +653,7 @@ Folgende Änderungen sollen folgen:
   \item[Schleimblöcke:] Der Schleimblock hat die Eigenschaft elastisch auf den Fall des Spielers zu reagieren und ihn wieder hochzuschleudern. Diese Mögliche Eigenschaft eines Blockes den Spieler wieder hochzuwerfen soll ebenfalls mit in die Bewegungsgleichung einflie\ss{}en.
 \end{description}
 
-\subsubsection{Generierung von Strukturen}
+\subsection{Generierung von Strukturen}
 
 Aktuell gibt es nur wenig Code, der für die Generierung von Strukturen
 verantwortlich ist. Es gibt eine Klasse, welche Strukturen in der Welt platziert
@@ -760,7 +674,7 @@ Punkte erweitert werden:
 \end{itemize}
 
 \iffalse
-\subsubsection{Speichersystem}
+\subsection{Speichersystem}
 
 Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen und den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
 
@@ -773,19 +687,15 @@ Folgende Änderungen können hier getätigt werden:
 \end{description}
 \fi
 
-\section{Meilenstein 3} \label{sec:ms3}
-
-Schwerpunkt von Meilenstein 3 ist das Aufzeigen der tatsächlichen Veränderungen. Abschließend wurde ein Fazit verfasst, welches unter anderem auf Probleme oder Vorgehensweisen eingeht. Zunächst werden die Veränderungen beschrieben und anschließend im Domänenmodell in den Kontext gesetzt. Dabei wird nicht das ganze Domänenmodell erneut modelliert, sondern die im Kontext wichtigen Klassen und Beziehungen veranschaulicht.
-
-\subsection{Beschreibung der Änderungen}
+\section{Beschreibung der Änderungen}
 
 Im folgenden Abschnitt werden die Umsetzungen bzw. die tatsächlichen Änderungen beschrieben.
 
-\subsubsection{Strukturen und Weltgenerierung}
+\subsection{Strukturen und Weltgenerierung}
 
 Vor der Änderung waren die Biome selber für die Generierung ihrer Strukturen verantwortlich, zu dem Zeitpunkt ausschließlich Bäume. Dies wurde mit der erweiterten Version geändert: Der Terraingenerator fragt lediglich die Biome, welche Art von Strukturen und Vegetation in ihnen auftauchen und der Terraingenerator ist verantwortlich für die Generierung. Auch wurden die Fähigkeiten des Generators erweitert: Vorher wusste er nur von der Höhen- und Biomverteilung über den Chunk Bescheid, den er gerade bearbeitet. Dadurch war es unmöglich Teile von Strukturen zu generieren, deren Zentrum zwar außerhalb des Chunks waren aber in den aktuellen Chunk rein ragten. Der neue Code verbessert dies: Es wird nun die Höhen- und Biomverteilung von den direkt und vertikal angrenzenden Chunks generiert, sodass die sich dort befindlichen Strukturen ermittelt und die in den Chunk ragenden Teile platziert werden können. Zu guter letzt gibt es nun die Möglichkeit, neue Strukturen mithilfe von Dateien zu beschreiben, anstatt diese starr im Code definieren zu müssen. Zwar müssen neue Typen von Strukturen immernoch in den Code integriert werden, indem ihre ID an den Terraingenerator übergeben wird, was jedoch einen kleineren Aufwand darstellt als die Struktur komplett im Code zu definieren.
 
-\subsubsection{Movement}
+\subsection{Movement}
 
 
 Die Änderungen an der Bewegung des Spielers bringen wenig Änderungen am Model mit sich, es handelt sich hier hauptsächlich um Anpassungen der Algorithmen. Die erste und wichtigste Änderung, war die Anpassung und Optimierung der Bestimmung der Kollisionen der Spielfigur. Hierbei wird ein kleines Hilfsobjekt initialisiert, dass die Position der Bounding-Box festhält, diese bewegen kann und die Blöcke um sie herum aus dem Objekt der Welt lädt. Dies dient hier lediglich der Leserlichkeit. In diese modifizierte Kollision kann nun die Prüfung der Überschreitung von Kanten beim Schleichen mit eingebettet werden. 
@@ -812,7 +722,7 @@ Die letzte Änderung sollte das Problem lösen, dass das Abbauen von Blöcken un
 
 \FloatBarrier
 
-\subsubsection{GUI und Inventar}
+\subsection{GUI und Inventar}
 
 Im Zuge der geforderten Veränderungen der grafischen Benutzeroberfläche und des Inventars, wurden die folgenden Änderungen umgesetzt.
 
@@ -825,37 +735,37 @@ Im Zuge der geforderten Veränderungen der grafischen Benutzeroberfläche und de
 
 Abschließend ist festzustellen, dass hauptsächlich die Klasse \texttt{Inventory} komplett neu ist. Klassen wie \texttt{Player} und \texttt{Context} mussten zwar verändert werden, bleiben aber in ihrer Funktionalität unverändert. Für die Grafik ist hauptsächlich die Bibliothek \texttt{SFML} wichtig.
 
-\subsection{Modelle gemä\ss{} der Veränderungen}
+\section{Modelle gemä\ss{} der Veränderungen}
 
 In diesem Abschnitt werden Modelle um wichtige Klassen oder Beziehungen ergänzt bzw. erklärend verändert.
 
-\subsubsection{Strukturen und Weltgenerierung}
+\subsection{Strukturen und Weltgenerierung}
 
 \begin{gfx}{Caption}{tag}{ht}
-\umlsimpleclass[x=11.30,y=-11.80,alias=UMLClass0]{World}
-\umlsimpleclass[x=14.60,y=-14.60,alias=UMLClass1]{Chunk}
-\umlsimpleclass[x=14.50,y=-11.80,alias=UMLClass2]{ChunkManager}
-\umlsimpleclass[x=21.60,y=-11.80,alias=UMLClass3]{ClassicOverworldGenerator}
-\umlsimpleclass[x=21.50,y=-9.20,alias=UMLClass4]{Biome}
-\umlsimpleclass[x=27.90,y=-11.80,alias=UMLClass5]{NoiseGenerator}
-\umlsimpleclass[x=21.60,y=-14.80,alias=UMLClass6]{Structure}
-\umluniassoc[name=Relation0,geometry=-|,anchor1=180.0,anchor2=-104.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
-\umlcompo[name=Relation1,geometry=--,anchor1=104.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
-\umluniassoc[name=Relation2,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass2}{UMLClass1}
-\umlcompo[name=Relation3,geometry=--,anchor1=0.0,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=0.8]{UMLClass2}{UMLClass3}
-\umlcompo[name=Relation4,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass3}{UMLClass5}
-\umlcompo[name=Relation5,geometry=--,anchor1=90.0,anchor2=-76.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass3}{UMLClass4}
-\umlcompo[name=Relation6,geometry=-|,anchor1=0.0,anchor2=76.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=1.8]{UMLClass4}{UMLClass5}
-\umlcompo[name=Relation7,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass3}{UMLClass6}
+\umlsimpleclass[x=15.50,y=-5.80,alias=UMLClass0]{World}
+\umlsimpleclass[x=11.60,y=-7.20,alias=UMLClass1]{Chunk}
+\umlsimpleclass[x=15.50,y=-8.60,alias=UMLClass2]{ChunkManager}
+\umlsimpleclass[x=15.40,y=-11.40,alias=UMLClass3]{ClassicOverworldGenerator}
+\umlsimpleclass[x=20.00,y=-11.40,alias=UMLClass4]{Biome}
+\umlsimpleclass[x=15.70,y=-13.80,alias=UMLClass5]{NoiseGenerator}
+\umlsimpleclass[x=12.40,y=-13.80,alias=UMLClass6]{Structure}
+\umluniassoc[name=Relation0,geometry=|-,anchor1=116.6,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
+\umlcompo[name=Relation1,geometry=--,anchor1=-76.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
+\umluniassoc[name=Relation2,geometry=-|,anchor1=180.0,anchor2=-116.6,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=1.8]{UMLClass2}{UMLClass1}
+\umlcompo[name=Relation3,geometry=--,anchor1=-76.0,anchor2=63.4,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=0.8]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation4,geometry=--,anchor1=-63.4,anchor2=104.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass3}{UMLClass5}
+\umlcompo[name=Relation5,geometry=--,anchor1=0.0,anchor2=180.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass3}{UMLClass4}
+\umlcompo[name=Relation6,geometry=|-,anchor1=-90.0,anchor2=0.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=1.5]{UMLClass4}{UMLClass5}
+\umlcompo[name=Relation7,geometry=-|,anchor1=180.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},pos2=1.8]{UMLClass3}{UMLClass6}
 \end{gfx}
 
 \FloatBarrier
 
-\subsubsection{Movement}
+\subsection{Movement}
 
 Um die Lesbarkeit und Struktur des Codes zu verbessern, verwendet die Klasse \texttt{Player} eine lokal definierte Hilfsklasse \texttt{LocalAABB}.  Diese dient als temporäre Repräsentation der Bounding Box, berechnet aus Position, Dimension und Geschwindigkeit, ohne die Spielfigur selbst zu verändern. Sie speichert Transformationen lokal, lädt umgebende Blöcke zur Kollisionsprüfung und stellt berechnete Werte wie Minimum und Maximum der Bounding Box unter klar benannten Attributen bereit. Dadurch wird der eigentliche Code zur Bewegungs- und Kollisionserkennung strukturierter und leichter verständlich. Abbildung~\ref{gfx:localaabb} veranschaulicht die Rolle dieser Hilfsklasse im Zusammenspiel mit dem Spieler und den umgebenden Blöcken.
 
-\begin{gfx}{Local Bounding Box}{localaabb}{ht}
+\begin{gfx}{Verändertes Designmodell Local Bounding Box}{localaabb}{ht}
 \umlclass[x=0,y=0,alias=UMLClass0]{Player}
 {
    
@@ -899,7 +809,7 @@ Um die Lesbarkeit und Struktur des Codes zu verbessern, verwendet die Klasse \te
 
 \FloatBarrier
 
-\subsubsection{GUI und Inventar}
+\subsection{GUI und Inventar} \label{subsec:changeguidia}
 
 usecase hinzufügen: f3 menü, inventar toggle
 
@@ -925,7 +835,7 @@ Wie bereits beschrieben, dient die Klasse \texttt{Inventory} dazu, das Inventar 
 
 Durch die neue GUI stehen dem Spieler auch zwei neue Use-Cases zur verfügung. Der Spieler kann mit (I) seine "Hotbar" also sein Inventarleiste verstecken und wieder anzeigen und mit (F3) kann der Spieler eine Debug-Pbersicht über Standard-Daten erhalten, wie die Himmelsrichtuing und die Koordinaten des Spielers.
 
-\subsubsection*{UC08 – Inventarleiste umschalten}
+\subsection*{UC08 – Inventarleiste umschalten}
 
 \textbf{Name:} Inventarleiste umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -943,7 +853,7 @@ Durch die neue GUI stehen dem Spieler auch zwei neue Use-Cases zur verfügung. D
   \item[3.] Use-Case endet erfolgreich
 \end{description}
 
-\subsubsection*{UC09 – Debug-Menü umschalten}
+\subsection*{UC09 – Debug-Menü umschalten}
 
 \textbf{Name:} Debug-Menü umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -963,7 +873,7 @@ Durch die neue GUI stehen dem Spieler auch zwei neue Use-Cases zur verfügung. D
 
 \FloatBarrier
 
-\subsection{Fazit}
+\section{Fazit}
 
 Nach dem Umsetzen des Projektes, mit den uns selber gestellten Veränderungen, fallen mehrere Punkte auf, die ihre Aufmerksamkeit verdienen. Dabei geht es um positive, als auch negative Aspekte, die aber allesamt zur Lektion beitragen.
 \newline
@@ -1000,7 +910,7 @@ Hauptteil des Dokuments enthalten sind.
 \iffalse
 \section*{Arbeitsverteilung}
 
-\subsection*{Benjamin Brohs}
+\section*{Benjamin Brohs}
 \begin{mylist}
   \mylistentry{sec:intro}
 \end{mylist}
@@ -1008,6 +918,83 @@ Hauptteil des Dokuments enthalten sind.
 
 \newpage
 %%% Anhänge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{gfx}{Use-Case Diagramm}{usecase}{ht}
+  % Systemgrenze
+  \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
+    \umlusecase[x=0, y=0]{Bewegen}
+    \umlusecase[x=0, y=-1.2]{Bewegen (vertikal)}
+    \umlusecase[x=0, y=-2.4]{Springen}
+    \umlusecase[x=0, y=-3.6]{Flugmodus umschalten}
+    \umlusecase[x=0, y=-4.8]{Maussteuerung deaktivieren}
+    \umlusecase[x=0, y=-6]{Block abbauen}
+    \umlusecase[x=0, y=-7.2]{Block platzieren}
+    \umlusecase[x=0, y=-8.4]{Inventarleiste umschalten}
+    \umlusecase[x=0, y=-9.6]{Debug-Menü umschalten}
+  \end{umlsystem}
+
+  % Akteur
+  \umlactor[x=-3, y=-5]{Spieler}
+
+  % Assoziationen
+  \umlassoc{Spieler}{usecase-1}
+  \umlassoc{Spieler}{usecase-2}
+  \umlassoc{Spieler}{usecase-3}
+  \umlassoc{Spieler}{usecase-4}
+  \umlassoc{Spieler}{usecase-5}
+  \umlassoc{Spieler}{usecase-6}
+  \umlassoc{Spieler}{usecase-7}
+  \umlassoc{Spieler}{usecase-8}
+  \umlassoc{Spieler}{usecase-9}
+
+\end{gfx}
+
+\begin{gfx}{Bewegungszustände}{state}{ht}
+  
+  \umlstateinitial[x=-2.9,y=4,name=init]
+  \umlstatefinal[x=6.1,y=4,name=final]
+
+  \begin{umlstate}[x=0,y=0,name=spiel]{Spiel}
+
+    \umlstateinitial[x=-3,y=0,name=subinit]
+    \umlbasicstate[x=0,y=0,name=laufen]{Laufen}
+    \umlbasicstate[x=6,y=0,name=fallen]{Fallen}
+    \umlbasicstate[x=0,y=-6,name=schwimmen]{Schwimmen}
+    \umlbasicstate[x=6,y=-6,name=fliegen]{Fliegen}
+
+    \umltrans[anchor2=193]{subinit}{laufen}
+
+    \umltrans[anchor1=215,anchor2=55]{fallen}{schwimmen}
+    \coordinate (P) at (1.65,-3.5);
+    \node[rotate=45] (N) at (P) {berührtWasser};
+
+    \umltrans[anchor1=35,anchor2=235]{schwimmen}{fallen}
+    \coordinate (P) at (4.45,-1.9);
+    \node[rotate=45] (N) at (P) {verlässtWasser};
+
+    \umltrans[]{fliegen}{laufen}
+    \coordinate (P) at (2.1,-1.45);
+    \node[rotate=-45] (N) at (P) {berührtBoden};
+
+    \umltrans[]{laufen}{schwimmen}
+    \coordinate (P) at (-.2,-3);
+    \node[rotate=90] (N) at (P) {berührtWasser};
+
+    \umltrans[]{fallen}{fliegen}
+    \umltrans[]{fliegen}{fallen}
+    \coordinate (P) at (5.8,-3);
+    \node[rotate=90] (N) at (P) {flugUmschalten};
+
+    \umltrans[arg=berührtWasser,pos=0.5,rotate=45]{fliegen}{schwimmen}
+    \umltrans[anchor1=10,anchor2=170,arg={überKanteFallen, springen},pos=0.5,rotate=45]{laufen}{fallen}
+    \umltrans[anchor1=190,anchor2=350,arg=berührtBoden,pos=0.5,rotate=45]{fallen}{laufen}
+
+  \end{umlstate}
+
+  \umltrans[anchor2=136]{init}{spiel}
+  \umltrans[anchor1=46]{spiel}{final}
+
+\end{gfx}
 
 \begin{figure} [ht]
   \centering
