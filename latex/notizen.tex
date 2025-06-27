@@ -286,18 +286,18 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \textbf{Name:} Bewegen \\
 \textbf{Akteur:} Spieler \\
-\textbf{Ziel:} Horizontale ortbewegung der Spielfigur in der Spielwelt entsprechend der Eingaben \\
+\textbf{Ziel:} Horizontale Fortbewegung der Spielfigur in der Spielwelt entsprechend der Eingaben \\
 \textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv, Spielfigur schaut in eine ausgewählte Blickrichtung \\
-\textbf{Nachbedingungen:} Position der Spielfigur wurde ggf. angepasst \\
+\textbf{Nachbedingungen:} Position der Spielfigur wurde angepasst \\
 \textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Bewegungstasten. Die Bewegungsrichtung wird durch die aktuelle Blickrichtung bestimmt. Der Use-Case bleibt aktiv, solange Eingaben erfolgen. Sprinten, Schleichen können die Fortbewegung beeinflussen.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spiel bestimmt den Zustand der Spielfigur
+  \item[1.] Spiel validiert, dass Spieler im Zustand Laufen ist
   \item[2.] Spieler drückt Bewegungstasten (W/A/S/D)
-  \item[2\opt a.] Spielfigur hat Bodenkontakt und Spieler drückt zusätzlich Sprinttaste (Strg):
-  \item[2\opt a.1.] Spiel erhöht Geschwindigkeit der Spielfigur
-  \item[2\opt b.] Spielfigur hat Bodenkontakt und Spieler drückt zusätzlich Schleich\-taste (Shift):
+  \item[2\opt a.] Spieler drückt zusätzlich Sprinttaste (Strg):
+  \item[2\opt a.1.] Spiel erhöht horizontale Geschwindigkeit der Spielfigur
+  \item[2\opt b.] Spieler drückt zusätzlich Schleich\-taste (Shift):
   \item[2\opt b.1.] Spiel verringert horizontale Geschwindigkeit der Spielfigur
   \item[3.] Spiel bestimmt Richtung und Geschwindigkeit der Bewegung
   \item[4.] Spiel beginnt die Position der Spielfigur anzupassen bis der Spieler die Eingabe verändert
@@ -305,9 +305,29 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
   \item[6.] Use-Case endet erfolgreich
 \end{description}
 
+\subsubsection*{UC02 – Bewegen (vertikal)}
 
+\textbf{Name:} Bewegen (vertikal) \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Vertikale Fortbewegung der Spielfigur entsprechend der Eingaben  \\
+\textbf{Vorbedingungen:} Spielfigur befindet sich in der Spielwelt \\
+\textbf{Nachbedingungen:} Position der Spielfigur wurde angepasst \\
+\textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Leertaste oder Shift. Dies funktioniert nur wenn die Spielfigur fliegt oder schwimmt.
 
-\subsubsection*{UC02 – Springen}
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spiel validiert, dass Spieler im Zustand Schwimmen oder Fliegen ist
+  \item[2.] Spieler drückt Leertaste
+  \item[2a.] Spieler drückt Shift:
+  \item[2a.1.] Spiel setzt eine Geschwindigkeit nach unten
+  \item[2a.2.] Use-Case wird bei Schritt 4 fortgesetzt
+  \item[3.] Spiel setzt eine Geschwindigkeit nach oben
+  \item[4.] Spiel beginnt die Position der Spielfigur anzupassen bis der Spieler die Eingabe verändert
+  \item[5.] Spieler verändert die Eingabe oder lässt alle Eingaben los
+  \item[6.] Use-Case endet erfolgreich
+\end{description}
+
+\subsubsection*{UC03 – Springen}
 
 \textbf{Name:} Springen \\
 \textbf{Akteur:} Spieler \\
@@ -329,7 +349,7 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \newpage
 
-\subsubsection*{UC03 – Flugmodus umschalten}
+\subsubsection*{UC04 – Flugmodus umschalten}
 
 \textbf{Name:} Flugmodus umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -341,16 +361,16 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
   \item[1.] Spiel validiert, dass Spieler im Zustand Fallen oder Fliegen ist
-  \item[1.] Spieler drückt die Fliegentaste (F)
-  \item[2.] Spiel aktiviert den Flugmodus für die Spielfigur
-  \item[2a.] Flugmodus ist bereits aktiv
-  \item[2a.1.] Spiel deaktiviert den Flugmodus für die Spielfigur
-  \item[3.] Use-Case endet erfolgreich
+  \item[2.] Spieler drückt die Fliegentaste (F)
+  \item[3.] Spiel aktiviert den Flugmodus für die Spielfigur
+  \item[3a.] Flugmodus ist bereits aktiv
+  \item[3a.1.] Spiel deaktiviert den Flugmodus für die Spielfigur
+  \item[4.] Use-Case endet erfolgreich
 \end{description}
 
 \newpage
 
-\subsubsection*{UC04 – Maussteuerung umschalten}
+\subsubsection*{UC05 – Maussteuerung umschalten}
 
 \textbf{Name:} Maussteuerung umschalten \\
 \textbf{Akteur:} Spieler \\
@@ -373,7 +393,7 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \newpage
 
-\subsubsection*{UC05 – Block abbauen}
+\subsubsection*{UC06 – Block abbauen}
 
 \textbf{Name:} Block abbauen \\
 \textbf{Akteur:} Spieler \\
@@ -398,7 +418,7 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \newpage
 
-\subsubsection*{UC06 – Block platzieren}
+\subsubsection*{UC07 – Block platzieren}
 
 \textbf{Name:} Block platzieren \\
 \textbf{Akteur:} Spieler \\
@@ -409,12 +429,12 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler klickt die rechte Maustaste
-  \item[2.] Spiel validiert, dass der Block platziert werden kann
-  \item[2a.] Es ist keine valide Oberfläche im Sichtfeld
-  \item[2a.1.] Use-Case endet erfolglos
-  \item[3.] Spiel validiert, dass Spielfigur einen Block im Inventar hat
-  \item[3a.] Spielerfigur hat keinen platzierbaren Block im Inventar
+  \item[1.] Spieler wählt mit Pfeiltasten (up/down) oder Nummerntasten (1-9) einen platzierbaren Block aus seinem Inventar
+  \item[1a.] Spieler hat keinen validen Block in der Hand
+  \item[1a.1.] Use-Case endet erfolglos
+  \item[2.] Spieler klickt die rechte Maustaste
+  \item[3.] Spiel validiert, dass der Block platziert werden kann
+  \item[3a.] Es ist keine valide Oberfläche im Sichtfeld
   \item[3a.1.] Use-Case endet erfolglos
   \item[4.] Spiel platziert Block an ausgewählter Stelle
   \item[5.] Spiel entfernt Block aus dem Inventar
@@ -911,6 +931,44 @@ Dadurch, dass die grafische Benutzeroberfläche mithilfe einer Bibliothek und \t
 \end{gfx}
 
 Wie bereits beschrieben, dient die Klasse \texttt{Inventory} dazu, das Inventar zentral zu verwalten. Der Spieler hat genau ein Inventar und das Inventar mehrere slots gemäß der definierten Konstante \texttt{MAX\_INV\_SLOTS}.
+
+Durch die neue GUI stehen dem Spieler auch zwei neue Use-Cases zur verfügung. Der Spieler kann mit (I) seine "Hotbar" also sein Inventarleiste verstecken und wieder anzeigen und mit (F3) kann der Spieler eine Debug-Pbersicht über Standard-Daten erhalten, wie die Himmelsrichtuing und die Koordinaten des Spielers.
+
+\subsubsection*{UC08 – Inventarleiste umschalten}
+
+\textbf{Name:} Inventarleiste umschalten \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Verstecken oder Anzeigen der Hotbar \\
+\textbf{Vorbedingungen:} Spielfigur ist aktiv \\
+\textbf{Nachbedingungen:} Die Hotbar ist aktiv oder versteckt je nach vorherigem Zustand \\
+\textbf{Beschreibung:} Spieler kann Items im Inventar anzeigen und verstecken
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler drückt (I)
+  \item[2.] Spiel versteckt die Inventarleiste
+  \item[2a.] Inventarleiste ist versteckt
+  \item[2a.1.] Spiel zeigt die Inventarleiste
+  \item[3.] Use-Case endet erfolgreich
+\end{description}
+
+\subsubsection*{UC09 – Debug-Menü umschalten}
+
+\textbf{Name:} Debug-Menü umschalten \\
+\textbf{Akteur:} Spieler \\
+\textbf{Ziel:} Verstecken oder Anzeigen des Debug-Menüs \\
+\textbf{Vorbedingungen:} Spielfigur ist aktiv \\
+\textbf{Nachbedingungen:} Das Debug-Menü ist aktiv oder versteckt je nach vorherigem Zustand \\
+\textbf{Beschreibung:} Spieler kann Daten im Debug-Menü anzeigen und verstecken
+
+\textbf{Ablaufspezifikation:}
+\begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spieler drückt (F3)
+  \item[2.] Spiel zeigt das Debug-Menü
+  \item[2a.] Debug-Menü ist aktiv
+  \item[2a.1.] Spiel versteckt das Debug-Menü
+  \item[3.] Use-Case endet erfolgreich
+\end{description}
 
 \FloatBarrier
 
