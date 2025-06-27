@@ -250,6 +250,9 @@ void Player::calculate(World &world) {
     if (m_isOnGround && m_isFlying) {
         m_isFlying = false;
     }
+    if (m_isInWater && m_isFlying) {
+        m_isFlying = false;
+    }
 
     if (m_isFlying) {
         velocity.y = velocity.y * 0.6f * BASE_FRICTION + m_input.y * GROUND_ACCEL_BASE;
