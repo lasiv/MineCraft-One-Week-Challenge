@@ -236,6 +236,7 @@ Für die Use-Cases sollen einige Rahmenbedingungen definiert werden. Abbildung~\
   \item[6.] Use-Case endet erfolgreich
 \end{description}
 
+\newpage
 \subsection*{UC03 – Springen}
 
 \textbf{Name:} Springen \\
@@ -356,6 +357,7 @@ Die verbleibenden beiden Use-Cases sind aufgrund der Änderungen entstanden und 
 
 Das Verlassen des Spiels ist nicht als Use-Case modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schlie\ss{}en des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
+\newpage
 \section{Domänenmodell} \label{subsec:domain}
 
 Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde basierend auf den Use Cases entworfen und enthält alle wichtigen Objekte, die die Problematik des vereinfachten Minecraft Spiels nach Au\ss{}en hin sichtbar sind, mit denen interagiert wird. 
@@ -422,6 +424,7 @@ Abbildung \ref{gfx:domain} zeigt ein Domänemodell unserer Software. Es wurde ba
 
 Es ist zu sehen, wie sich die Spielfigur in einer Welt aus Blöcken befindet und sich in dieser auf verschiedene Arten bewegen kann. Die Blöcke der Welt können abgebaut und wieder platziert werden, und befinden sich zwischenzeitig als Item auf einem ItemStack in dem Inventar der Spielfigur.
 
+\newpage
 \section{Designmodell} \label{subsec:design}
 
 Im folgenden Abschnitt ist das Designmodell in mehrere kleinere Abschnitte unterteilt worden. Dies ist dem gro\ss{}en Umfang des Modells geschuldet. Jeder Teil des Modells ist textuell erklärt. Die Erklärungen werden durch stark vereinfachte Ausschnitte des Designmodells unterstützt. Das komplette Designmodell kann hier eingesehen werden: \href{https://github.com/lasiv/MineCraft-One-Week-Challenge/blob/master/latex/design_full.png}{Designmodell}
@@ -465,6 +468,7 @@ Der einzige Zustand, den unser Spiel momentan kennt ist der PlayState. Er enthä
 Die \texttt{Player} Klasse stellt eine Schnittstelle für den Benutzer dar, mit dem Spiel zu interagieren und ist von der Klasse \texttt{Entity} abgeleitet. Sie enthält eine Axis Aligned Bounding Box (\texttt{AABB}) um Kollisionen in der Welt wahrzunehmen. Der \texttt{Player} ist Teil der Klasse \texttt{PlayState} und hat somit auch Zugriff auf die  Events vom \texttt{Keyboard}. In der Spielerklasse werden die Tastatureingaben zum bewegen in der Welt verarbeitet, sowie die Mausbewegungen, um sich bewegen und umschauen zu können. Weitere Interaktionen beinhalten beispielsweise das Abbauen und Platzieren von Blöcken in der Welt. Baut der Spieler einen Block ab, so wird er als Item, mit spezifischen Material, in der Klasse \texttt{ItemStack} gespeichert. 
 
 \FloatBarrier
+\newpage
 \subsection*{World}
 
 \begin{gfx}{Designmodell World}{world}{ht}
@@ -610,6 +614,7 @@ Die Bibliothek \texttt{SFML} ermöglicht die Erstellung von Fenstern in denen da
 
 \texttt{Glad} ist die Bibliothek, die das Rendern mit OpenGL übernimmt und wird in den Render Klassen aufgerufen, um mithilfe der Meshes, Modelle und Shadern das Spiel darzustellen.
 
+\newpage
 \section{Beschreibung der geforderten Veränderungen} \label{subsec:desc_of_changes}
 
 Hiermit wird beschrieben, inwiefern sich die geplanten Veränderungen im Projekt äu\ss{}ern. Dies geschieht im Bezug auf den in Abschnitt \ref{subsec:inf} beschriebenen Zustand des Projektes. Es soll damit deutlich werden, dass die Software nicht von Grund neu gedacht wird. Es entstehen mehr oder weniger Add-On artige Veränderungen.
@@ -673,7 +678,6 @@ Punkte erweitert werden:
 	\item Chunk übergreifende Strukturen
 \end{itemize}
 
-\iffalse
 \subsection{Speichersystem}
 
 Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen und den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
@@ -685,8 +689,8 @@ Folgende Änderungen können hier getätigt werden:
   \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte Welt wieder geöffnet werden kann. Dies braucht dann einige zusätzliche Features der Bedienung.
   \item[Weltauswahl:] Eine Möglichkeit wäre, im Zuge der Änderungen an UI eine Art Auswahl-Menü zu bauen, in der Welten generiert und gestartet werden können.
 \end{description}
-\fi
 
+\newpage
 \section{Beschreibung der Änderungen}
 
 Im folgenden Abschnitt werden die Umsetzungen bzw. die tatsächlichen Änderungen beschrieben.
@@ -735,20 +739,21 @@ Im Zuge der geforderten Veränderungen der grafischen Benutzeroberfläche und de
 
 Abschließend ist festzustellen, dass hauptsächlich die Klasse \texttt{Inventory} komplett neu ist. Klassen wie \texttt{Player} und \texttt{Context} mussten zwar verändert werden, bleiben aber in ihrer Funktionalität unverändert. Für die Grafik ist hauptsächlich die Bibliothek \texttt{SFML} wichtig.
 
+\newpage
 \section{Modelle gemä\ss{} der Veränderungen}
 
 In diesem Abschnitt werden Modelle um wichtige Klassen oder Beziehungen ergänzt bzw. erklärend verändert.
 
 \subsection{Strukturen und Weltgenerierung}
 
-\begin{gfx}{Caption}{tag}{ht}
+\begin{gfx}{Verändertes Designmodell Generierung}{newgen}{ht}
 \umlsimpleclass[x=15.50,y=-5.80,alias=UMLClass0]{World}
 \umlsimpleclass[x=11.60,y=-7.20,alias=UMLClass1]{Chunk}
 \umlsimpleclass[x=15.50,y=-8.60,alias=UMLClass2]{ChunkManager}
 \umlsimpleclass[x=15.40,y=-11.40,alias=UMLClass3]{ClassicOverworldGenerator}
 \umlsimpleclass[x=20.00,y=-11.40,alias=UMLClass4]{Biome}
 \umlsimpleclass[x=15.70,y=-13.80,alias=UMLClass5]{NoiseGenerator}
-\umlsimpleclass[x=12.40,y=-13.80,alias=UMLClass6]{Structure}
+\umlsimpleclass[x=11.40,y=-13.80,alias=UMLClass6]{Structure}
 \umluniassoc[name=Relation0,geometry=|-,anchor1=116.6,anchor2=180.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
 \umlcompo[name=Relation1,geometry=--,anchor1=-76.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
 \umluniassoc[name=Relation2,geometry=-|,anchor1=180.0,anchor2=-116.6,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=1.8]{UMLClass2}{UMLClass1}
@@ -873,10 +878,10 @@ Durch die neue GUI stehen dem Spieler auch zwei neue Use-Cases zur verfügung. D
 
 \FloatBarrier
 
+\newpage
 \section{Fazit}
 
 Nach dem Umsetzen des Projektes, mit den uns selber gestellten Veränderungen, fallen mehrere Punkte auf, die ihre Aufmerksamkeit verdienen. Dabei geht es um positive, als auch negative Aspekte, die aber allesamt zur Lektion beitragen.
-\newline
 \begin{description}
   \item[Codebase] Zunächst einmal sollte man sich vor beginnen des Projektes, und überlegen der Veränderungen, die Codebase anschauen. In unserem Fall kam der Aspekt zu kurz. Dies wurde uns dadurch zum Verhängnis, dass einiges an Zeit allein zum Verständnis des Codes aufgewandt werden musste. Die Schwierigkeit daran lag zum Teil auch im Umfang des Codes. Für ein Projekt im Kontext des Studiums lässt sich zusammenfassend sagen, dass es schlichtweg zu viel ist. Dadurch mangelte es stetig an Überblick.
   \item[Pflege der Codebase] Erschwerend zu der umfangreichen Codebase kam die fehlende Pflege des Codes hinzu. Das ursprüngliche Projekt wurde innerhalb einer Woche geschrieben mit einem tatsächlichen Zeitaufwand von 17 stunden. Das spiegelt sich leider in auskommentierten, nicht erklärten Codeblöcken oder auch in dem äu\ss{}erst unmodularen Design wieder. Eine sorgfältige Analyse des Projekts hätte dem entgegen wirken und uns dabei helfen können, ein geeigneteres zu finden.
