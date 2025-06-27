@@ -166,9 +166,9 @@ Im Laufe des Projekts wurden einige der Standard-Funktionen dazu programmiert. D
 \newpage
 \subsection{Use-Case-Modell} \label{subsec:usecase}
 
-Folgender Abschnitt thematisiert das UseCase Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
+Folgender Abschnitt thematisiert das Use-Case Modell der Software. Es handelt sich hier um ein Spiel, das alleine gespielt wird, somit gibt es hier auch nur einen Akteur. Abbildung \ref{gfx:usecase} zeigt die UseCases, die in der Software implementiert sind. Diese sind in den folgenden Abschnitten näher beschrieben.
 
-\begin{gfx}{UseCase Diagramm}{usecase}{ht}
+\begin{gfx}{Use-Case Diagramm}{usecase}{ht}
   % Systemgrenze
   \begin{umlsystem}[x=4, y=0]{Minecraft-Klon}
     \umlusecase[x=0, y=0]{Bewegen}
@@ -289,19 +289,20 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 \textbf{Ziel:} Horizontale ortbewegung der Spielfigur in der Spielwelt entsprechend der Eingaben \\
 \textbf{Vorbedingungen:} Spiel läuft, Spielfigur ist aktiv, Spielfigur schaut in eine ausgewählte Blickrichtung \\
 \textbf{Nachbedingungen:} Position der Spielfigur wurde ggf. angepasst \\
-\textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Bewegungstasten. Die Bewegungsrichtung wird durch die aktuelle Blickrichtung bestimmt. Der Use Case bleibt aktiv, solange Eingaben erfolgen. Sprinten, Schleichen können die Fortbewegung beeinflussen.
+\textbf{Beschreibung:} Der Spieler bewegt die Spielfigur durch Eingabe von Bewegungstasten. Die Bewegungsrichtung wird durch die aktuelle Blickrichtung bestimmt. Der Use-Case bleibt aktiv, solange Eingaben erfolgen. Sprinten, Schleichen können die Fortbewegung beeinflussen.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler drückt Bewegungstasten (W/A/S/D)
-  \item[2.] Spiel bestimmt die Richtung der Bewegung und den Zustand der Spielfigur
+  \item[1.] Spiel bestimmt den Zustand der Spielfigur
+  \item[2.] Spieler drückt Bewegungstasten (W/A/S/D)
   \item[2\opt a.] Spielfigur hat Bodenkontakt und Spieler drückt zusätzlich Sprinttaste (Strg):
   \item[2\opt a.1.] Spiel erhöht Geschwindigkeit der Spielfigur
   \item[2\opt b.] Spielfigur hat Bodenkontakt und Spieler drückt zusätzlich Schleich\-taste (Shift):
   \item[2\opt b.1.] Spiel verringert horizontale Geschwindigkeit der Spielfigur
-  \item[2.] Spiel beginnt die Position der Spielfigur anzupassen bis Spieler die Eingabe ändert
-  \item[3.] Spieler ändert die Eingabe lässt alle Eingaben los
-  \item[4.] Use-Case endet erfolgreich
+  \item[3.] Spiel bestimmt Richtung und Geschwindigkeit der Bewegung
+  \item[4.] Spiel beginnt die Position der Spielfigur anzupassen bis der Spieler die Eingabe verändert
+  \item[5.] Spieler verändert die Eingabe oder lässt alle Eingaben los
+  \item[6.] Use-Case endet erfolgreich
 \end{description}
 
 
@@ -312,23 +313,18 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 \textbf{Akteur:} Spieler \\
 \textbf{Ziel:} Hindernisse überwinden oder Höhe gewinnen \\
 \textbf{Vorbedingungen:} Spielfigur befindet sich in der Spielwelt \\
-\textbf{Nachbedingungen:} Spielfigur bewegt sich vertikal nach oben oder bleibt unverändert \\
-\textbf{Beschreibung:} Durch Drücken der Springtaste kann die Spielfigur entweder einen einmaligen Sprung ausführen (bei Bodenkontakt) oder im Flugmodus kontinuierlich aufsteigen. Das Verhalten hängt vom Zustand der Spielfigur (am Boden oder im Flug) ab.
-
-\textit{Hinweis: Im Flugmodus verhält sich der Use Case wie eine kontinuierliche Bewegungseingabe. Au\ss{}erhalb des Flugmodus handelt es sich um eine einmalige Aktion.}
+\textbf{Nachbedingungen:} Spielfigur bekommt Bewegung vertikal nach oben\\
+\textbf{Beschreibung:} Durch Drücken der Springtaste kann die Spielfigur bei Bodenkontakt einen einmaligen Sprung ausführen.
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
-  \item[1.] Spieler drückt Sprungtaste (Leertaste)
-  \item[2.] Spiel validiert, dass Spieler springen kann
-  
-  \item[2a.] Spielfigur hat keinen Bodenkontakt:
-  \item[2a.1.] UseCase endet erfolglos
-  \item[2a.1.\opt a.] Spielfigur ist im Flugmodus:
-  \item[2a.1.\opt a.1.] Solange Springtaste gedrückt ist, erhält die Spielfigur Bewegung nach oben
-  \item[2a.1.\opt a.2.] Der Use Case endet erfolgreich, sobald die Taste losgelassen wird
+  \item[1.] Spiel validiert, dass Spieler im Zustand Laufen ist
+  \item[1a.] Spielfigur ist in einem anderen Zustand
+  \item[1a.1.] Use-Case endet erfolglos 
+  \item[2.] Spieler drückt Sprungtaste (Leertaste)
   \item[3.] Spiel löst Sprungbewegung der Spielfigur aus
-  \item[4.] UseCase endet erfolgreich
+  \item[4.] Spiel setzt Zustand der Spielfigur zu Fallen
+  \item[4.] Use-Case endet erfolgreich
 \end{description}
 
 \newpage
@@ -344,11 +340,12 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
 
 \textbf{Ablaufspezifikation:}
 \begin{description}[style=nextline,leftmargin=1.9cm,labelwidth=1.6cm]
+  \item[1.] Spiel validiert, dass Spieler im Zustand Fallen oder Fliegen ist
   \item[1.] Spieler drückt die Fliegentaste (F)
   \item[2.] Spiel aktiviert den Flugmodus für die Spielfigur
   \item[2a.] Flugmodus ist bereits aktiv
   \item[2a.1.] Spiel deaktiviert den Flugmodus für die Spielfigur
-  \item[3.] UseCase endet erfolgreich
+  \item[3.] Use-Case endet erfolgreich
 \end{description}
 
 \newpage
@@ -369,9 +366,9 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
   \item[2a.] Mauszeiger ist bereits freigeschaltet
   \item[2a.1.] Spiel fängt den Mauszeiger ein
   \item[2a.2.] Spiel aktiviert Mausbewegung zur  Kamerasteuerung
-  \item[2a.3.] UseCase endet erfolgreich
+  \item[2a.3.] Use-Case endet erfolgreich
   \item[3.] Spiel deaktiviert Mausbewegung zur Kamerasteuerung
-  \item[4.] UseCase endet erfolgreich
+  \item[4.] Use-Case endet erfolgreich
 \end{description}
 
 \newpage
@@ -390,13 +387,13 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
   \item[1.] Spieler klickt die linke Maustaste
   \item[2.] Spiel validiert, dass ein entfernbarer Block im Sichtfeld ist
   \item[2a.] Es ist kein entfernbarer Block im Sichtfeld
-  \item[2a.1.] UseCase endet erfolglos
+  \item[2a.1.] Use-Case endet erfolglos
   \item[3.] Spiel entfernt Block aus der Welt
   \item[4.] Spiel fügt den Block dem Inventar der Spielfigur hinzu
   \item[4a.] Das Inventar der Spielfigur ist voll
   \item[4a.1.] Spiel fügt den Block nicht dem inventar der Spielfigur hinzu
-  \item[4a.2.] UseCase endet erfolgreich 
-  \item[5.] UseCase endet erfolgreich
+  \item[4a.2.] Use-Case endet erfolgreich 
+  \item[5.] Use-Case endet erfolgreich
 \end{description}
 
 \newpage
@@ -415,18 +412,18 @@ Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf B
   \item[1.] Spieler klickt die rechte Maustaste
   \item[2.] Spiel validiert, dass der Block platziert werden kann
   \item[2a.] Es ist keine valide Oberfläche im Sichtfeld
-  \item[2a.1.] UseCase endet erfolglos
+  \item[2a.1.] Use-Case endet erfolglos
   \item[3.] Spiel validiert, dass Spielfigur einen Block im Inventar hat
   \item[3a.] Spielerfigur hat keinen platzierbaren Block im Inventar
-  \item[3a.1.] UseCase endet erfolglos
+  \item[3a.1.] Use-Case endet erfolglos
   \item[4.] Spiel platziert Block an ausgewählter Stelle
   \item[5.] Spiel entfernt Block aus dem Inventar
-  \item[6.] UseCase endet erfolgreich
+  \item[6.] Use-Case endet erfolgreich
 \end{description}
 
 \subsubsection*{Spiel Verlassen}
 
-Das Verlassen des Spiels ist nicht als UseCase modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schlie\ss{}en des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
+Das Verlassen des Spiels ist nicht als Use-Case modelliert, da beim Verlassen des Spiels keine weiteren Aktionen vorgenommen werden, als das Programm zu beenden. Dies geschieht durch das Schlie\ss{}en des Fensters oder durch Drücken der Escape-Taste. Das Spiel wird dann beendet und alle Ressourcen werden freigegeben.
 
 \subsection{Domänenmodell} \label{subsec:domain}
 
@@ -823,6 +820,23 @@ In diesem Abschnitt werden Modelle um wichtige Klassen oder Beziehungen ergänzt
 
 \subsubsection{Strukturen und Weltgenerierung}
 
+\begin{gfx}{Caption}{tag}{ht}
+\umlsimpleclass[x=11.30,y=-11.80,alias=UMLClass0]{World}
+\umlsimpleclass[x=14.60,y=-14.60,alias=UMLClass1]{Chunk}
+\umlsimpleclass[x=14.50,y=-11.80,alias=UMLClass2]{ChunkManager}
+\umlsimpleclass[x=21.60,y=-11.80,alias=UMLClass3]{ClassicOverworldGenerator}
+\umlsimpleclass[x=21.50,y=-9.20,alias=UMLClass4]{Biome}
+\umlsimpleclass[x=27.90,y=-11.80,alias=UMLClass5]{NoiseGenerator}
+\umlsimpleclass[x=21.60,y=-14.80,alias=UMLClass6]{Structure}
+\umluniassoc[name=Relation0,geometry=-|,anchor1=180.0,anchor2=-104.0,mult1={1},arg1={pWorld},pos1=0.2,mult2={*},pos2=1.8]{UMLClass1}{UMLClass0}
+\umlcompo[name=Relation1,geometry=--,anchor1=104.0,anchor2=76.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=0.8]{UMLClass0}{UMLClass2}
+\umluniassoc[name=Relation2,geometry=--,anchor1=-76.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass2}{UMLClass1}
+\umlcompo[name=Relation3,geometry=--,anchor1=0.0,anchor2=180.0,mult1={*},pos1=0.2,mult2={1},arg2={terrainGenerator},pos2=0.8]{UMLClass2}{UMLClass3}
+\umlcompo[name=Relation4,geometry=--,anchor1=0.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={1},arg2={biomeNoiseGen},pos2=0.8]{UMLClass3}{UMLClass5}
+\umlcompo[name=Relation5,geometry=--,anchor1=90.0,anchor2=-76.0,mult1={*},pos1=0.2,mult2={5},pos2=0.8]{UMLClass3}{UMLClass4}
+\umlcompo[name=Relation6,geometry=-|,anchor1=0.0,anchor2=76.0,mult1={1},pos1=0.2,mult2={1},arg2={heightGenerator},pos2=1.8]{UMLClass4}{UMLClass5}
+\umlcompo[name=Relation7,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass3}{UMLClass6}
+\end{gfx}
 
 \FloatBarrier
 
