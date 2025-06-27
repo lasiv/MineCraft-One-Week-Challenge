@@ -790,6 +790,18 @@ Dadurch, dass die grafische Benutzeroberfläche mithilfe einer Bibliothek und \t
 
 \subsection{Fazit}
 
+Nach dem Umsetzen des Projektes, mit den uns selber gestellten Veränderungen, fallen mehrere Punkte auf, die ihre Aufmerksamkeit verdienen. Dabei geht es um positive, als auch negative Aspekte, die aber allesamt zur Lektion beitragen.
+\newline
+\begin{description}
+  \item[Codebase] Zunächst einmal sollte man sich vor beginnen des Projektes, und überlegen der Veränderungen, die Codebase anschauen. Nun, in unserem Fall, kam dies etwas zu kurz. Dies wurde uns dadurch zum verhängnis, dass wir viel Code erst einmal versuchen mussten zu verstehen. Die Schwierigkeit war nicht etwa der Code ansich, sondern dessen Umfang. Für ein Projekt im Kontext des Studiums, lässt sich zusammenfassend sagen, dass es schlichtweg zu viel Code ist. Dadurch mangelte es stetig an Überblick.
+  \item[Pflege der Codebase] Erschwerend zu der umfangreichen Codebase kam die fehlende Pflege des Codes hinzu. Das das original Open-Source-Projekt wurde in einer Woche geschrieben. In insgesamt 17 stunden. Das spiegelt sich leider in auskommentierten, nicht erklärten Codeblöcken, oder auch in dem ziemlich unmodularen Design, wieder. Dass dies nicht schon vorher so erkannt wurde, ist auf uns zurückzuführen. Durch eine sehr eifrige, voreilige Vorgehensweise, mangelte es an begutachtung des Inhaltes des Codes.
+  \item[OpenGL] Sobald der Code einigermaßen nachvollzogen wurde, kommt OpenGL ins Spiel. Die Schwierigkeit bestand darin, herauszufinden, wie man mit SFML und OpenGL eine 2D-Grafik über eine 3D-Grafik zeichnet. Dies war leider nicht sehr intuitiv und wurde erweitert erschwert, durch den umfangreichen Code. Es muss aber gesagt sein, dass nach dem Verstehen des Ablaufs von OpenGL-3D-Rendering und OpenGL-2D-Rendering, die Nutzung deutlich einfacher war. So lässt sich feststellen, dass immer dazu gelernt wird, und einige Prozesse nicht so funktionieren, wie man sich diese vorstellt.
+  \item[Buildprozess] Ein kleineres Problem hingegen, war der Buildprozess. Dadurch, dass das original-Projekt auf Windows entwickelt wurde, war der Buildprozess für Linux-Distributionen nicht ausreichend beschrieben. Es war einige Recherche nötig, um zu verstehen, welche schritte zusätzlich nötig waren. Letztlich war das auch wieder ein Punkt, an dem nützliche Prozesse gelernt wurden. So wie zum Beispiel die verwendung von CMake, welche noch nicht allen von uns geläufig war. Für die Zukunft sollte man sich des Buildprozesses mit CMake bewusst sein, weil es sehr nützlich ist. 
+  \item[Versionsverwaltung mit Git] Besonders positiv jedoch ist die Versionsverwaltung mit Git. Das ist zwar die gängigste Methode von Versionsverwaltung, jedoch dadurch immernoch eine sehr gute. Vorallem das Arbeiten in Branches ergibt Sinn, wenn mehrere Personen an mehreren Bereichen Arbeiten. Der Prozess der Entwicklung der Software, war stets übersichtlich. Damit auch für die Zukunft eine Art der Versionsverwaltung, die immer verwendet werden sollte.     
+\end{description}
+
+Zusammfassend war das Projekt sehr lehrreich. Wir erarbeiteten uns Wissen mit CMake und OpenGL. Zusätzlich haben wir unser Wissen in der Programmiersprache C++, und somit auch in objektorientierter Programmierung, noch weiter vertieft. Zukünftig sollte man jedoch immer erst den Code sichten und ihn verstehen. Es ist wichtig eine Idee zu haben, warum Code so geschrieben wurde, um eigene Änderungen besser integrieren zu können. Mit diesem Fazit endet ein sehr spannendes, umfangreiches und lehrreiches Projekt.
+
 %\begin{tikzpicture}
 %  \node at (0,0) [name=start]{start};
 %  \node at (3,3) [name=end]{end};
