@@ -251,30 +251,19 @@ Für die UseCases sollen einige Rahmenbedingungen definiert werden. Abbildung~\r
 \begin{itemize}
   \item \textbf{Bewegungszustände:} Die Spielfigur befindet sich das komplette Spiel über in mindestens einem dieser Spielzustände. Eingaben auf der Tastatur können basierend auf diesen zuständen unterschiedliche Aktionen hervorrufen.
   \item \textbf{Maussteuerung:} Solange die Maussteuerung nicht durch einen der später definierten Use-Cases ausgeschaltet wurde wird sie als immer aktiv angenommen. Selbst wenn nicht aktiv die Richtung geändert wird, zählt die Aktive Blickrichtung als gewählte Eingabe. Aus diesem Grund erhält diese keinen eigenen Use-Case und wird in anderen als Vorraussetzung genommen.
-  \item 
-
-
-\end{itemize}
-
-Die Bewegung der Spielfigur basiert auf einem kontinuierlichen Physikmodell, das zwischen horizontaler und vertikaler Bewegung unterscheidet. Die berechnung dieser ist abhängig von den Eingaben sowie dem Zustand der Spielfigur. 
-
-
-(ändern ggf)
-
-
-Die Geschwindigkeit in jeder Raumrichtung wird in jedem Simulationsschritt auf Basis folgender Prinzipien berechnet:
-
-\begin{itemize}
-  \item \textbf{Horizontale Bewegung:}  Eingaben wie Bewegungstasten (W/A/S/D) erzeugen eine gerichtete Beschleunigung basierend auf der Blickrichtung der Spielfigur. Diese wird auf die aktuelle Geschwindigkeit addiert. Unabhängig vom Zustand (am Boden, in der Luft, im Flugmodus) wird eine konstante Dämpfung angewandt, die die Geschwindigkeit über die Zeit exponentiell reduziert.
-
-  \item \textbf{Vertikale Bewegung:}  Diese unterscheidet sich je nach Modus: im \textbf{Flugmodus} gilt die gleiche Dämpfung wie in horizontaler Richtung. Die Eingaben \texttt{Springen} (Leertaste) und \texttt{Schleichen} (Strg) erzeugen eine gerichtete Beschleunigung nach oben oder unten, analog zu Bewegungseingaben horizontal. Im \textbf{Bodenmodus} gilt diese Dämpfung nicht mehr, stattdessen wird eine Gravitationskonstante von der vertikalen Geschwindigkeit subtrahiert. Ein Sprung setzt dann die vertikale Geschwindigkeit ohne eine Beschleunigung auf einen festen positiven Wert.
-
-  \item \textbf{Zusammenfassung der Logik:}
+  \item \textbf{Horizontale Bewegung:} Die Bewegung der Spielfigur findet mit 20Hz statt, in festen Ticks, zwischen den Positionen wird interpoliert. Die Horizontale Bewegung erfolgt nach rekursiver Formel. Grob unterteilt sich die Beweung in einen Teil Momentum, also die vorherige Geschwindigkeit multipliziert mit mehreren Parametern zur Dämpfing dieser, und einen zweiten Teil der Beschleunigung. Momentum und Beschleunigung werden zur Geschwindigkeit addiert. Die Parameter hängen von dem Zustand der Spielfigur ab:
   \begin{itemize}
-    \item Dämpfung wirkt \textbf{immer} in allen Richtungen au\ss{}er vertikal im Bodenmodus.
-    \item Gravitation ersetzt im Bodenmodus die vertikale Dämpfung.
-    \item Sprung ist eine \textit{diskrete Initialisierung der vertikalen Geschwindigkeit}, kein kontinuierlicher Prozess.
-    \item Die Dämpfung erfolgt exponentiell, die Gravitation linear.
+    \item \textbf{Laufen:} Ein Parameter der sowohl in Momentum also auch Beschleunigung Einfluss hat, ist die Haftreibung des Untergrunds. Zusätzlich gelten weiter spezifische Parameter, die extra zur präzisen Laufbewegung beitragen.
+    \item \textbf{Fallen:} Hier spielt keine Haftreibung mehr eine Rolle, und die Bewegung wird annähernd wie beim laufen aber mit deutlich niedrigerer Reibung berechnet.
+    \item \textbf{Fliegen:} Hier wird die gleiche horizontale Bewegung wie beim Laufen benutzt, aber verdoppelt, um sich schneller bewegen zu können.
+    \item \textbf{Schwimmen:} Diese Bewegung ist mehr vereinfacht und hat deutlisch stärkere Reibung um dem Wasser ein anstrengendes Vorankommen zu simulieren
+  \end{itemize}
+  \item \textbf{Vertikale Bewegung:} Ebenso wid die vertikale Bewegung in Ticks berechnet. Sie ist jedoch nicht so kompliziert. Es wirkt hier eine konstante Beschleunigung nach unten um Schwerkraft zu simulieren. Diese wird der vorherigen Geschwindigkeit abgezogen und anschließlich mit einer Luftreibung multipliziert. Auch hier gibt es Unterschiede in den einzelnen Zuständen:
+  \begin{itemize}
+    \item \textbf{Laufen:} Wie beschrieben gild eine Schwerkraft, die der Kollision des Blockes undter den Füßen entgegenwirkt. bei einem Sprung wird statt Gravitation eine positive Anfangsgeschwindigkeit gesetzt.
+    \item \textbf{Fallen:} Beim Fallen wirkt auch wie beschrieben die Schwerkraft. Der Zustand Fallen kann aber auch nach einem Spruing nach oben fliegen und durch die Gravitation abbremsen
+    \item \textbf{Fliegen:} Hier gilt keine Schwerkraft und bewegung wird alleine durch die Eingaben bestimmt. Es werde hier ähnliche Formeln herangezogen, wie in der horizontalen Bewegung
+    \item \textbf{Schwimmen:} Deser Zustand ist eine Kombination, wie beim Fliegen, kann man sich auf und ab bewegen, jedoch gilt eine Schwerkraft, die einen nach unten zieht, wenn auch nicht so stark
   \end{itemize}
 \end{itemize}
 
@@ -770,6 +759,7 @@ Punkte erweitert werden:
 	\item Chunk übergreifende Strukturen
 \end{itemize}
 
+\iffalse
 \subsubsection{Speichersystem}
 
 Ein weiteres Problem, dass bei verbleibender Zeit gelöst werden könnte, ist das Speichersystem. Momentan werden jegliche Änderungen und den Blockkonfigurationen der Chunks verworfen, wenn der Chunk entladen wird. Wird er neu geladen wird er neu generiert und die Änderungen gehen verloren. 
@@ -781,6 +771,7 @@ Folgende Änderungen können hier getätigt werden:
   \item[Speichern und Laden nach Laufzeit:] Weiterführend kann man diese Änderungen auch als Datei speichern, sodass nach Beendung des Spiels die gespeicherte Welt wieder geöffnet werden kann. Dies braucht dann einige zusätzliche Features der Bedienung.
   \item[Weltauswahl:] Eine Möglichkeit wäre, im Zuge der Änderungen an UI eine Art Auswahl-Menü zu bauen, in der Welten generiert und gestartet werden können.
 \end{description}
+\fi
 
 \section{Meilenstein 3} \label{sec:ms3}
 
