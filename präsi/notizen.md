@@ -32,7 +32,12 @@
 
 ##### Strukturen
 
-##### GUI
+##### GUI & Inventar
+
+- OpenGL & SFML kurz erwähnen
+- Debug Info kurz erläutern (warum entstanden -> eigentlich zum SFML und Player debugen im zusammenhang mit FPS counter, Movement und Inventar)
+- Inventar Klasse erläutern (funktion, nutzen, nicht detaliert methoden, vorher nacher)
+- Inventar Klasse einordnen (teil von Player Klasse, kann mit I-Key toggled werden)
 
 #### Vorstellung
 
