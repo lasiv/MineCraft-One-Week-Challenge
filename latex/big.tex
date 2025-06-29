@@ -6,203 +6,63 @@
 \begin{document}
 
 \begin{tikzpicture}
-\umlclass[x=24.50,y=-9.10,alias=UMLClass0]{World}
+\umlclass[x=11.2,y=-14.0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
 {
-  isRunning: std::atomic\textless{}bool\textgreater{} \\
-  playerSpawnPoint: vec3 \\
+  x: Zahl \\
+  y: Zahl \\
+  z: Zahl \\
 }
 {
 }
-\umlclass[x=30.80,y=-9.00,alias=UMLClass1]{Chunk}
+\umlclass[x=12.70,y=-4.50,alias=UMLClass1]{World}
 {
-  isLoaded: bool \\
+}
+{
+  block\_entfernen(position: Vektor): Bool \\
+  block\_platzieren(position: Vektor): Bool \\
+}
+\umlclass[x=11.20,y=-9.50,alias=UMLClass2]{Spielfigur}
+{
+  position: Vektor \\
+  bewegung: Vektor \\
+  am\_fliegen: Bool \\
+}
+{
+  springen(): void \\
+  sprinten(): void \\
+  schleichen(): void \\
+  fliegen(): void \\
+  abbauen(): viod \\
+  platzieren(): void \\
+}
+\umlclass[x=19.40,y=-4.50,alias=UMLClass3]{Block}
+{
+  block\_id: Zahl \\
+  textur\_id: Zahl \\
+  position: Vektor
 }
 {
 }
-\umlclass[x=30.70,y=-15.30,alias=UMLClass2]{ChunkBlock}
-{
-  id: int \\
-}
+\umlclass[x=18.00,y=-8.50,alias=UMLClass4]{Inventar}
 {
 }
-\umlclass[x=24.50,y=-12.90,alias=UMLClass3]{Player}
 {
-  isOnGround: bool \\
-  isFlying: bool \\
-  isSneak: bool \\
-  acceleration: vec3 \\
+  item\_entfernen(item\_id: Zahl): Bool \\
+  item\_hinzufügen(itme\_id: Zahl): Bool \\
+}
+\umlclass[x=18.60,y=-14.0,alias=UMLClass5]{ItemStack}
+{
+  item\_id: Zahl \\
+  anzahl: Zahl \\
 }
 {
+  ahzahl\_erhöhen(): void \\
+  anzahl\_verringern(): void \\
 }
-\umlclass[x=24.30,y=-16.50,alias=UMLClass4]{ItemStack}
-{
-  -- numInStack: int \\
-}
-{
-}
-\umlclass[x=30.80,y=-12.40,alias=UMLClass5]{ChunkSection}
-{
-  hasMesh: bool \\
-  hasBufferedMesh: bool \\
-}
-{
-}
-\umlsimpleclass[x=30.90,y=-5.60,alias=UMLClass6]{ChunkManager}
-\umlclass[x=6.20,y=-1.00,alias=UMLClass7,type={struct}]{vec3}
-{
-  x: float \\
-  y: float \\
-  z: float \\
-}
-{
-}
-\umlclass[x=24.50,y=-20.00,alias=UMLClass8]{Material}
-{
-  maxStackSize: int \\
-  isBlock: bool \\
-  name: string \\
-  id: Material::ID \\
-}
-{
-}
-\umlclass[x=20.40,y=-15.10,alias=UMLClass9]{Entity}
-{
-  position: vec3 \\
-  rotation: vec3 \\
-  velocity: vec3 \\
-}
-{
-}
-\umlclass[x=20.30,y=-18.30,alias=UMLClass10]{AABB}
-{
-  position: vec3 \\
-  dimensions: vec3 \\
-}
-{
-}
-\umlclass[x=8.30,y=-2.30,alias=UMLClass11,type={enum}]{Material::ID}
-{
-  Nothing \\
-  Grass \\
-  Dirt \\
-  Stone \\
-  OakBark \\
-  OakLeaf \\
-  Sand \\
-  Cactus \\
-  Rose \\
-  TallGrass \\
-  DeadShrub \\
-}
-{
-}
-\umlsimpleclass[x=17.90,y=-9.00,alias=UMLClass12]{PlayState}
-\umlsimpleclass[x=18.00,y=-6.20,alias=UMLClass13]{Application}
-\umlclass[x=5.50,y=-8.80,alias=UMLClass14]{RenderMaster}
-{
-  drawBox: bool \\
-}
-{
-}
-\umlsimpleclass[x=6.80,y=-11.70,alias=UMLClass15]{WaterRenderer}
-\umlsimpleclass[x=9.60,y=-11.70,alias=UMLClass16]{ChunkRenderer}
-\umlsimpleclass[x=4.20,y=-11.70,alias=UMLClass17]{FloraRenderer}
-\umlsimpleclass[x=1.40,y=-11.70,alias=UMLClass18]{SkyboxRenderer}
-\umlclass[x=5.70,y=-14.80,alias=UMLClass19,type={abstract}]{Renderer}
-{
-  chunks: vector\textless{}RenderInfo\textgreater{} \\
-}
-{
-}
-\umlsimpleclass[x=5.80,y=-17.70,alias=UMLClass20]{Shader}
-\umlclass[x=11.70,y=-0.80,alias=UMLClass21,type={struct}]{RenderInfo}
-{
-  vao: unsigned int \\
-  indicesCount: unsigned int \\
-}
-{
-}
-\umlclass[x=15.20,y=-0.70,alias=UMLClass22,type={struct}]{mat4}
-{
-  rows: vec4[4] \\
-}
-{
-}
-\umlclass[x=17.20,y=-1.10,alias=UMLClass23,type={struct}]{vec3}
-{
-  x: float \\
-  y: float \\
-  z: float \\
-  w: float \\
-}
-{
-}
-\umlclass[x=13.70,y=-14.90,alias=UMLClass24]{Camera}
-{
-  projectionMatrix: mat4 \\
-  viewMatrix: mat4 \\
-  projViewMatrix: mat4 \\
-  frustum: ViewFrustum \\
-  config: Config \\
-}
-{
-}
-\umlclass[x=19.80,y=-0.80,alias=UMLClass25,type={struct}]{Plane}
-{
-  distanceToOrigin: float \\
-  normal: vec3 \\
-}
-{
-}
-\umlclass[x=19.80,y=-2.60,alias=UMLClass26,type={struct}]{VewFrustum}
-{
-  planes: Plane[6] \\
-}
-{
-}
-\umlclass[x=23.20,y=-1.30,alias=UMLClass27,type={struct}]{Config}
-{
-  windowX: int \\
-  windowY: int \\
-  isFullscreen: bool \\
-  renderDistance: int \\
-  fow: int \\
-}
-{
-}
-\umlcompo[name=Relation0,geometry=--,anchor1=-90.0,anchor2=78.7,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass5}{UMLClass2}
-\umlassoc[name=Relation1,geometry=--,anchor1=2.7,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},arg2={pWorld},pos2=0.8]{UMLClass0}{UMLClass1}
-\umlcompo[name=Relation2,geometry=--,anchor1=-81.9,anchor2=84.8,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass0}{UMLClass3}
-\umlcompo[name=Relation3,geometry=--,anchor1=-95.2,anchor2=78.7,mult1={1},pos1=0.2,mult2={*},arg2={items},pos2=0.8]{UMLClass3}{UMLClass4}
-\umlaggreg[name=Relation4,geometry=--,anchor1=-90.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={mchunks},pos2=0.8]{UMLClass1}{UMLClass5}
-\umlassoc[name=Relation5,geometry=|-,anchor1=81.9,anchor2=180.0,mult1={1},arg1={world},pos1=0.2,mult2={1},arg2={chunkManager},pos2=1.8]{UMLClass0}{UMLClass6}
-\umlassoc[name=Relation6,geometry=--,anchor1=-104.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={*},arg2={chunks},pos2=0.8]{UMLClass6}{UMLClass1}
-\umlassoc[name=Relation7,geometry=--,anchor1=-78.7,anchor2=95.7,mult1={*},pos1=0.2,mult2={1},arg2={material},pos2=0.8]{UMLClass4}{UMLClass8}
-\umlinherit[name=Relation8,geometry=-|,anchor1=-171.9,anchor2=90.0]{UMLClass3}{UMLClass9}
-\umlaggreg[name=Relation9,geometry=--,anchor1=-90.0,anchor2=81.9]{UMLClass9}{UMLClass10}
-\umlassoc[name=Relation10,geometry=--,anchor1=10.0,anchor2=166.6,mult1={*},pos1=0.2,mult2={1},arg2={world},pos2=0.8]{UMLClass12}{UMLClass0}
-\umlassoc[name=Relation11,geometry=-|-,anchor1=-10.3,anchor2=166.6,mult1={*},pos1=0.2,mult2={1},arg2={player},pos2=2.8]{UMLClass12}{UMLClass3}
-\umlcompo[name=Relation12,geometry=--,anchor1=-90.0,anchor2=82.9,mult1={1},pos1=0.2,mult2={*},arg2={states},pos2=0.8]{UMLClass13}{UMLClass12}
-\umlaggreg[name=Relation13,geometry=-|,anchor1=180.0,anchor2=99.5,mult1={1},pos1=0.2,mult2={1},arg2={renderMaster},pos2=1.8]{UMLClass13}{UMLClass14}
-\umlaggreg[name=Relation14,geometry=-|,anchor1=180.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass14}{UMLClass18}
-\umlaggreg[name=Relation15,geometry=--,anchor1=-155.2,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass14}{UMLClass17}
-\umlaggreg[name=Relation16,geometry=--,anchor1=-24.8,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass14}{UMLClass15}
-\umlaggreg[name=Relation17,geometry=-|,anchor1=0.0,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=1.8]{UMLClass14}{UMLClass16}
-\umlinherit[name=Relation18,geometry=|-|,anchor1=-90.0,anchor2=131.2]{UMLClass17}{UMLClass19}
-\umlinherit[name=Relation19,geometry=|-|,anchor1=-90.0,anchor2=58.0]{UMLClass15}{UMLClass19}
-\umlinherit[name=Relation20,geometry=|-,anchor1=-90.0,anchor2=10.8]{UMLClass16}{UMLClass19}
-\umlaggreg[name=Relation21,geometry=--,anchor1=-82.9,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},arg2={shader},pos2=0.8]{UMLClass19}{UMLClass20}
-\umlaggreg[name=Relation22,geometry=--,anchor1=175.9,anchor2=-2.7,mult1={1},arg1={entity},pos1=0.2,mult2={1},pos2=0.8]{UMLClass9}{UMLClass24}
+\umlcompo[name=Relation0,geometry=--,anchor1=0,anchor2=180,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass1}{UMLClass3}
+\umlassoc[name=Relation1,geometry=--,anchor1=-146.9,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,anchor1=32.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass2}{UMLClass4}
+\umlaggreg[name=Relation3,geometry=--,anchor1=-59,anchor2=90,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass4}{UMLClass5}
 \end{tikzpicture}
 
 \end{document}
-
-
-% todo 
-% position relationen auf bounding box
-% winkel verbindung relation
-% geometry bestimmen
-% relationen argumente einfügen
-% packages fixen
-% farbsupport
-
