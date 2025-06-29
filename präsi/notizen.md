@@ -49,7 +49,10 @@
 
 #### Fazit
 
+- Codebase & Pflege
+- OpenGL
+- Buildprozess
+- Versionsverwaltung mit Git
+- Diagramme
 
-
-
-
+- Abschluss (ggf. offene Fragen klären)
