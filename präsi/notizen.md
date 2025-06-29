@@ -1,9 +1,7 @@
 #### Einleitung
 
-
-
-#### Use-Cases
-
+- ggf Minecraft kurz erklären
+- generelle Infos übers projekt in Originalform
 
 
 #### Domänenmodell
@@ -16,7 +14,13 @@
 
 #### Änderungen
 
+##### Movement
 
+###### Use-Cases
+
+##### Strukturen
+
+##### GUI
 
 #### Vorstellung
 
