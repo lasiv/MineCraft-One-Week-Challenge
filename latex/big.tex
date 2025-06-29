@@ -6,7 +6,7 @@
 \begin{document}
 
 \begin{tikzpicture}
-\umlclass[x=11.2,y=-14.0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
+\umlclass[x=0,y=0,alias=UMLClass0,type={DatenObjekt}]{Vektor}
 {
   x: Zahl \\
   y: Zahl \\
@@ -14,14 +14,14 @@
 }
 {
 }
-\umlclass[x=12.70,y=-4.50,alias=UMLClass1]{World}
+\umlclass[x=7,y=5,alias=UMLClass1]{World}
 {
 }
 {
   block\_entfernen(position: Vektor): Bool \\
   block\_platzieren(position: Vektor): Bool \\
 }
-\umlclass[x=11.20,y=-9.50,alias=UMLClass2]{Spielfigur}
+\umlclass[x=0,y=5,alias=UMLClass2]{Spielfigur}
 {
   position: Vektor \\
   bewegung: Vektor \\
@@ -35,22 +35,21 @@
   abbauen(): viod \\
   platzieren(): void \\
 }
-\umlclass[x=19.40,y=-4.50,alias=UMLClass3]{Block}
+\umlclass[x=7,y=0,alias=UMLClass3]{Block}
 {
   block\_id: Zahl \\
   textur\_id: Zahl \\
-  position: Vektor
 }
 {
 }
-\umlclass[x=18.00,y=-8.50,alias=UMLClass4]{Inventar}
+\umlclass[x=-7,y=5,alias=UMLClass4]{Inventar}
 {
 }
 {
   item\_entfernen(item\_id: Zahl): Bool \\
   item\_hinzufügen(itme\_id: Zahl): Bool \\
 }
-\umlclass[x=18.60,y=-14.0,alias=UMLClass5]{ItemStack}
+\umlclass[x=-7,y=0,alias=UMLClass5]{ItemStack}
 {
   item\_id: Zahl \\
   anzahl: Zahl \\
@@ -59,10 +58,10 @@
   ahzahl\_erhöhen(): void \\
   anzahl\_verringern(): void \\
 }
-\umlcompo[name=Relation0,geometry=--,anchor1=0,anchor2=180,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass1}{UMLClass3}
-\umlassoc[name=Relation1,geometry=--,anchor1=-146.9,anchor2=90.0,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
-\umlcompo[name=Relation2,geometry=--,anchor1=32.0,anchor2=180.0,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass2}{UMLClass4}
-\umlaggreg[name=Relation3,geometry=--,anchor1=-59,anchor2=90,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass4}{UMLClass5}
+\umlcompo[name=Relation0,geometry=--,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass1}{UMLClass3}
+\umlassoc[name=Relation1,geometry=--,mult1={1},pos1=0.2,mult2={1},pos2=0.8]{UMLClass1}{UMLClass2}
+\umlcompo[name=Relation2,geometry=--,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass2}{UMLClass4}
+\umlaggreg[name=Relation3,geometry=--,mult1={1},pos1=0.2,mult2={*},pos2=0.8]{UMLClass4}{UMLClass5}
 \end{tikzpicture}
 
 \end{document}
