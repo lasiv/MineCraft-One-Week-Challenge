@@ -49,10 +49,11 @@
 
 #### Fazit
 
-- Codebase & Pflege
-- OpenGL
-- Buildprozess
-- Versionsverwaltung mit Git
-- Diagramme
+- Codebase & Pflege (zu viel, unmodular, fehlende erklärung -> unübersichtlich)
+- OpenGL (schwierigkeiten mit 2D-Rendering über 3D-Rendering, GLStates richtig verlassen)
+- Buildprozess (fehlende schritte für Linux-Distributionen -> Recherche -> nimmt Zeit in anspruch)
+- Versionsverwaltung mit Git (effizient, übersichtlich <- vorallem mit mehreren Personen)
+- Diagramme (Vertiefung von Verständnis für Code für Entwickler und Dritte)
 
-- Abschluss (ggf. offene Fragen klären)
+- Abschluss (erlangen und vertiefen von Wissen mit CMake, OpenGL und dem Arbeiten in einer Gruppe an Software) 
+- ggf. offene Fragen klären
