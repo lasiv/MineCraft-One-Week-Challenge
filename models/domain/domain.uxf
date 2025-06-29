@@ -5,8 +5,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>620</y>
+      <x>800</x>
+      <y>540</y>
       <w>120</w>
       <h>100</h>
     </coordinates>
@@ -21,8 +21,8 @@ z: Zahl</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>190</y>
+      <x>290</x>
+      <y>270</y>
       <w>310</w>
       <h>70</h>
     </coordinates>
@@ -35,8 +35,8 @@ block_platzieren(position: Vektor): Bool</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>360</y>
+      <x>800</x>
+      <y>260</y>
       <w>160</w>
       <h>180</h>
     </coordinates>
@@ -57,8 +57,8 @@ platzieren(): void</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>900</x>
-      <y>190</y>
+      <x>370</x>
+      <y>520</y>
       <w>140</w>
       <h>70</h>
     </coordinates>
@@ -71,8 +71,8 @@ textur_id: Zahl</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>760</x>
-      <y>370</y>
+      <x>1120</x>
+      <y>280</y>
       <w>280</w>
       <h>60</h>
     </coordinates>
@@ -85,60 +85,60 @@ item_hinzufügen(itme_id: Zahl): Bool</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
-      <y>210</y>
-      <w>140</w>
-      <h>40</h>
+      <x>430</x>
+      <y>330</y>
+      <w>40</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>550</x>
-      <y>250</y>
-      <w>40</w>
-      <h>130</h>
+      <x>590</x>
+      <y>300</y>
+      <w>230</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>630</x>
-      <y>390</y>
-      <w>150</w>
+      <x>950</x>
+      <y>300</y>
+      <w>190</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>420</y>
+      <x>1260</x>
+      <y>330</y>
       <w>40</w>
-      <h>220</h>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>830</x>
-      <y>620</y>
+      <x>1170</x>
+      <y>520</y>
       <w>200</w>
       <h>100</h>
     </coordinates>
